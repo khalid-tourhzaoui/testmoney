@@ -1,0 +1,66 @@
+<!--**********************************
+            Sidebar start
+        ***********************************-->
+        <div class="deznav" th:fragment="sidebar">
+            <div class="deznav-scroll">
+				<div class="main-profile">
+					<div class="image-bx">
+						<img src="images/men_avatar.png" alt="avatar men" th:if="${user.getGender() == 'MEN'}">
+						<img src="images/woman_avatar.png" alt="avatar men" th:if="${user.getGender() == 'WOMEN'}">
+						<a th:href="@{${currentUrl}}"><i class="fa fa-cog" aria-hidden="true"></i></a>
+					</div>
+					<h5 th:if="${user.getGender() == 'MEN'}" class="name"><span class="font-w400" >Bonjour,Monsieur</span></h5>
+					<h5 th:if="${user.getGender() == 'WOMEN'}" class="name"><span class="font-w400" >Bonjour,Madame</span></h5>
+					<p class="email"><span  class="__cf_email__">[[${user.getEmail()}]]</a></p>
+				</div>
+				<ul class="metismenu" id="menu">
+					<li class="nav-label first">Menu principal</li>
+                    <li th:if="${user.getRole() == 'ADMIN'}"><a  th:href="@{/admin-dashboard}" aria-expanded="false">
+							<i class="flaticon-144-layout"></i>
+							<span class="nav-text">Tableau de bord</span>
+						</a>
+                    </li>
+                    
+                    <li th:if="${user.getRole() == 'USER'}"><a  th:href="@{/user-dashboard}" aria-expanded="false">
+							<i class="flaticon-144-layout"></i>
+							<span class="nav-text">Tableau de bord</span>
+						</a>
+                    </li>
+                    <!--***************************************************************************************************-->
+                    <li th:if="${user.getRole() == 'ADMIN'}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+							<i class="flaticon-381-network"></i>
+							<span class="nav-text">Gestion des offres</span>
+						</a>
+                         <ul aria-expanded="false">
+							<li><a th:href="@{/liste-des-offres}"><i class="fa-solid fa-list"></i> Liste des offres</a></li>
+							<li><a th:href="@{/ajouter-offre}"><i class="fa-solid fa-folder-plus"></i> Ajouter un offre</a></li>
+						</ul>
+
+                    </li>
+                    
+                     <li th:if="${user.getRole() == 'USER'}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+							<i class="flaticon-381-network"></i>
+							<span class="nav-text">Gestion des offres</span>
+						</a>
+                         <ul aria-expanded="false">
+							<li><a th:href="@{/liste-offres-pending}"><i class="fa-solid fa-list"></i> Liste des offres</a></li>
+						</ul>
+
+                    </li>   
+                     <!--***************************************************************************************************-->
+                     <li th:if="${user.getRole() == 'ADMIN'}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+							<i class="flaticon-381-network"></i>
+							<span class="nav-text">Gestion des participations</span>
+						</a>
+                         <ul aria-expanded="false">
+							<li><a th:href="@{/liste-offres-pending}"><i class="fa-solid fa-list"></i> Liste des participations</a></li>
+						</ul>
+
+                    </li>
+                </ul>
+				
+			</div>
+        </div>
+        <!--**********************************
+            Sidebar end
+        ***********************************-->

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout/head :: head}">
+
+<body>
+
+	<!--*******************
+        Preloader start
+    ********************-->
+	<div id="preloader">
+		<div class="sk-three-bounce">
+			<div class="sk-child sk-bounce1"></div>
+			<div class="sk-child sk-bounce2"></div>
+			<div class="sk-child sk-bounce3"></div>
+		</div>
+	</div>
+	<!--*******************
+        Preloader end
+    ********************-->
+
+	<!--**********************************
+        Main wrapper start
+    ***********************************-->
+	<div id="main-wrapper">
+
+		<!--**********************************
+            Nav header start
+        ***********************************-->
+		<div th:replace="~{layout/NavHeader :: NavHeader}"></div>
+
+		<!--**********************************
+            Nav header end
+        ***********************************-->
+
+
+		<!--**********************************
+            Header start
+        ***********************************-->
+		<div th:replace="~{layout/header :: header}"></div>
+		<!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+		<!--**********************************
+            Sidebar start
+        ***********************************-->
+		<div th:replace="~{layout/sidebar :: sidebar}"></div>
+
+		<!--**********************************
+            Sidebar end
+        ***********************************-->
+		<!--**********************************
+            Content body start
+        ***********************************-->
+		<!-- liste-offres.html -->
+		<div class="content-body">
+			<div class="container-fluid">
+				<div class="project-nav">
+					<!-- Navigation tabs -->
+					<div class="card card-action card-tabs  mx-auto">
+						<ul class="nav nav-tabs style-2">
+							<li class="nav-item">
+								<a href="#navpills-1" class="nav-link text-dark"
+									th:href="@{/liste-des-offres?status=All}" aria-expanded="false">
+									Toutes les offres <span
+										class="badge badge-pill shadow-primary badge-primary">[[${totalOffersCount}]]</span>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="#navpills-2" class="nav-link text-dark"
+									th:href="@{/liste-des-offres?status=Progress}" aria-expanded="false">
+									En cours <span
+										class="badge badge-pill badge-info shadow-info">[[${inProgressCount}]]</span>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="#navpills-3" class="nav-link text-dark"
+									th:href="@{/liste-des-offres?status=Pending}" aria-expanded="true">
+									En attente <span
+										class="badge badge-pill badge-warning shadow-warning">[[${pendingCount}]]</span>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="#navpills-4" class="nav-link text-dark"
+									th:href="@{/liste-des-offres?status=Closed}" aria-expanded="true">
+									Fermé <span
+										class="badge badge-pill badge-danger shadow-danger">[[${closedCount}]]</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+
+					<!-- Tab content -->
+					<div class="tab-content project-list-group mx-auto" id="myTabContent">
+						<!-- All Offre -->
+						<div class="tab-pane fade active show" id="navpills-1">
+							<div class="card row " th:each="operation : ${userDaretOperations}">
+								<div th:if="${operation.status == 'All' or operation.status == null}"
+									th:replace="~{Admin/daretDetailsFragment :: daretDetails(${operation})}"></div>
+							</div>
+						</div>
+
+						<!-- On Progress -->
+						<div class="tab-pane fade" id="navpills-2">
+							<div class="card" th:each="operation : ${userDaretOperations}">
+								<div th:if="${operation.status == 'Progress'}"
+									th:replace="~{Admin/daretDetailsFragment :: daretDetails(${operation})}"></div>
+							</div>
+						</div>
+
+						<!-- Pending -->
+						<div class="tab-pane fade" id="navpills-3">
+							<div class="card" th:each="operation : ${userDaretOperations}">
+								<div th:if="${operation.status == 'Pending'}"
+									th:replace="~{Admin/daretDetailsFragment :: daretDetails(${operation})}"></div>
+							</div>
+						</div>
+
+						<!-- Closed -->
+						<div class="tab-pane fade" id="navpills-4">
+							<div class="card" th:each="operation : ${userDaretOperations}">
+								<div th:if="${operation.status == 'Closed'}"
+									th:replace="~{Admin/daretDetailsFragment :: daretDetails(${operation})}"></div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+		<!--**********************************
+            Content body end
+        ***********************************-->
+
+
+		<!-- Required vendors -->
+		<script data-cfasync="false" src="../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+		<script src="vendor/global/global.min.js"></script>
+		<script src="vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+		<script src="vendor/chart.js/Chart.bundle.min.js"></script>
+
+		<!-- Chart piety plugin files -->
+		<script src="vendor/peity/jquery.peity.min.js"></script>
+
+		<!-- Apex Chart -->
+		<script src="vendor/apexchart/apexchart.js"></script>
+
+		<!-- Dashboard 1 -->
+		<script src="js/dashboard/dashboard-1.js"></script>
+		<script src="vendor/datatables/js/jquery.dataTables.min.js"></script>
+		<script src="js/plugins-init/datatables.init.js"></script>
+		<script src="vendor/owl-carousel/owl.carousel.js"></script>
+		<script src="js/custom.min.js"></script>
+		<script src="js/deznav-init.js"></script>
+		<script src="js/demo.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+		<script>
+			var currentDate = new Date();
+
+			// Set the day, month, and year buttons
+			document.getElementById('dayButton').textContent = `${currentDate.toLocaleDateString('en-US', { weekday: 'long' })} ${currentDate.getDate()}`;
+			document.getElementById('monthButton').textContent = currentDate.toLocaleString('default', { month: 'short' });
+			document.getElementById('yearButton').textContent = currentDate.getFullYear();
+			/*------------------------------------------------------------------------------------------------------------*/
+		</script>
+		<!-- Add this script to your HTML file, or include it in your existing script file -->
+		<script th:inline="javascript">
+			function confirmEditOrDelete(operationId, operationStatus) {
+				if (operationStatus === 'Progress') {
+					// Display a SweetAlert for cancellation
+					Swal.fire({
+						icon: 'warning',
+						title: 'Delete Canceled',
+						text: 'Cannot delete an operation in progress.',
+						confirmButtonColor: '#3085d6',
+						confirmButtonText: 'OK'
+					});
+				} else {
+					// Set the operationId in the hidden input field
+					document.getElementById('operationIdInput').value = operationId;
+
+					// Display a confirmation SweetAlert for other statuses
+					Swal.fire({
+						icon: 'question',
+						title: 'Confirm Delete',
+						text: 'Are you sure you want to delete this operation?',
+						showCancelButton: true,
+						confirmButtonColor: '#d33',
+						cancelButtonColor: '#3085d6',
+						confirmButtonText: 'Delete'
+					}).then((result) => {
+						if (result.isConfirmed) {
+							// Submit the form to delete-daret action
+							document.getElementById('deleteForm').submit();
+						}
+					});
+				}
+			}
+		</script>
+
+</body>
+
+</html>

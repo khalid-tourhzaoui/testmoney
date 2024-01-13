@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<!-- Common title, favicon, and font-awesome link -->
+	<link rel="icon" type="image/png" sizes="256x256" th:href="@{/images/dollar.png}" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+		integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+		integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous" />
+
+	<!-- Common stylesheets -->
+	<link rel="stylesheet" th:href="@{/vendor/chartist/css/chartist.min.css}" />
+	<link rel="stylesheet" th:href="@{/vendor/bootstrap-select/dist/css/bootstrap-select.min.css}" />
+	<link rel="stylesheet" th:href="@{/vendor/owl-carousel/owl.carousel.css}" />
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+
+	<!-- Additional stylesheets specific to certain pages -->
+	<link rel="stylesheet" th:href="@{/vendor/select2/css/select2.min.css}" />
+	<link rel="stylesheet" th:href="@{/vendor/jquery-smartwizard/dist/css/smart_wizard.min.css}" />
+</head>
+
+<body>
+
+	<!--*******************
+        Preloader start
+    ********************-->
+	<div id="preloader">
+		<div class="sk-three-bounce">
+			<!-- ... Preloader content ... -->
+		</div>
+	</div>
+	<!--*******************
+        Preloader end
+    ********************-->
+
+	<!--**********************************
+        Main wrapper start
+    ***********************************-->
+	<div id="main-wrapper">
+
+		<!--**********************************
+            Nav header start
+        ***********************************-->
+		<div th:replace="layout/NavHeader :: NavHeader"></div>
+		<!--**********************************
+            Nav header end
+        ***********************************-->
+
+		<!--**********************************
+            Header start
+        ***********************************-->
+		<div th:replace="layout/header :: header"></div>
+		<!--**********************************
+            Header end
+        ***********************************-->
+
+		<!--**********************************
+            Sidebar start
+        ***********************************-->
+		<div th:replace="layout/sidebar :: sidebar"></div>
+		<!--**********************************
+            Sidebar end
+        ***********************************-->
+
+		<!--**********************************
+            Content body start
+        ***********************************-->
+		<div class="content-body">
+			<div class="container-fluid">
+
+				<!-- row -->
+				<div class="row">
+					<div class="col-xl-12 col-xxl-12">
+						<div class="card">
+							<div class="card-header">
+								<h4 class="card-title">Veuillez remplir les champs marqués d'une astérisque (*) car ils
+									sont obligatoires.</h4>
+							</div>
+							<div class="card-body">
+								<div id="smartwizard" class="form-wizard order-create">
+									<ul class="nav nav-wizard">
+										<li><a class="nav-link" href="#wizard_Service"><span>1</span></a></li>
+										<li><a class="nav-link" href="#wizard_Time"><span>2</span></a></li>
+										<li><a class="nav-link" href="#wizard_Payment"><span>3</span></a></li>
+									</ul>
+									<form class="tab-content" th:action="@{'/edit-offer/' + ${daretOperation.id}}"
+										method="post" th:object="${daretOperation}">
+										<div id="wizard_Service" class="tab-pane" role="tabpanel">
+											<div class="row">
+												<div class="col-lg-12 mb-2">
+													<div class="form-group">
+														<label for="designation">Nom d'opération :</label>
+														<input type="text" id="designation" th:field="*{designation}"
+															class="form-control"
+															placeholder="Entrez le nom d'opération">
+
+													</div>
+												</div>
+												<div class="col-lg-12 mb-2">
+													<div class="form-group">
+														<label for="single-select">Type de Période</label>
+														<select id="single-select" class="form-control"
+															name="typePeriode" th:field="*{typePeriode}">
+															<option value="mensuelle"
+																th:selected="${daretOperation.typePeriode == 'mensuelle'}">
+																Mensuelle</option>
+															<option value="hebdomadaire"
+																th:selected="${daretOperation.typePeriode == 'hebdomadaire'}">
+																Hebdomadaire</option>
+															<option value="par semaine"
+																th:selected="${daretOperation.typePeriode == 'par semaine'}">
+																Par semaine</option>
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div id="wizard_Time" class="tab-pane" role="tabpanel">
+											<div class="row">
+
+												<div class="col-lg-12 mb-2">
+													<div class="form-group">
+														<label for="nombreParticipant">Nombre de Personne : </label>
+														<div class="input-group">
+															<button type="button" class="btn btn-outline-primary"
+																onclick="decrement()">-</button>
+															<input type="number" class="form-control mx-1"
+																id="nombreParticipant" name="nombreParticipant"
+																th:field="*{nombreParticipant}"
+																placeholder="Enter Nombre de Personne">
+															<button type="button" class="btn btn-outline-primary"
+																onclick="increment()">+</button>
+															<span th:if="${#fields.hasErrors('nombreParticipant')}"
+																th:errors="*{nombreParticipant}"
+																class="text-danger"></span>
+
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-12 mb-2">
+													<div class="form-group">
+														<label for="montantParPeriode">Montant par Période :</label>
+														<div class="input-group">
+															<button type="button" class="btn btn-outline-primary"
+																onclick="decrementMontant()">-</button>
+															<input type="number" class="form-control"
+																id="montantParPeriode" name="montantParPeriode"
+																th:field="*{montantParPeriode}"
+																placeholder="Enter Montant par Période">
+															<button type="button" class="btn btn-outline-primary"
+																onclick="incrementMontant()">+</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div id="wizard_Payment" class="tab-pane" role="tabpanel">
+											<div class="row">
+												<div class="col-lg-6 mx-auto mb-2">
+													<div class="form-group">
+														<button type="submit"
+															class="btn btn-success w-100">Modifier</button>
+													</div>
+												</div>
+											</div>
+
+										</div>
+
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--**********************************
+            Content body end
+        ***********************************-->
+
+
+	</div>
+	<!-- Required vendors -->
+	<script th:src="@{/vendor/global/global.min.js}"></script>
+	<script th:src="@{/vendor/bootstrap-select/dist/js/bootstrap-select.min.js}"></script>
+	<script th:src="@{/vendor/chart.js/Chart.bundle.min.js}"></script>
+	<script th:src="@{/vendor/peity/jquery.peity.min.js}"></script>
+	<script th:src="@{/vendor/apexchart/apexchart.js}"></script>
+	<script th:src="@{/js/dashboard/dashboard-1.js}"></script>
+	<script th:src="@{/vendor/owl-carousel/owl.carousel.js}"></script>
+	<script th:src="@{/js/custom.min.js}"></script>
+	<script th:src="@{/js/deznav-init.js}"></script>
+	<script th:src="@{/js/demo.js}"></script>
+	<script th:src="@{/vendor/jquery-smartwizard/dist/js/jquery.smartWizard.js}"></script>
+	<script th:src="@{/vendor/select2/js/select2.full.min.js}"></script>
+
+
+	<script>
+		function increment() {
+			var input = document.getElementById('nombreParticipant');
+			input.stepUp();
+		}
+
+		function decrement() {
+			var input = document.getElementById('nombreParticipant');
+			input.stepDown();
+		}
+		function incrementMontant() {
+			var input = document.getElementById('montantParPeriode');
+			input.stepUp();
+		}
+
+		function decrementMontant() {
+			var input = document.getElementById('montantParPeriode');
+			input.stepDown();
+		}
+		// Get the current date
+		var currentDate = new Date();
+
+		// Set the day, month, and year buttons
+		document.getElementById('dayButton').textContent = `${currentDate.toLocaleDateString('en-US', { weekday: 'long' })} ${currentDate.getDate()}`;
+		document.getElementById('monthButton').textContent = currentDate.toLocaleString('default', { month: 'short' });
+		document.getElementById('yearButton').textContent = currentDate.getFullYear();
+	</script>
+</body>
+
+</html>

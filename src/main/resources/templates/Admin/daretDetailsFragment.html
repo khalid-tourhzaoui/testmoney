@@ -1,0 +1,89 @@
+<!-- _daretDetailsFragment.html -->
+<div th:fragment="daretDetails(operation)">
+	<div class="project-info ">
+		<div class="col-xl-3 my-2 col-lg-4 col-sm-6">
+			<p class="text-primary mb-1">#N-[[${operation.id}]]</p>
+			<h5 class="title font-w600 mb-2"><a href="" class="text-black">[[${operation.designation}]]</a></h5>
+			<div class="text-dark"><i class="fa fa-calendar-o mr-3" aria-hidden="true"></i>créé le
+				[[${operation.dateDebut}]]</div>
+		</div>
+
+		<div class="col-xl-2 my-2 col-lg-4 col-sm-6">
+			<div class="d-flex align-items-center">
+				<div class="project-media">
+					<img src="images/money-flow.gif" alt="">
+				</div>
+				<div class="ml-2">
+					<span>Montant d'offre</span>
+					<h5 class="mb-0 pt-1 font-w50 text-black">[[${operation.montantParPeriode}]] DH</h5>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-xl-2 my-2 col-lg-4 col-sm-6">
+			<div class="d-flex align-items-center">
+				<div class="project-media">
+					<img src="images/customer.gif" alt="">
+				</div>
+				<div>
+					<span>Nombre de personne</span>
+					<h5 class="mb-0 pt-1 font-w50 text-black">[[${operation.nombreParticipant}]]</h5>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-xl-3 my-2 col-lg-4 col-sm-6">
+			<div class="d-flex align-items-center">
+				<div class="project-media">
+					<img src="images/12-hours.gif" alt="">
+				</div>
+				<div class="ml-2">
+					<span>Date fin</span>
+					<h5 class="mb-0 font-w50 text-black"><i class="fa fa-calendar-o mr-2"
+							aria-hidden="true"></i>[[${operation.dateFin}]]</h5>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-xl-2 my-2 col-lg-6 col-sm-6">
+			<div class="d-flex project-status align-items-center">
+				<!-- Display status based on the operation's status -->
+				<span th:if="${operation.status == 'Progress'}"
+					class="btn bgl-info text-info status-btn ms-5">[[${operation.status}]]</span>
+				<span th:if="${operation.status == 'Pending'}"
+					class="btn bgl-warning text-warning status-btn ms-5">[[${operation.status}]]</span>
+				<span th:if="${operation.status == 'closed'}"
+					class="btn bgl-danger text-danger status-btn ms-5">[[${operation.status}]]</span>
+
+				<!-- Dropdown for additional actions -->
+				<div class="dropdown">
+					<a href="javascript:void(0);" data-toggle="dropdown" aria-expanded="false">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path
+								d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z"
+								stroke="#575757" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+							<path
+								d="M12 6C12.5523 6 13 5.55228 13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5C11 5.55228 11.4477 6 12 6Z"
+								stroke="#575757" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+							<path
+								d="M12 20C12.5523 20 13 19.5523 13 19C13 18.4477 12.5523 18 12 18C11.4477 18 11 18.4477 11 19C11 19.5523 11.4477 20 12 20Z"
+								stroke="#575757" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+						</svg>
+					</a>
+					<div class="dropdown-menu dropdown-menu-right">
+						<a class="dropdown-item" th:href="@{'/show-offer/' + ${operation.id}}">Show</a>
+						<a class="dropdown-item" th:href="@{'/edit-offer/' + ${operation.id}}">Edit</a>
+						<form id="deleteForm" th:action="@{/delete-daret}" method="post">
+							<input type="hidden" id="operationIdInput" name="operationId" />
+						</form>
+						<a class="dropdown-item" th:data-id="${operation.id}" th:data-status="${operation.status}"
+							style="cursor: pointer;"
+							onclick="confirmEditOrDelete(this.getAttribute('data-id'), this.getAttribute('data-status'))">
+							Delete
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
