@@ -114,8 +114,7 @@ public class DaretOperationController {
 	        daretOperation.setStatus("Pending");
 	        daretOperation.setDateDebut(null);
 	        daretOperation.setDateFin(null);
-	        daretOperation.setTourDeRole(1L);
-
+	        daretOperation.setTourDeRole(1);
 	        daretOperationService.save(daretOperation);
 
 	        return "redirect:/liste-des-offres";
@@ -165,7 +164,6 @@ public class DaretOperationController {
 	            existingDaretOperation.setTypePeriode(updatedDaretOperation.getTypePeriode());
 	            updatedDaretOperation.setAdminOffre(currentUser);
 		        updatedDaretOperation.setStatus("Pending");
-		        updatedDaretOperation.setTourDeRole(1L);
 
 	            
 	            // Save the updatedDaretOperation
@@ -194,12 +192,12 @@ public class DaretOperationController {
 	            // Perform authorization check here if needed
 
 	            // If the DaretOperation is not in progress, show the update form
-	            model.addAttribute("daretOperation", daretOperation)
-	                 .addAttribute("participants", participants)
-	                 .addAttribute("pageTitle", "DARET-ADMIN UPDATE OFFER");
+	            model.addAttribute("daretOperation", daretOperation);
+	            model.addAttribute("participants", participants);
+	            model.addAttribute("pageTitle", "DARET-ADMIN UPDATE OFFER");
 
 	            // Return the view name for the update offer form
-	            return "Admin/show-offer";
+	            return "Admin/hara";
 
 	        } catch (Exception xe) {
 	            // Consider redirecting to a more user-friendly error page or login page

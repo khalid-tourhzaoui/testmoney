@@ -47,9 +47,8 @@ public class DaretOperation {
     @Positive(message = "Le montant par période doit être un nombre positif")
     @Column(nullable = false)
     private double montantParPeriode;
-
-    @Column(nullable = false)
-    private Long tourDeRole;
+    @Column(nullable = true)
+    private int tourDeRole;
     
     @Column(nullable = true)
     private float placesReservees=0;
@@ -62,7 +61,7 @@ public class DaretOperation {
     @Column(name = "updated_at")
     private Date updatedAt;
 	public DaretOperation(String designation, int nombreParticipant, LocalDate dateDebut, LocalDate dateFin,String typePeriode, User adminOffre, String status,
-			double montantParPeriode,Long tourDeRole) {
+			double montantParPeriode,int tourDeRole) {
 		
 		this.designation = designation;
 		this.nombreParticipant = nombreParticipant;
@@ -72,7 +71,7 @@ public class DaretOperation {
 		this.adminOffre = adminOffre;
 		this.status = status;
 		this.montantParPeriode = montantParPeriode;
-		this.tourDeRole = tourDeRole;
+		this.tourDeRole=tourDeRole;
 	}
 
 	public DaretOperation() {
@@ -152,13 +151,7 @@ public class DaretOperation {
 		this.montantParPeriode = montantParPeriode;
 	}
 
-	public Long getTourDeRole() {
-		return tourDeRole;
-	}
-
-	public void setTourDeRole(Long tourDeRole) {
-		this.tourDeRole = tourDeRole;
-	}
+	
 
 	public List<DaretParticipant> getDaretParticipants() {
 		return daretParticipants;
@@ -174,6 +167,13 @@ public class DaretOperation {
 
 	public void setPlacesReservees(float placesReservees) {
 		this.placesReservees = placesReservees;
+	}
+	public int getTourDeRole() {
+		return tourDeRole;
+	}
+
+	public void setTourDeRole(int tourDeRole) {
+		this.tourDeRole = tourDeRole;
 	}
 	@PrePersist
     protected void onCreate() {

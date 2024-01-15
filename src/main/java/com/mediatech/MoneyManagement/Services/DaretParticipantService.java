@@ -9,4 +9,5 @@ public interface DaretParticipantService {
     DaretParticipant getDaretParticipantById(Long id);
     DaretOperation getDaretOperationById(Long daretOperationId);
     void addParticipantToDaretOperation(Long daretOperationId, Long userId, String paymentType,float montantPaye);
+	/*void makePaymentAndUpdateTourDeRole(DaretParticipant participant);*/
 }

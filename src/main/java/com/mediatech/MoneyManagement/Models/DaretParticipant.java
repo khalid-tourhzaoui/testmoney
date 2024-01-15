@@ -39,11 +39,16 @@ public class DaretParticipant {
     
     @Column(nullable=true)
     private int VerifyPayement;
-    
-    
+
+   @Column(nullable=true)
+   private boolean isCouple;
+   
+   @Column(nullable=true)
+   private int ParticipantIndex;
+
 
 	public DaretParticipant(User user, DaretOperation daretOperation, float montantPaye, LocalDate datePaiement,
-			String typePayement, int verifyPayement) {
+			String typePayement, int verifyPayement,boolean isCouple) {
 		super();
 		this.user = user;
 		this.daretOperation = daretOperation;
@@ -51,12 +56,39 @@ public class DaretParticipant {
 		this.datePaiement = datePaiement;
 		this.typePayement = typePayement;
 		this.VerifyPayement = verifyPayement;
+		this.isCouple = isCouple;
 	}
 
 	public DaretParticipant() {
 		super();
 		//TODO Auto-generated constructor stub
 	}
+
+	 /*public DaretParticipant(DaretParticipant other) {
+	        this.user = other.user;
+	        this.daretOperation = other.daretOperation;
+	        this.typePayement = other.typePayement;
+	        this.montantPaye = other.montantPaye;
+	        this.datePaiement = other.datePaiement;
+	        this.VerifyPayement = other.VerifyPayement;
+	        this.isCouple = other.isCouple;
+	    }*/
+	public DaretParticipant(DaretParticipant existingParticipant) {
+	    this.user = existingParticipant.getUser();
+	    this.daretOperation = existingParticipant.getDaretOperation();
+	    this.createdAt = existingParticipant.getCreatedAt();
+	    this.updatedAt = existingParticipant.getUpdatedAt();
+	    this.montantPaye = existingParticipant.getMontantPaye();
+	    this.datePaiement = existingParticipant.getDatePaiement();
+	    this.typePayement = existingParticipant.getTypePayement();
+	    this.VerifyPayement = existingParticipant.getVerifyPayement();
+	    this.isCouple = existingParticipant.getIsCouple();
+	    // Assuming participantIndex is also an attribute in DaretParticipant
+	    this.ParticipantIndex = existingParticipant.getParticipantIndex();
+	}
+
+
+	
 
 	public Long getId() {
 		return id;
@@ -129,6 +161,23 @@ public class DaretParticipant {
 	public void setVerifyPayement(int verifyPayement) {
 		VerifyPayement = verifyPayement;
 	}
+
+	public boolean getIsCouple() {
+        return isCouple;
+    }
+
+    public void setIsCouple(boolean isCouple) {
+        this.isCouple = isCouple;
+    }
+
+    // Getter et Setter pour tourDeRole
+    public int getParticipantIndex() {
+        return ParticipantIndex;
+    }
+
+    public void setParticipantIndex(int ParticipantIndex) {
+        this.ParticipantIndex = ParticipantIndex;
+    }
 
 	@PrePersist
     protected void onCreate() {

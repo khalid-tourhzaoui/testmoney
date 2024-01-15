@@ -1,8 +1,6 @@
 package com.mediatech.MoneyManagement.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-
 import org.springframework.stereotype.Service;
 
 import com.mediatech.MoneyManagement.Models.DaretOperation;
@@ -22,10 +20,13 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
 
     @Autowired
     private DaretParticipantRepository daretParticipantRepository;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private DaretOperationRepository daretOperationRepository;
+
     @Override
     public void addParticipantToDaretOperation(Long daretOperationId, Long userId, String paymentType, float montantPaye) {
         try {
@@ -38,7 +39,6 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
             daretParticipant.setTypePayement(paymentType);
 
             double factor;
-            double montant;
             switch (paymentType) {
                 case "Moitier":
                     factor = 0.5;
@@ -51,59 +51,135 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
                     break;
             }
 
-            montant = montantPaye * factor;
-            daretParticipant.setMontantPaye((float) montant);
+            float montant = (float) (montantPaye * factor);
+            daretParticipant.setMontantPaye(montant);
 
             float currentPlacesReservees = daretOperation.getPlacesReservees();
-            daretOperation.setPlacesReservees((float)(currentPlacesReservees +factor));
+            daretOperation.setPlacesReservees((float) (currentPlacesReservees + factor));
 
+            handleCoupleParticipants(daretParticipant, participants);
 
             if (daretOperation.getPlacesReservees() >= daretOperation.getNombreParticipant()) {
                 daretOperation.setStatus("Progress");
 
-                // Set dateDebut only if it's not already set
                 if (daretOperation.getDateDebut() == null) {
                     daretOperation.setDateDebut(LocalDate.now());
                 }
 
-                // Determine dateFin based on typePeriode and nombreParticipant
-                if ("mensuelle".equalsIgnoreCase(daretOperation.getTypePeriode())) {
-                    int numberOfMonths = daretOperation.getNombreParticipant();
-                    LocalDate newDateFin = daretOperation.getDateDebut().plusMonths(numberOfMonths);
-                    daretOperation.setDateFin(newDateFin);
-                    if (daretOperation.getDateDebut() != null ) {
-                        for (DaretParticipant participant : participants) {
-                        	participant.setDatePaiement(daretOperation.getDateDebut().plusMonths(1));
-                        }
-                    }
-                } else if ("hebdomadaire".equalsIgnoreCase(daretOperation.getTypePeriode())) {
-                    int numberOfWeeks = daretOperation.getNombreParticipant();
-                    LocalDate newDateFin = daretOperation.getDateDebut().plusDays(numberOfWeeks);
-                    daretOperation.setDateFin(newDateFin);
+                setEndDateBasedOnTypeAndNumberOfParticipants(daretOperation);
+
+                // Utiliser un compteur séparé pour l'index du participant
+                int participantIndex = 1;
+
+                for (DaretParticipant participant : participants) {
+                    // Ne mettez à jour la date de paiement que si la date de début est définie
                     if (daretOperation.getDateDebut() != null) {
-                        for (DaretParticipant participant : participants) {
-                        	participant.setDatePaiement(daretOperation.getDateDebut().plusDays(1));
-                        }
+                        // Logique pour définir la date de paiement en fonction de la période
+                        participant.setDatePaiement(calculateNextPaymentDate(participant, daretOperation));
                     }
-                } else if ("semaine".equalsIgnoreCase(daretOperation.getTypePeriode())) {
-                    int numberOfWeeks = daretOperation.getNombreParticipant();
-                    LocalDate newDateFin = daretOperation.getDateDebut().plusWeeks(numberOfWeeks);
-                    daretOperation.setDateFin(newDateFin);
-                    if (daretOperation.getDateDebut() != null) {
-                        for (DaretParticipant participant : participants) {
-                        	participant.setDatePaiement(daretOperation.getDateDebut().plusWeeks(1));
-                        }
-                    }
+
+                    participant.setParticipantIndex(participantIndex);
+
+                    // Logique pour définir si le participant est en couple
+                    participant.setIsCouple(isCouple(participant, participants));
+
+                    // Incrémenter le compteur de l'index du participant
+                    participantIndex++;
                 }
             }
-            
-            daretOperationRepository.save(daretOperation);
+
             daretParticipantRepository.save(daretParticipant);
+            daretOperationRepository.save(daretOperation);
         } catch (EntityNotFoundException ex) {
-            System.out.println("EROOOOOOOOOOOOOOOOOOOR");
+            System.out.println("ERROR: " + ex.getMessage());
+        }
+    }
+    private boolean isCouple(DaretParticipant participant, List<DaretParticipant> participants) {
+        return participant.getTypePayement().equalsIgnoreCase("Moitier") && participant.getParticipantIndex() % 2 == 0;
+    }
+
+    private void handleCoupleParticipants(DaretParticipant newParticipant, List<DaretParticipant> participants) {
+        if (newParticipant.getTypePayement().equalsIgnoreCase("Moitier")) {
+            DaretParticipant halfPaymentParticipant = findAvailableHalfPaymentParticipant(participants);
+
+            if (halfPaymentParticipant != null && halfPaymentParticipant.getDaretOperation().equals(newParticipant.getDaretOperation())) {
+                // Found a participant paying half who is not part of a couple in the same Daret
+                // Update both participants to have the same index and mark them as a couple
+                int coupleIndex = halfPaymentParticipant.getParticipantIndex();
+                newParticipant.setParticipantIndex(coupleIndex);
+                newParticipant.setIsCouple(true);
+                halfPaymentParticipant.setIsCouple(true);
+            } else {
+                // If no existing participant paying half in the same Daret, assign a new incremented index
+                int newIndex = findNextAvailableIndex(participants);
+                newParticipant.setParticipantIndex(newIndex);
+            }
+        } else {
+            // For normal or double payments, assign a new incremented index
+            int newIndex = findNextAvailableIndex(participants);
+            newParticipant.setParticipantIndex(newIndex);
         }
     }
 
+
+    private DaretParticipant findAvailableHalfPaymentParticipant(List<DaretParticipant> participants) {
+        for (DaretParticipant existingParticipant : participants) {
+            if (existingParticipant.getTypePayement().equalsIgnoreCase("Moitier")
+                    && !existingParticipant.getIsCouple()) {
+                // Found a participant paying half who is not part of a couple
+                return existingParticipant;
+            }
+        }
+        return null;
+    }
+
+    private int findNextAvailableIndex(List<DaretParticipant> participants) {
+        int maxIndex = 0;
+
+        for (DaretParticipant participant : participants) {
+            if (participant.getParticipantIndex() > maxIndex) {
+                maxIndex = participant.getParticipantIndex();
+            }
+        }
+
+        return maxIndex + 1;
+    }
+
+    // Calculate next payment date based on typePeriode
+    private LocalDate calculateNextPaymentDate(DaretParticipant participant, DaretOperation daretOperation) {
+        String typePeriode = daretOperation.getTypePeriode();
+
+        // Use the participant's payment date or the tontine start date if it's null
+        LocalDate currentDate = participant.getDatePaiement() != null ? participant.getDatePaiement() : daretOperation.getDateDebut();
+
+        switch (typePeriode.toLowerCase()) {
+            case "mensuelle":
+                return currentDate.plusMonths(1);
+            case "hebdomadaire":
+                return currentDate.plusDays(7);
+            case "semaine":
+                return currentDate.plusWeeks(1);
+            default:
+                throw new IllegalArgumentException("Unsupported type de période: " + typePeriode);
+        }
+    }
+
+    // Set the end date based on typePeriode and numberOfParticipants
+    private void setEndDateBasedOnTypeAndNumberOfParticipants(DaretOperation daretOperation) {
+        if ("mensuelle".equalsIgnoreCase(daretOperation.getTypePeriode())) {
+            int numberOfMonths = daretOperation.getNombreParticipant();
+            LocalDate newDateFin = daretOperation.getDateDebut().plusMonths(numberOfMonths);
+            daretOperation.setDateFin(newDateFin);
+        } else if ("hebdomadaire".equalsIgnoreCase(daretOperation.getTypePeriode())) {
+            int numberOfWeeks = daretOperation.getNombreParticipant();
+            LocalDate newDateFin = daretOperation.getDateDebut().plusDays(numberOfWeeks * 7);
+            daretOperation.setDateFin(newDateFin);
+        } else if ("semaine".equalsIgnoreCase(daretOperation.getTypePeriode())) {
+            int numberOfWeeks = daretOperation.getNombreParticipant();
+            LocalDate newDateFin = daretOperation.getDateDebut().plusWeeks(numberOfWeeks);
+            daretOperation.setDateFin(newDateFin);
+        }
+    }
 
     @Override
     public List<DaretParticipant> getAllDaretParticipants() {
@@ -121,9 +197,5 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
                 .orElseThrow(() -> new EntityNotFoundException("DaretOperation not found with id: " + daretOperationId));
     }
 
-
-
     // Add more service methods as needed
-
 }
-
