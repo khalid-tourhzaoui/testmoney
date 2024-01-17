@@ -2,7 +2,11 @@ package com.mediatech.MoneyManagement.Controllers;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -179,69 +183,95 @@ public class DaretParticipantController {
 	            // Récupérer le DaretOperation depuis la base de données
 	            DaretOperation daretOperation = daretOperationService.getDaretOperationById(daretOperationId);
 
-	            // Mise à jour du verifyPayment et datePaiement pour tous les utilisateurs participant à ce DaretOperation
-	            List<DaretParticipant> participants = new ArrayList<>(daretOperation.getDaretParticipants());
-
-	            // Counter for tour de role
-	            int tourDeRoleCounter = daretOperation.getTourDeRole();
-
-	            // Nouvelle liste pour stocker les nouveaux participants
-	            List<DaretParticipant> newParticipants = new ArrayList<>();
+	            // Mise à jour du verifyPayement et datePaiement pour tous les utilisateurs participant à ce DaretOperation
+	            List<DaretParticipant> participants = daretOperation.getDaretParticipants();
+	            boolean allPaymentsReceived = true;
 
 	            for (DaretParticipant participant : participants) {
-	                participant.setVerifyPayement(0);
-
-	                // Mettre à jour la date de paiement en fonction de la période
-	                LocalDate nextPaymentDate = calculateNextPaymentDate(participant, daretOperation);
-	                participant.setDatePaiement(nextPaymentDate);
-
-	                // Gérer le cas où le participant a le type de montant "double"
-	                if ("Double".equalsIgnoreCase(participant.getTypePayement())) {
-	                    // Dupliquer le participant
-	                    DaretParticipant secondParticipant = new DaretParticipant(participant);
-
-	                    // Assigner le tour de rôle pour le deuxième participant
-	                    secondParticipant.setParticipantIndex(participant.getParticipantIndex());
-	                    secondParticipant.setIsCouple(participant.getIsCouple());
-
-	                    // Ajouter le deuxième participant à la liste temporaire
-	                    newParticipants.add(secondParticipant);
+	                if (participant.getVerifyPayement() == 0) {
+	                    allPaymentsReceived = false;
+	                    break; // Sortir de la boucle si un paiement est manquant
 	                }
 	            }
 
-	            // Ajouter les nouveaux participants à la liste principale
-	            participants.addAll(newParticipants);
+	            if (allPaymentsReceived) {
+	                // Tous les paiements ont été reçus, mise à jour du tour de rôle
+	                updateTourDeRole(daretOperation);
 
-	            // Mettre à jour le tour de rôle pour la tontine
-	            daretOperation.setTourDeRole(++tourDeRoleCounter);
+	                // Réinitialiser verifyPayement et ajuster datePaiement pour le prochain cycle
+	                for (DaretParticipant participant : participants) {
+	                    participant.setVerifyPayement(0);
+	                    //calculateNextPaymentDate(participant, daretOperation);
 
-	            // Enregistrez les modifications dans la base de données
-	            daretOperationService.save(daretOperation);
+	                    // Ajouter la logique pour gérer le tour de rôle pour le participant de type "double"
+	                    if ("Double".equalsIgnoreCase(participant.getTypePayement())) {
+	                        int tourIncremented = participant.getTourIncremented();
 
-	            // Rediriger vers une page de succès
-	            return "redirect:/show-offer/" + daretOperation.getId();
+	                        if (tourIncremented < 2) {
+	                            // Participant with type "Double" can increment the index up to two times
+	                            int currentTourDeRole = daretOperation.getTourDeRole();
+	                            participant.setTourIncremented(tourIncremented + 1);
+	                            participant.setCoupleIndex(currentTourDeRole);
+
+	                            // Décaler les indices pour les autres participants
+	                            for (DaretParticipant otherParticipant : participants) {
+	                                if (!participant.equals(otherParticipant) && !otherParticipant.getTypePayement().equalsIgnoreCase("Double")) {
+	                                    otherParticipant.setCoupleIndex(otherParticipant.getCoupleIndex() + 1);
+	                                }
+	                            }
+	                        }
+	                    } else if ("Moitie".equalsIgnoreCase(participant.getTypePayement())) {
+	                        // Participant with type "Moitie" forming a couple
+	                        if (participant.getCoupleIndex() == 0) {
+	                            // This participant is the first person of the couple
+	                            int currentTourDeRole = daretOperation.getTourDeRole();
+	                            participant.setCoupleIndex(currentTourDeRole);
+
+	                            // Set the couple index for the second person of the couple
+	                            for (DaretParticipant otherParticipant : participants) {
+	                                if (!participant.equals(otherParticipant) && otherParticipant.getCoupleIndex() == 0 && otherParticipant.getTypePayement().equalsIgnoreCase("Moitie")) {
+	                                    otherParticipant.setCoupleIndex(1);
+	                                    otherParticipant.setCoupleIndex(currentTourDeRole);
+	                                }
+	                            }
+	                        }
+	                    }
+	                }
+
+	                // Enregistrez les modifications dans la base de données
+	                daretOperationService.save(daretOperation);
+
+	                // Vous pouvez ajouter d'autres logiques ici
+	                // Rediriger vers une page de succès
+	                return "redirect:/show-offer/" + daretOperation.getId();
+	            } else {
+	                // Certains paiements sont manquants, rediriger vers une page d'erreur ou une autre page
+	                return "redirect:/payment-error";
+	            }
 	        } catch (Exception e) {
 	            // Gérer les exceptions, pour l'instant, rediriger vers la page de connexion
 	            return "redirect:/login";
 	        }
 	    }
 
+	    private void updateTourDeRole(DaretOperation daretOperation) {
+	        // Logique pour mettre à jour le tour de rôle selon vos besoins
+	        // Par exemple, vous pouvez incrémenter le tour de rôle actuel
+	        int currentTourDeRole = daretOperation.getTourDeRole();
+	        daretOperation.setTourDeRole(currentTourDeRole + 1);
+	    }
 
-	    public LocalDate calculateNextPaymentDate(DaretParticipant participant, DaretOperation daretOperation) {
-	        String typePeriode = daretOperation.getTypePeriode();
-	        LocalDate currentDate = participant.getDatePaiement();
 
-	        switch (typePeriode.toLowerCase()) {
-	            case "mensuelle":
-	                return currentDate.plusMonths(1);
-	            case "hebdomadaire":
-	                return currentDate.plusDays(7);
-	            case "semaine":
-	                return currentDate.plusWeeks(1);
-	            default:
-	                throw new IllegalArgumentException("Unsupported type de période: " + typePeriode);
+	    // Calculez la prochaine date de paiement en fonction de la période
+	    public void calculateNextPaymentDate(DaretParticipant participant, DaretOperation daretOperation) {
+	        if ("mensuelle".equalsIgnoreCase(daretOperation.getTypePeriode())) {
+	            participant.setDatePaiement(participant.getDatePaiement().plusMonths(1));
+	        } else if ("hebdomadaire".equalsIgnoreCase(daretOperation.getTypePeriode())) {
+	            participant.setDatePaiement(participant.getDatePaiement().plusDays(1));
+	        } else if ("semaine".equalsIgnoreCase(daretOperation.getTypePeriode())) {
+	            participant.setDatePaiement(participant.getDatePaiement().plusWeeks(1));
 	        }
 	    }
 
-    
+
 }

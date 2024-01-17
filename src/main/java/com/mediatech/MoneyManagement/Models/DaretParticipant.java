@@ -41,14 +41,17 @@ public class DaretParticipant {
     private int VerifyPayement;
 
    @Column(nullable=true)
-   private boolean isCouple;
+   private boolean isCouple=false;
    
    @Column(nullable=true)
    private int ParticipantIndex;
-
+   @Column(name = "couple_index")
+   private int coupleIndex;
+   @Column(name = "tour_incremented")
+   private int tourIncremented;
 
 	public DaretParticipant(User user, DaretOperation daretOperation, float montantPaye, LocalDate datePaiement,
-			String typePayement, int verifyPayement,boolean isCouple) {
+			String typePayement, int verifyPayement,boolean isCouple,int coupleIndex,int ParticipantIndex,int tourIncremented ) {
 		super();
 		this.user = user;
 		this.daretOperation = daretOperation;
@@ -57,6 +60,9 @@ public class DaretParticipant {
 		this.typePayement = typePayement;
 		this.VerifyPayement = verifyPayement;
 		this.isCouple = isCouple;
+		this.coupleIndex = coupleIndex;
+		this.ParticipantIndex = ParticipantIndex;
+		this.tourIncremented = tourIncremented;
 	}
 
 	public DaretParticipant() {
@@ -85,10 +91,28 @@ public class DaretParticipant {
 	    this.isCouple = existingParticipant.getIsCouple();
 	    // Assuming participantIndex is also an attribute in DaretParticipant
 	    this.ParticipantIndex = existingParticipant.getParticipantIndex();
+	    this.coupleIndex = existingParticipant.getCoupleIndex();
+	    this.tourIncremented = existingParticipant.getTourIncremented();
 	}
 
 
 	
+
+	public int getTourIncremented() {
+		return tourIncremented;
+	}
+
+	public void setTourIncremented(int tourIncremented) {
+		this.tourIncremented = tourIncremented;
+	}
+
+	public int getCoupleIndex() {
+		return coupleIndex;
+	}
+
+	public void setCoupleIndex(int coupleIndex) {
+		this.coupleIndex = coupleIndex;
+	}
 
 	public Long getId() {
 		return id;
@@ -162,15 +186,17 @@ public class DaretParticipant {
 		VerifyPayement = verifyPayement;
 	}
 
-	public boolean getIsCouple() {
-        return isCouple;
-    }
+	
 
-    public void setIsCouple(boolean isCouple) {
-        this.isCouple = isCouple;
-    }
+    public boolean isCouple() {
+		return isCouple;
+	}
 
-    // Getter et Setter pour tourDeRole
+	public void setCouple(boolean isCouple) {
+		this.isCouple = isCouple;
+	}
+
+	// Getter et Setter pour tourDeRole
     public int getParticipantIndex() {
         return ParticipantIndex;
     }
@@ -178,6 +204,8 @@ public class DaretParticipant {
     public void setParticipantIndex(int ParticipantIndex) {
         this.ParticipantIndex = ParticipantIndex;
     }
+
+	
 
 	@PrePersist
     protected void onCreate() {
@@ -188,4 +216,12 @@ public class DaretParticipant {
     protected void onUpdate() {
         updatedAt = new Date();
     }
+
+	public boolean getIsCouple() {
+		return isCouple;
+	}
+
+	public void setIsCouple(boolean b) {
+		this.isCouple = b;
+	}
 }

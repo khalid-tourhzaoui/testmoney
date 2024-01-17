@@ -95,31 +95,51 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
         }
     }
     private boolean isCouple(DaretParticipant participant, List<DaretParticipant> participants) {
-        return participant.getTypePayement().equalsIgnoreCase("Moitier") && participant.getParticipantIndex() % 2 == 0;
+        return participant.getTypePayement().equalsIgnoreCase("Moitier") && participant.getIsCouple();
     }
+
 
     private void handleCoupleParticipants(DaretParticipant newParticipant, List<DaretParticipant> participants) {
         if (newParticipant.getTypePayement().equalsIgnoreCase("Moitier")) {
-            DaretParticipant halfPaymentParticipant = findAvailableHalfPaymentParticipant(participants);
-
-            if (halfPaymentParticipant != null && halfPaymentParticipant.getDaretOperation().equals(newParticipant.getDaretOperation())) {
-                // Found a participant paying half who is not part of a couple in the same Daret
-                // Update both participants to have the same index and mark them as a couple
-                int coupleIndex = halfPaymentParticipant.getParticipantIndex();
-                newParticipant.setParticipantIndex(coupleIndex);
-                newParticipant.setIsCouple(true);
-                halfPaymentParticipant.setIsCouple(true);
-            } else {
-                // If no existing participant paying half in the same Daret, assign a new incremented index
-                int newIndex = findNextAvailableIndex(participants);
-                newParticipant.setParticipantIndex(newIndex);
-            }
+            handleMoitierParticipant(newParticipant, participants);
+        } else if (newParticipant.getTypePayement().equalsIgnoreCase("Double")) {
+            handleDoubleParticipant(newParticipant, participants);
         } else {
-            // For normal or double payments, assign a new incremented index
+            // For normal payments, assign a new incremented index
             int newIndex = findNextAvailableIndex(participants);
             newParticipant.setParticipantIndex(newIndex);
+            newParticipant.setCoupleIndex(newIndex);
         }
     }
+
+    private void handleMoitierParticipant(DaretParticipant newParticipant, List<DaretParticipant> participants) {
+        DaretParticipant halfPaymentParticipant = findAvailableHalfPaymentParticipant(participants);
+
+        if (halfPaymentParticipant != null) {
+            // Found a participant paying half who is not part of a couple in the same Daret
+            // Update both participants to have the same index and mark them as a couple
+            int coupleIndex = halfPaymentParticipant.getCoupleIndex();
+            newParticipant.setIsCouple(true);
+            halfPaymentParticipant.setIsCouple(true);
+            newParticipant.setParticipantIndex(coupleIndex);
+            newParticipant.setCoupleIndex(coupleIndex);
+        } else {
+            // If no existing participant paying half in the same Daret, retain the current index
+            int newIndex = findNextAvailableIndex(participants);
+            newParticipant.setParticipantIndex(newIndex);
+            newParticipant.setCoupleIndex(newIndex);
+        }
+    }
+
+    private void handleDoubleParticipant(DaretParticipant newParticipant, List<DaretParticipant> participants) {
+        // For participants with type "Double", assign a new incremented index
+    	int newIndex = findNextAvailableIndex(participants);
+    	newParticipant.setParticipantIndex(newIndex);
+        newParticipant.setCoupleIndex(newIndex);
+    }
+
+
+
 
 
     private DaretParticipant findAvailableHalfPaymentParticipant(List<DaretParticipant> participants) {
@@ -145,6 +165,7 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
         return maxIndex + 1;
     }
 
+
     // Calculate next payment date based on typePeriode
     private LocalDate calculateNextPaymentDate(DaretParticipant participant, DaretOperation daretOperation) {
         String typePeriode = daretOperation.getTypePeriode();
@@ -156,7 +177,7 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
             case "mensuelle":
                 return currentDate.plusMonths(1);
             case "hebdomadaire":
-                return currentDate.plusDays(7);
+                return currentDate.plusDays(1);
             case "semaine":
                 return currentDate.plusWeeks(1);
             default:
@@ -172,7 +193,7 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
             daretOperation.setDateFin(newDateFin);
         } else if ("hebdomadaire".equalsIgnoreCase(daretOperation.getTypePeriode())) {
             int numberOfWeeks = daretOperation.getNombreParticipant();
-            LocalDate newDateFin = daretOperation.getDateDebut().plusDays(numberOfWeeks * 7);
+            LocalDate newDateFin = daretOperation.getDateDebut().plusDays(numberOfWeeks);
             daretOperation.setDateFin(newDateFin);
         } else if ("semaine".equalsIgnoreCase(daretOperation.getTypePeriode())) {
             int numberOfWeeks = daretOperation.getNombreParticipant();

@@ -78,7 +78,7 @@
                   </div>
                   <div class="card-body">
                      <div class="table-responsive">
-                        <table class="table style-1" id="ListDatatableView">
+                        <table class="table style-1 text-center" id="ListDatatableView">
                            <thead>
                               <tr class="text-center">
                                  <th>#</th>
@@ -92,7 +92,7 @@
                            </thead>
                            <tbody>
                               <tr th:each="participant,iterStat : ${participants}"
-                              th:class="${participant.ParticipantIndex==daretOperation.tourDeRole} ? 'table-danger' : ''">
+                              th:class="${participant.coupleIndex == daretOperation.tourDeRole} ? 'table-danger ' : ''">
                                  <td th:text="${iterStat.count}"></td>
                                  <td>
 									 <div class="media style-1">
@@ -106,7 +106,7 @@
                                  <td>[[${participant.montantPaye}]] DH</td>
                                  <td>[[${participant.typePayement}]]</td>
 								 <td>[[${participant.datePaiement}]]</td>
-                                 <td>Pending</td>
+                                 <td th:text="${participant.ParticipantIndex == daretOperation.tourDeRole ? 'Current' : 'Pending'}"></td>
                                  <td>
 									<!--<a href="javascript:void(0);" class="btn btn-primary"
 								        th:disabled="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd', timeZone) != #temporals.format(participant.datePaiement, 'yyyy-MM-dd') or participant.verifyPayement != 0}">
