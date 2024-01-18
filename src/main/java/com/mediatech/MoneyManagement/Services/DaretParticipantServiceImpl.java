@@ -85,9 +85,13 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
 
                     // Incrémenter le compteur de l'index du participant
                     participantIndex++;
-                }
-            }
 
+
+                }
+
+              
+            }
+            
             daretParticipantRepository.save(daretParticipant);
             daretOperationRepository.save(daretOperation);
         } catch (EntityNotFoundException ex) {
@@ -106,9 +110,15 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
             handleDoubleParticipant(newParticipant, participants);
         } else {
             // For normal payments, assign a new incremented index
-            int newIndex = findNextAvailableIndex(participants);
-            newParticipant.setParticipantIndex(newIndex);
-            newParticipant.setCoupleIndex(newIndex);
+            int newIndexParticipant = findNextAvailableIndex(participants);
+            int newIndexCouple = findNextAvailableIndex2(participants);
+            newParticipant.setParticipantIndex(newIndexParticipant);
+            newParticipant.setCoupleIndex(newIndexCouple);
+            if(newParticipant.getParticipantIndex()==1) {
+            	newParticipant.setEtatTour("current");
+            }else {
+            	newParticipant.setEtatTour("not_done");
+            }
         }
     }
 
@@ -121,21 +131,35 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
             int coupleIndex = halfPaymentParticipant.getCoupleIndex();
             newParticipant.setIsCouple(true);
             halfPaymentParticipant.setIsCouple(true);
-            newParticipant.setParticipantIndex(coupleIndex);
             newParticipant.setCoupleIndex(coupleIndex);
-        } else {
-            // If no existing participant paying half in the same Daret, retain the current index
             int newIndex = findNextAvailableIndex(participants);
             newParticipant.setParticipantIndex(newIndex);
-            newParticipant.setCoupleIndex(newIndex);
+            newParticipant.setEtatTour(halfPaymentParticipant.getEtatTour());
+        } else {
+            // If no existing participant paying half in the same Daret, retain the current index
+        	int newIndexParticipant = findNextAvailableIndex(participants);
+            int newIndexCouple = findNextAvailableIndex2(participants);
+            newParticipant.setCoupleIndex(newIndexCouple);
+            newParticipant.setParticipantIndex(newIndexParticipant);
+            if(newParticipant.getParticipantIndex()==1) {
+            	newParticipant.setEtatTour("current");
+            }else {
+            	newParticipant.setEtatTour("not_done");
+            }
         }
     }
 
     private void handleDoubleParticipant(DaretParticipant newParticipant, List<DaretParticipant> participants) {
         // For participants with type "Double", assign a new incremented index
-    	int newIndex = findNextAvailableIndex(participants);
-    	newParticipant.setParticipantIndex(newIndex);
-        newParticipant.setCoupleIndex(newIndex);
+    	int newIndexParticipant = findNextAvailableIndex(participants);
+        int newIndexCouple = findNextAvailableIndex2(participants);
+    	newParticipant.setParticipantIndex(newIndexParticipant);
+        newParticipant.setCoupleIndex(newIndexCouple);
+        if(newParticipant.getParticipantIndex()==1) {
+        	newParticipant.setEtatTour("current");
+        }else {
+        	newParticipant.setEtatTour("not_done");
+        }
     }
 
 
@@ -165,7 +189,17 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
         return maxIndex + 1;
     }
 
+    private int findNextAvailableIndex2(List<DaretParticipant> participants) {
+        int maxIndex = 0;
 
+        for (DaretParticipant participant : participants) {
+            if (participant.getCoupleIndex() > maxIndex) {
+                maxIndex = participant.getCoupleIndex();
+            }
+        }
+
+        return maxIndex + 1;
+    }
     // Calculate next payment date based on typePeriode
     private LocalDate calculateNextPaymentDate(DaretParticipant participant, DaretOperation daretOperation) {
         String typePeriode = daretOperation.getTypePeriode();

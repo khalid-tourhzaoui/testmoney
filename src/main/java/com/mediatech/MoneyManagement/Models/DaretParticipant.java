@@ -47,11 +47,11 @@ public class DaretParticipant {
    private int ParticipantIndex;
    @Column(name = "couple_index")
    private int coupleIndex;
-   @Column(name = "tour_incremented")
-   private int tourIncremented;
+   @Column(nullable = true)
+   private String EtatTour;
 
 	public DaretParticipant(User user, DaretOperation daretOperation, float montantPaye, LocalDate datePaiement,
-			String typePayement, int verifyPayement,boolean isCouple,int coupleIndex,int ParticipantIndex,int tourIncremented ) {
+			String typePayement, int verifyPayement,boolean isCouple,int coupleIndex,int ParticipantIndex,String EtatTour) {
 		super();
 		this.user = user;
 		this.daretOperation = daretOperation;
@@ -62,7 +62,7 @@ public class DaretParticipant {
 		this.isCouple = isCouple;
 		this.coupleIndex = coupleIndex;
 		this.ParticipantIndex = ParticipantIndex;
-		this.tourIncremented = tourIncremented;
+		this.EtatTour = EtatTour;
 	}
 
 	public DaretParticipant() {
@@ -70,15 +70,7 @@ public class DaretParticipant {
 		//TODO Auto-generated constructor stub
 	}
 
-	 /*public DaretParticipant(DaretParticipant other) {
-	        this.user = other.user;
-	        this.daretOperation = other.daretOperation;
-	        this.typePayement = other.typePayement;
-	        this.montantPaye = other.montantPaye;
-	        this.datePaiement = other.datePaiement;
-	        this.VerifyPayement = other.VerifyPayement;
-	        this.isCouple = other.isCouple;
-	    }*/
+
 	public DaretParticipant(DaretParticipant existingParticipant) {
 	    this.user = existingParticipant.getUser();
 	    this.daretOperation = existingParticipant.getDaretOperation();
@@ -89,21 +81,22 @@ public class DaretParticipant {
 	    this.typePayement = existingParticipant.getTypePayement();
 	    this.VerifyPayement = existingParticipant.getVerifyPayement();
 	    this.isCouple = existingParticipant.getIsCouple();
-	    // Assuming participantIndex is also an attribute in DaretParticipant
 	    this.ParticipantIndex = existingParticipant.getParticipantIndex();
 	    this.coupleIndex = existingParticipant.getCoupleIndex();
-	    this.tourIncremented = existingParticipant.getTourIncremented();
+	    this.EtatTour = existingParticipant.getEtatTour();
 	}
 
 
 	
 
-	public int getTourIncremented() {
-		return tourIncremented;
+
+
+	public String getEtatTour() {
+		return EtatTour;
 	}
 
-	public void setTourIncremented(int tourIncremented) {
-		this.tourIncremented = tourIncremented;
+	public void setEtatTour(String etatTour) {
+		EtatTour = etatTour;
 	}
 
 	public int getCoupleIndex() {
