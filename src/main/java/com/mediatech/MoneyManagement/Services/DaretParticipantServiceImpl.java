@@ -86,7 +86,6 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
                     // Incrémenter le compteur de l'index du participant
                     participantIndex++;
 
-
                 }
 
               
@@ -226,8 +225,8 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
             LocalDate newDateFin = daretOperation.getDateDebut().plusMonths(numberOfMonths);
             daretOperation.setDateFin(newDateFin);
         } else if ("hebdomadaire".equalsIgnoreCase(daretOperation.getTypePeriode())) {
-            int numberOfWeeks = daretOperation.getNombreParticipant();
-            LocalDate newDateFin = daretOperation.getDateDebut().plusDays(numberOfWeeks);
+            int numberOfDays = daretOperation.getNombreParticipant();
+            LocalDate newDateFin = daretOperation.getDateDebut().plusDays(numberOfDays);
             daretOperation.setDateFin(newDateFin);
         } else if ("semaine".equalsIgnoreCase(daretOperation.getTypePeriode())) {
             int numberOfWeeks = daretOperation.getNombreParticipant();
@@ -248,9 +247,7 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
 
     @Override
     public DaretOperation getDaretOperationById(Long daretOperationId) {
-        return daretOperationRepository.findById(daretOperationId)
-                .orElseThrow(() -> new EntityNotFoundException("DaretOperation not found with id: " + daretOperationId));
+        return daretOperationRepository.findById(daretOperationId).orElse(null);
     }
 
-    // Add more service methods as needed
 }

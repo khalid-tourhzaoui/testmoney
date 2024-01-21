@@ -19,7 +19,7 @@ public interface DaretOperationRepository extends JpaRepository<DaretOperation, 
     List<DaretOperation> findByStatus(String status);
 
 	//long countDistinctByStatusAndParticipants(String status, User participant);
-    long countByDaretParticipantsUserAndStatus(User participant, String status);
+    long countDistinctByDaretParticipantsUserAndStatus(User participant, String status);
 
 
 

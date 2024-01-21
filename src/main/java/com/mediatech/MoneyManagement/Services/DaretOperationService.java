@@ -31,10 +31,6 @@ public interface DaretOperationService {
     
     List<DaretOperation> findPendingOffers();
     
-    //void addParticipantToDaretOperation(Long daretOperationId, Long userId, String paymentType);
-    
-    /*long countDistinctUserParticipationsByStatus(User participant, String status);*/
-    /*long countDistinctByStatusAndUser(String status, User user);*/
     long countParticipationsByUserAndStatus(User participant, String status);
 
 

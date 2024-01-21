@@ -3,7 +3,6 @@
 
 <head th:replace="layout/head :: head">
 
-
 <body>
 
 	<!--*******************
@@ -65,8 +64,11 @@
 					<div class="col-xl-12 col-xxl-12">
 						<div class="card">
 							<div class="card-header">
-								<h4 class="card-title">Veuillez remplir les champs marqués d'une astérisque (*) car ils
-									sont obligatoires.</h4>
+								<!-- Error Message -->
+								<div th:if="${errorMessage}" class="alert alert-danger text-dark" role="alert">
+									<span th:text="${errorMessage}"></span>
+								</div>
+								<!-- Your existing form and other content -->
 							</div>
 							<div class="card-body">
 								<div id="smartwizard" class="form-wizard order-create">
@@ -76,7 +78,7 @@
 										<li><a class="nav-link" href="#wizard_Payment"><span>3</span></a></li>
 									</ul>
 									<form class="tab-content" th:action="@{/ajouter-offre}" method="post"
-										th:object="${daretOperation}">
+										th:object="${daretOperation}" onsubmit="return validateForm()">
 										<div id="wizard_Service" class="tab-pane" role="tabpanel">
 											<div class="row">
 												<div class="col-lg-12 mb-2">
@@ -85,10 +87,6 @@
 														<input type="text" id="designation" th:field="*{designation}"
 															class="form-control"
 															placeholder="Entrez le nom d'opération">
-														<span class="text-danger"
-															th:if="${#fields.hasErrors('designation')}"
-															th:errors="*{designation}"></span>
-
 													</div>
 												</div>
 												<div class="col-lg-12 mb-2">
@@ -98,7 +96,7 @@
 															name="typePeriode" th:field="*{typePeriode}">
 															<option value="mensuelle">Mensuelle</option>
 															<option value="hebdomadaire">Hebdomadaire</option>
-															<option value="par semaine">Par semaine</option>
+															<option value="semaine">Par semaine</option>
 														</select>
 													</div>
 												</div>
@@ -119,10 +117,6 @@
 																placeholder="Enter Nombre de Personne">
 															<button type="button" class="btn btn-outline-primary"
 																onclick="increment()">+</button>
-															<span th:if="${#fields.hasErrors('nombreParticipant')}"
-																th:errors="*{nombreParticipant}"
-																class="text-danger"></span>
-
 														</div>
 													</div>
 												</div>
@@ -139,6 +133,7 @@
 															<button type="button" class="btn btn-outline-primary"
 																onclick="incrementMontant()">+</button>
 														</div>
+
 													</div>
 												</div>
 											</div>
@@ -206,6 +201,38 @@
 	<script src="js/deznav-init.js"></script>
 	<script src="js/demo.js"></script>
 	<script>
+		// Fonction pour valider le formulaire côté client
+		function validateForm() {
+			// Récupérez les valeurs des champs
+			var designation = document.getElementById('designation').value;
+			var typePeriode = document.getElementById('single-select').value;
+			var nombreParticipant = document.getElementById('nombreParticipant').value;
+			var montantParPeriode = document.getElementById('montantParPeriode').value;
+
+			// Effectuez vos validations ici
+			if (designation.trim() === "") {
+				alert("Le nom d'opération est obligatoire");
+				return false;
+			}
+
+			if (typePeriode.trim() === "") {
+				alert("Le type de période est obligatoire");
+				return false;
+			}
+
+			if (isNaN(nombreParticipant) || nombreParticipant < 2) {
+				alert("Le nombre de participants doit être d'au moins 2");
+				return false;
+			}
+
+			if (isNaN(montantParPeriode) || montantParPeriode < 0) {
+				alert("Le montant par période doit être un nombre positif");
+				return false;
+			}
+
+			// Si toutes les validations réussissent, retournez true
+			return true;
+		}
 		function increment() {
 			var input = document.getElementById('nombreParticipant');
 			input.stepUp();
@@ -227,8 +254,8 @@
 		var currentDate = new Date();
 
 		// Set the day, month, and year buttons
-		document.getElementById('dayButton').textContent = `${currentDate.toLocaleDateString('en-US', { weekday: 'long' })} ${currentDate.getDate()}`;
-		document.getElementById('monthButton').textContent = currentDate.toLocaleString('default', { month: 'short' });
+		document.getElementById('dayButton').textContent = `${currentDate.toLocaleDateString('en-US', {weekday: 'long'})} ${currentDate.getDate()}`;
+		document.getElementById('monthButton').textContent = currentDate.toLocaleString('default', {month: 'short'});
 		document.getElementById('yearButton').textContent = currentDate.getFullYear();
 	</script>
 </body>

@@ -71,9 +71,9 @@
 						</svg>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
-						<a class="dropdown-item" th:href="@{'/show-offer/' + ${operation.id}}">Show</a>
-						<a class="dropdown-item" th:href="@{'/edit-offer/' + ${operation.id}}">Edit</a>
-						<form id="deleteForm" th:action="@{/delete-daret}" method="post">
+						<a class="dropdown-item" th:href="@{'/details-offre/' + ${operation.id}}">Show</a>
+						<a class="dropdown-item" th:href="@{'/modifier-offre/' + ${operation.id}}">Edit</a>
+						<form id="deleteForm" th:action="@{/supprimer-offre}" method="post">
 							<input type="hidden" id="operationIdInput" name="operationId" />
 						</form>
 						<a class="dropdown-item" th:data-id="${operation.id}" th:data-status="${operation.status}"

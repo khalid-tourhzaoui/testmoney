@@ -6,50 +6,32 @@
 
 <body>
 
-    <!--*******************
-        Preloader start
-    ********************-->
+    <!--*************************************Preloader-Start***********************************-->
     <div id="preloader">
         <div class="sk-three-bounce">
-            <!-- ... Preloader content ... -->
+            <div class="sk-child sk-bounce1"></div>
+            <div class="sk-child sk-bounce2"></div>
+            <div class="sk-child sk-bounce3"></div>
         </div>
     </div>
-    <!--*******************
-        Preloader end
-    ********************-->
+    <!--*************************************Preloader-End*************************************-->
 
-    <!--**********************************
-        Main wrapper start
-    ***********************************-->
+    <!--**********************************Main wrapper start***********************************-->
     <div style="height:100vh;" id="main-wrapper">
 
-        <!--**********************************
-            Nav header start
-        ***********************************-->
+	<!--**********************************Nav header start*************************************-->
         <div th:replace="layout/NavHeader :: NavHeader"></div>
-        <!--**********************************
-            Nav header end
-        ***********************************-->
+	<!--**********************************Nav header end***************************************-->
 
-        <!--**********************************
-            Header start
-        ***********************************-->
+    <!--**********************************Header start*****************************************-->
         <div th:replace="layout/header :: header"></div>
-        <!--**********************************
-            Header end
-        ***********************************-->
+    <!--**********************************Header end*******************************************-->
 
-        <!--**********************************
-            Sidebar start
-        ***********************************-->
+	<!--***********************************Sidebar start***************************************-->
         <div th:replace="layout/sidebar :: sidebar"></div>
-        <!--**********************************
-            Sidebar end
-        ***********************************-->
+	<!--***********************************Sidebar end*****************************************-->
 
-        <!--**********************************
-            Content body start
-        ***********************************-->
+    <!--***********************************Content body start**********************************-->
         <div class="content-body">
             <div class="container-fluid">
                 <!-- Row -->
@@ -195,9 +177,9 @@
     <!-- Chart piety plugin files -->
     <script src="vendor/peity/jquery.peity.min.js"></script>
     <!-- Apex Chart -->
-    <script src="vendor/apexchart/apexchart.js"></script>
+    <!--<script src="vendor/apexchart/apexchart.js"></script>-->
     <!-- Dashboard 1 -->
-    <script src="js/dashboard/dashboard-1.js"></script>
+    <!--<script src="js/dashboard/dashboard-1.js"></script>-->
     <script src="vendor/owl-carousel/owl.carousel.js"></script>
     <script src="js/custom.min.js"></script>
     <script src="js/deznav-init.js"></script>

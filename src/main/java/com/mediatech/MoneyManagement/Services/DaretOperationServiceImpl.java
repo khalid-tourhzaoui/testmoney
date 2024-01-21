@@ -44,7 +44,7 @@ public class DaretOperationServiceImpl implements DaretOperationService {
 
     @Override
     public long countOnProgressByAdminOffre(User adminOffre) {
-        return countByStatusAndAdminOffre("On Progress", adminOffre);
+        return countByStatusAndAdminOffre("Progress", adminOffre);
     }
 
     @Override
@@ -76,47 +76,8 @@ public class DaretOperationServiceImpl implements DaretOperationService {
     }
     @Override
     public long countParticipationsByUserAndStatus(User participant, String status) {
-        return daretOperationRepository.countByDaretParticipantsUserAndStatus(participant, status);
+        return daretOperationRepository.countDistinctByDaretParticipantsUserAndStatus(participant, status);
     }
-    /*@Override
-    public long countDistinctUserParticipationsByStatus(User participant, String status) {
-        return daretOperationRepository.countDistinctByStatusAndParticipants(status, participant);
-    }*/
-    
-    /*@Override
-    public void addParticipantToDaretOperation(Long daretOperationId, Long userId, String paymentType) {
-        DaretOperation daretOperation = daretOperationRepository.findById(daretOperationId)
-                .orElseThrow(null);
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(null);
-
-        double factor;
-        switch (paymentType) {
-            case "Moitier":
-                factor = 0.5;
-                break;
-            case "Double":
-                factor = 2.0;
-                break;
-            default:
-                factor = 1.0; // Default to normal
-                break;
-        }
-
-        float currentPlacesReservees = daretOperation.getPlacesReservees();
-        daretOperation.setPlacesReservees((float) (currentPlacesReservees + factor));
-
-        daretOperation.getDaretParticipants().addAll(user);
-
-       
-        if (daretOperation.getPlacesReservees() >= daretOperation.getNombreParticipant()) {
-            daretOperation.setStatus("Progress");
-
-           
-        }
-
-        daretOperationRepository.save(daretOperation);
-    }*/
+   
 
 }

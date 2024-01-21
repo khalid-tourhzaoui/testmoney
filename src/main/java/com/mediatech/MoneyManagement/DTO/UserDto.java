@@ -85,9 +85,6 @@ public class UserDto {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-
-
-   
-    
+  
 }
 

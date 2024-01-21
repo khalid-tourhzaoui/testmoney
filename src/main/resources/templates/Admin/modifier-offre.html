@@ -79,8 +79,10 @@
 					<div class="col-xl-12 col-xxl-12">
 						<div class="card">
 							<div class="card-header">
-								<h4 class="card-title">Veuillez remplir les champs marqués d'une astérisque (*) car ils
-									sont obligatoires.</h4>
+								<!-- Error Message -->
+								<div th:if="${errorMessage}" class="alert alert-danger text-dark" role="alert">
+									<span th:text="${errorMessage}"></span>
+								</div>
 							</div>
 							<div class="card-body">
 								<div id="smartwizard" class="form-wizard order-create">
@@ -89,8 +91,8 @@
 										<li><a class="nav-link" href="#wizard_Time"><span>2</span></a></li>
 										<li><a class="nav-link" href="#wizard_Payment"><span>3</span></a></li>
 									</ul>
-									<form class="tab-content" th:action="@{'/edit-offer/' + ${daretOperation.id}}"
-										method="post" th:object="${daretOperation}">
+									<form class="tab-content" th:action="@{'/modifier-offre/' + ${daretOperation.id}}"
+										method="post" th:object="${daretOperation}" onsubmit="return validateForm()">
 										<div id="wizard_Service" class="tab-pane" role="tabpanel">
 											<div class="row">
 												<div class="col-lg-12 mb-2">
@@ -136,9 +138,7 @@
 																placeholder="Enter Nombre de Personne">
 															<button type="button" class="btn btn-outline-primary"
 																onclick="increment()">+</button>
-															<span th:if="${#fields.hasErrors('nombreParticipant')}"
-																th:errors="*{nombreParticipant}"
-																class="text-danger"></span>
+
 
 														</div>
 													</div>
@@ -203,6 +203,37 @@
 
 
 	<script>
+		function validateForm() {
+			// Récupérez les valeurs des champs
+			var designation = document.getElementById('designation').value;
+			var typePeriode = document.getElementById('single-select').value;
+			var nombreParticipant = document.getElementById('nombreParticipant').value;
+			var montantParPeriode = document.getElementById('montantParPeriode').value;
+
+			// Effectuez vos validations ici
+			if (designation.trim() === "") {
+				alert("Le nom d'opération est obligatoire");
+				return false;
+			}
+
+			if (typePeriode.trim() === "") {
+				alert("Le type de période est obligatoire");
+				return false;
+			}
+
+			if (isNaN(nombreParticipant) || nombreParticipant < 2) {
+				alert("Le nombre de participants doit être d'au moins 2");
+				return false;
+			}
+
+			if (isNaN(montantParPeriode) || montantParPeriode < 0) {
+				alert("Le montant par période doit être un nombre positif");
+				return false;
+			}
+
+			// Si toutes les validations réussissent, retournez true
+			return true;
+		}
 		function increment() {
 			var input = document.getElementById('nombreParticipant');
 			input.stepUp();
@@ -225,8 +256,8 @@
 		var currentDate = new Date();
 
 		// Set the day, month, and year buttons
-		document.getElementById('dayButton').textContent = `${currentDate.toLocaleDateString('en-US', { weekday: 'long' })} ${currentDate.getDate()}`;
-		document.getElementById('monthButton').textContent = currentDate.toLocaleString('default', { month: 'short' });
+		document.getElementById('dayButton').textContent = `${currentDate.toLocaleDateString('en-US', {weekday: 'long'})} ${currentDate.getDate()}`;
+		document.getElementById('monthButton').textContent = currentDate.toLocaleString('default', {month: 'short'});
 		document.getElementById('yearButton').textContent = currentDate.getFullYear();
 	</script>
 </body>

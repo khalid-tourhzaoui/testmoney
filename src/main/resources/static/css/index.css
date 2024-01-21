@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;600&display=swap');
 body {
-    font-family: 'Raleway', sans-serif;
+     font-family: "Playfair Display", serif;
+  	font-optical-sizing: auto;
+  	font-weight: weight;
+  	font-style: normal;
     background-color: #F7F7F7;
 }
 
