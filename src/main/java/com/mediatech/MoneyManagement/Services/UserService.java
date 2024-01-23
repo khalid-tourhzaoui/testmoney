@@ -1,5 +1,7 @@
 package com.mediatech.MoneyManagement.Services;
 
+import java.util.List;
+
 import com.mediatech.MoneyManagement.DTO.UserDto;
 
 
@@ -19,6 +21,8 @@ public interface UserService {
     User findById(Long userId);
     
     boolean isCorrectPassword(String userEmail, String password);
+    
+	List<User> findAllUsers();
 
 
    

@@ -33,9 +33,9 @@
 		<!--***********************************Content body start**********************************-->
 		<div class="content-body">
 			<div class="container-fluid">
-				<!--ADMIN-->
+				<!-- ADMIN-->
 				<div th:if="${user.role=='ADMIN'}">
-				<!--**********************************************************************************************-->
+					<!--**********************************************************************************************-->
 					<div class="card ">
 						<div class="card-body">
 							<div id="accordion-seven" class="accordion accordion-header-bg accordion-bordered">
@@ -43,11 +43,178 @@
 									<div class="accordion__header accordion__header--primary" data-toggle="collapse"
 										data-target="#header-bg_collapseOne">
 										<span class="accordion__header--icon"></span>
-										<strong class="accordion__header--text">Ces cartes représentent les tontines que
-											vous avez créées.</strong>
+										<strong class="accordion__header--text">Ces cartes représentent le nombre des tontines présentes dans votre application.</strong>
 										<span class="accordion__header--indicator"></span>
 									</div>
 									<div id="header-bg_collapseOne" class="collapse accordion__body show bg-light"
+										data-parent="#accordion-seven">
+										<div class="accordion__body--text">
+											<div class="row">
+												<!-------------->
+												<div class="col-xl-3 col-xxl-4 col-lg-6 col-sm-6">
+													<div class="widget-stat card bg-warning">
+														<div class="card-body p-4">
+															<div class="media">
+																<span class="mr-2 bg-white">
+																	<img src="/images/piggy-bank.gif"
+																		class="img img-fluid" />
+																</span>
+																<div class="media-body text-white text-right">
+																	<p class="mb-1">Nombre des tontines en cours</p>
+																	<h3 class="text-white">[[${AllTontineProgress}]]</h3>
+																</div>
+															</div>
+														</div>
+														<div class="card-footer text-center">
+															<a class="btn btn-light text-warning"
+																th:href="@{/liste-des-toutes-les-tontines?status=Progress}">
+																Plus d'infos <i class="fas fa-arrow-circle-right"></i>
+															</a>
+														</div>
+													</div>
+												</div>
+												<!-------------->
+												<div class="col-xl-3 col-xxl-4 col-lg-6 col-sm-6">
+													<div class="widget-stat card bg-info">
+														<div class="card-body p-4">
+															<div class="media">
+																<span class="mr-2 bg-white">
+																	<img src="/images/pending-icon.gif"
+																		class="img img-fluid" />
+																</span>
+																<div class="media-body text-white text-right">
+																	<p class="mb-1">Nombre des tontines en attente </p>
+																	<h3 class="text-white">[[${AllTontinePending}]]</h3>
+																</div>
+															</div>
+														</div>
+														<div class="card-footer text-center">
+															<a class="btn btn-light text-info"
+																th:href="@{/liste-des-toutes-les-tontines?status=Pending}">
+																Plus d'infos <i class="fas fa-arrow-circle-right"></i>
+															</a>
+														</div>
+													</div>
+												</div>
+												<!-------------->
+												<div class="col-xl-3 col-xxl-4 col-lg-6 col-sm-6">
+													<div class="widget-stat card bg-success">
+														<div class="card-body p-4">
+															<div class="media">
+																<span class="mr-2 bg-white">
+																	<img src="/images/closed-unscreen.gif"
+																		class="img img-fluid" />
+																</span>
+																<div class="media-body text-white text-right">
+																	<p class="mb-1 text-sm">Nombre des tontines terminer
+																	</p>
+																	<h3 class="text-white">[[${AllTontineClosed}]]</h3>
+																</div>
+															</div>
+														</div>
+														<div class="card-footer text-center">
+															<a class="btn btn-light text-success"
+																th:href="@{/liste-des-toutes-les-tontines?status=Closed}">
+																Plus d'infos <i class="fas fa-arrow-circle-right"></i>
+															</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--**********************************************************************************************-->
+					<!--**********************************************************************************************-->
+					<div class="card ">
+						<div class="card-body">
+							<div id="accordion-seven" class="accordion accordion-header-bg accordion-bordered">
+								<div class="accordion__item">
+									<div class="accordion__header accordion__header--primary" data-toggle="collapse"
+										data-target="#header-bg_collapseTwo">
+										<span class="accordion__header--icon"></span>
+										<strong class="accordion__header--text">Ces cartes représentent le nombre des utilisateurs présentes dans votre application.</strong>
+										<span class="accordion__header--indicator"></span>
+									</div>
+									<div id="header-bg_collapseTwo" class="collapse accordion__body show bg-light"
+										data-parent="#accordion-seven">
+										<div class="accordion__body--text">
+											<div class="row">
+												<!-------------->
+												<div class="col-xl-3 col-xxl-4 col-lg-6 col-sm-6">
+													<div class="widget-stat card bg-warning">
+														<div class="card-body p-4">
+															<div class="media">
+																<span class="mr-2 bg-white">
+																	<img src="/images/piggy-bank.gif"
+																		class="img img-fluid" />
+																</span>
+																<div class="media-body text-white text-right">
+																	<p class="mb-1">Nombre des utilistauers</p>
+																	<h3 class="text-white">[[${AllUsers}]]</h3>
+																</div>
+															</div>
+														</div>
+														<div class="card-footer text-center">
+															<a class="btn btn-light text-warning"
+																th:href="@{/liste-utilisateurs}">
+																Plus d'infos <i class="fas fa-arrow-circle-right"></i>
+															</a>
+														</div>
+													</div>
+												</div>
+												<!-------------->
+												<div class="col-xl-3 col-xxl-4 col-lg-6 col-sm-6">
+													<div class="widget-stat card bg-info">
+														<div class="card-body p-4">
+															<div class="media">
+																<span class="mr-2 bg-white">
+																	<img src="/images/pending-icon.gif"
+																		class="img img-fluid" />
+																</span>
+																<div class="media-body text-white text-right">
+																	<p class="mb-1">Nombre des createurs </p>
+																	<h3 class="text-white">[[${AllCreateur}]]</h3>
+																</div>
+															</div>
+														</div>
+														<div class="card-footer text-center">
+															<a class="btn btn-light text-info"
+																th:href="@{/liste-utilisateurs}">
+																Plus d'infos <i class="fas fa-arrow-circle-right"></i>
+															</a>
+														</div>
+													</div>
+												</div>
+												<!-------------->
+											
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--**********************************************************************************************-->
+				</div>
+				<!--CREATEUR/ADMIN-->
+				<div th:if="${user.role=='CREATEUR' or user.role == 'ADMIN'}">
+				<!--**********************************************************************************************-->
+					<div class="card ">
+						<div class="card-body">
+							<div id="accordion-seven" class="accordion accordion-header-bg accordion-bordered">
+								<div class="accordion__item">
+									<div class="accordion__header accordion__header--primary" data-toggle="collapse"
+										data-target="#header-bg_collapseThree">
+										<span class="accordion__header--icon"></span>
+										<strong class="accordion__header--text">Ces cartes représentent le nombre des tontines que
+											vous avez créées.</strong>
+										<span class="accordion__header--indicator"></span>
+									</div>
+									<div id="header-bg_collapseThree" class="collapse accordion__body show bg-light"
 										data-parent="#accordion-seven">
 										<div class="accordion__body--text">
 											<div class="row">
@@ -134,12 +301,12 @@
 							<div id="accordion-two" class="accordion accordion-header-bg accordion-bordered">
 								<div class="accordion__item">
 									<div class="accordion__header accordion__header--primary" data-toggle="collapse"
-										data-target="#header-bg_collapseTwo">
+										data-target="#header-bg_collapseFour">
 										<span class="accordion__header--icon"></span>
-										<strong class="accordion__header--text">Ces cartes représentent les tontines auxquelles vous avez participé.</strong>
+										<strong class="accordion__header--text">Ces cartes représentent le nombre des tontines auxquelles vous avez participé.</strong>
 										<span class="accordion__header--indicator"></span>
 									</div>
-									<div id="header-bg_collapseTwo" class="collapse accordion__body show bg-light"
+									<div id="header-bg_collapseFour" class="collapse accordion__body show bg-light"
 										data-parent="#accordion-two">
 										<div class="accordion__body--text">
 											<div class="row">
@@ -228,12 +395,12 @@
 							<div id="accordion-seven" class="accordion accordion-header-bg accordion-bordered">
 								<div class="accordion__item">
 									<div class="accordion__header accordion__header--primary" data-toggle="collapse"
-										data-target="#header-bg_collapseOne">
+										data-target="#header-bg_collapseFive">
 										<span class="accordion__header--icon"></span>
-										<strong class="accordion__header--text">Ces cartes représentent les tontines auxquelles vous avez participé.</strong>
+										<strong class="accordion__header--text">Ces cartes représentent le nombre des tontines auxquelles vous avez participé.</strong>
 										<span class="accordion__header--indicator"></span>
 									</div>
-									<div id="header-bg_collapseOne" class="collapse accordion__body show"
+									<div id="header-bg_collapseFive" class="collapse accordion__body show"
 										data-parent="#accordion-seven">
 										<div class="accordion__body--text">
 											<div class="row">

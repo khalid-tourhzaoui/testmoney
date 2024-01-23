@@ -3,24 +3,31 @@
 	<div class="deznav-scroll bg-light shadow rounded">
 		<div class="main-profile">
 			<div class="image-bx">
-				<img th:src="${user.getGender() == 'MEN' ? 'images/men_avatar.png' : 'images/woman_avatar.png'}" alt="avatar">
-				<a th:href="@{${user.role == 'ADMIN' ? '/admin-dashboard' : '/user-dashboard'}}">
+				<img th:src="${user.getGender() == 'MALE' ? 'images/men_avatar.png' : 'images/woman_avatar.png'}"
+					alt="avatar">
+				<a
+					th:href="@{${user.role == 'CREATEUR' ? '/createur-dashboard' : (user.role == 'ADMIN' ? '/admin-dashboard' : '/user-dashboard')}}">
 					<i class="fa fa-cog" aria-hidden="true"></i>
 				</a>
 			</div>
-			<h5 th:if="${user.getGender() == 'MEN'}" class="name"><span class="font-w400">Bonjour,Monsieur</span></h5>
-			<h5 th:if="${user.getGender() == 'WOMEN'}" class="name"><span class="font-w400">Bonjour,Madame</span></h5>
+			<h5 th:if="${user.getGender() == 'MALE'}" class="name"><span class="font-w400">Bonjour,Monsieur</span></h5>
+			<h5 th:if="${user.getGender() == 'FEMALE'}" class="name"><span class="font-w400">Bonjour,Madame</span></h5>
 			<p class="email"><span class="__cf_email__">[[${user.getEmail()}]]</a></p>
 		</div>
 		<ul class="metismenu" id="menu">
 			<li class="nav-label first">Menu principal</li>
+			<li th:if="${user.getRole() == 'CREATEUR'}">
+				<a th:href="@{/createur-dashboard}" aria-expanded="false">
+					<i class="flaticon-144-layout"></i>
+					<span class="nav-text font-weight-bold">Tableau de bord</span>
+				</a>
+			</li>
 			<li th:if="${user.getRole() == 'ADMIN'}">
 				<a th:href="@{/admin-dashboard}" aria-expanded="false">
 					<i class="flaticon-144-layout"></i>
 					<span class="nav-text font-weight-bold">Tableau de bord</span>
 				</a>
 			</li>
-
 			<li th:if="${user.getRole() == 'USER'}">
 				<a th:href="@{/user-dashboard}" aria-expanded="false">
 					<i class="flaticon-144-layout"></i>
@@ -28,41 +35,48 @@
 				</a>
 			</li>
 			<!--***************************************************************************************************-->
-			<li th:if="${user.getRole() == 'ADMIN'}">
+			<li th:if="${user.getRole() == 'CREATEUR' or user.getRole() == 'ADMIN'}">
 				<a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
 					<i class="flaticon-381-network"></i>
 					<span class="nav-text font-weight-bold">Gestion des Tontines</span>
 				</a>
 				<ul aria-expanded="false">
-					<li><a th:href="@{/liste-des-tontines}" class="font-weight-bold"><i class="fa-solid fa-list"></i>Liste des tontines</a></li>
-					<li><a th:href="@{/ajouter-tontine}" class="font-weight-bold"><i class="fa-solid fa-folder-plus"></i>Ajouter une tontine</a>
+					<li><a th:href="@{/liste-des-tontines}" class="font-weight-bold"><i
+								class="fa-solid fa-list"></i>Liste des tontines</a></li>
+					<li><a th:href="@{/ajouter-tontine}" class="font-weight-bold"><i
+								class="fa-solid fa-folder-plus"></i>Ajouter une tontine</a>
 					</li>
 				</ul>
 
 			</li>
-
-			<li th:if="${user.getRole() == 'USER'}"><a class="has-arrow ai-icon" href="javascript:void()"
-					aria-expanded="false">
-					<i class="flaticon-381-network"></i>
-					<span class="nav-text font-weight-bold">Gestion des offres</span>
-				</a>
-				<ul aria-expanded="false">
-					<li><a th:href="@{/liste-offres-pending}"><i class="fa-solid fa-list"></i>Liste des offres</a></li>
-				</ul>
-
-			</li>
 			<!--***************************************************************************************************-->
-			<li th:if="${user.getRole() == 'ADMIN'}"><a class="has-arrow ai-icon" href="javascript:void()"
+
+			
+			<li th:if="${user.getRole() == 'CREATEUR' or user.getRole() == 'ADMIN' or user.getRole() == 'USER'}">
+				<a class="has-arrow ai-icon" href="javascript:void()"
 					aria-expanded="false">
 					<i class="flaticon-381-network"></i>
 					<span class="nav-text font-weight-bold">Gestion des participations</span>
 				</a>
 				<ul aria-expanded="false">
-					<li><a th:href="@{/liste-offres-pending}" class="font-weight-bold"><i class="fa-solid fa-list"></i>Liste des offres</a></li>
-					<li><a th:href="@{/liste-des-participations}" class="font-weight-bold"><i class="fa-solid fa-list"></i>Liste des participations</a></li>
+					<li><a th:href="@{/liste-offres-pending}" class="font-weight-bold"><i
+								class="fa-solid fa-list"></i>Liste des offres</a></li>
+					<li><a th:href="@{/liste-des-participations}" class="font-weight-bold"><i
+								class="fa-solid fa-list"></i>Liste des participations</a></li>
 				</ul>
 
 			</li>
+			<li th:if="${user.getRole() == 'ADMIN'}"><a class="has-arrow ai-icon" href="javascript:void()"
+					aria-expanded="false">
+					<i class="flaticon-381-network"></i>
+					<span class="nav-text font-weight-bold">Gestion des utilisateurs</span>
+				</a>
+				<ul aria-expanded="false">
+					<li><a th:href="@{/liste-utilisateurs}"><i class="fa-solid fa-list"></i>Liste des utilisateurs</a></li>
+				</ul>
+
+			</li>
+			<!--***************************************************************************************************-->
 		</ul>
 
 	</div>

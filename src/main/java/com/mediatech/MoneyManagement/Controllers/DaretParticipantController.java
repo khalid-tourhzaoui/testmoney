@@ -128,29 +128,57 @@ public class DaretParticipantController {
 //-----------------------------------------------------------------------------------------------------------------------------------------
 	@PostMapping("/passer-paiement/{participantId}")
 	public String makePayment(@PathVariable Long participantId, Model model) {
-		try {
-			DaretParticipant participant = daretParticipantService.getDaretParticipantById(participantId);
+	    try {
+	        DaretParticipant participant = daretParticipantService.getDaretParticipantById(participantId);
 
-			// Check conditions before updating verifyPayement
-			LocalDate currentDate = LocalDate.now();
-			LocalDate paymentDate = participant.getDatePaiement();
+	        // Check if datePaiement is null
+	        if (participant.getDatePaiement() == null) {
+	            // Get the previous participant's payment date
+	            DaretParticipant previousParticipant = getPreviousParticipant(participant);
+	            if (previousParticipant != null) {
+	                participant.setDatePaiement(previousParticipant.getDatePaiement());
+	            } else {
+	                model.addAttribute("ErrorMessage", "La date de paiement n'est pas définie et il n'y a pas de participant précédent.");
+	                return "redirect:/details-tontine/" + participant.getDaretOperation().getId();
+	            }
+	        }
 
-			if (currentDate.isEqual(paymentDate) && participant.getVerifyPayement() == 0) {
-				// Conditions met, update verifyPayement
-				participant.setVerifyPayement(1);
-				// Save the updated participant
-				daretParticipantRepository.save(participant);
-			} else {
-				model.addAttribute("ErrorMessage", "La date de paiement n'est pas valide.");
-				return "redirect:/details-tontine/" + participant.getDaretOperation().getId();
-			}
+	        // Check conditions before updating verifyPayement
+	        LocalDate currentDate = LocalDate.now();
+	        LocalDate paymentDate = participant.getDatePaiement();
 
-			// Redirect to the appropriate page
-			return "redirect:/details-tontine/" + participant.getDaretOperation().getId();
-		} catch (Exception e) {
-			// Handle exceptions if needed
-			return "redirect:/logout";
-		}
+	        if (currentDate.isEqual(paymentDate) && participant.getVerifyPayement() == 0) {
+	            // Conditions met, update verifyPayement
+	            participant.setVerifyPayement(1);
+	            // Save the updated participant
+	            daretParticipantRepository.save(participant);
+	        } else {
+	            model.addAttribute("ErrorMessage", "La date de paiement n'est pas valide.");
+	            return "redirect:/details-tontine/" + participant.getDaretOperation().getId();
+	        }
+
+	        // Redirect to the appropriate page
+	        return "redirect:/details-tontine/" + participant.getDaretOperation().getId();
+	    } catch (Exception e) {
+	        System.out.println("error : " + e.getMessage());
+	        // Handle exceptions if needed
+	        return "redirect:/logout";
+	    }
+	}
+
+	private DaretParticipant getPreviousParticipant(DaretParticipant currentParticipant) {
+	    // Get the list of participants for the current DaretOperation
+	    List<DaretParticipant> participants = currentParticipant.getDaretOperation().getDaretParticipants();
+
+	    // Find the index of the current participant
+	    int currentIndex = participants.indexOf(currentParticipant);
+
+	    // If the current participant is not the first one, return the previous participant
+	    if (currentIndex > 0) {
+	        return participants.get(currentIndex - 1);
+	    }
+
+	    return null; // Return null if there is no previous participant
 	}
 
 	/*------------------------------------------------------------------------------------------*/
@@ -199,7 +227,7 @@ public class DaretParticipantController {
 					daretOperation.setStatus("closed");
 					// Enregistrez la mise à jour du statut dans la base de données
 					daretOperationService.save(daretOperation);
-					return "redirect:/admin-dashboard";
+					return "redirect:/createur-dashboard";
 				}
 				// Rediriger vers une page de succès
 				return "redirect:/details-tontine/" + daretOperation.getId();

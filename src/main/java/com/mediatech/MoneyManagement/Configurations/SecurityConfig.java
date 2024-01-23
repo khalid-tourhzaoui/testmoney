@@ -98,11 +98,12 @@ public class SecurityConfig {
         http.csrf(c -> c.disable())
 
             .authorizeHttpRequests(request -> request
-                .requestMatchers("/admin-dashboard", "update-info", "/profile", "/liste-des-offres")
+                .requestMatchers("/admin-dashboard","/liste-utilisateurs","/liste-des-toutes-les-tontines")
                     .hasAuthority("ADMIN")
-                .requestMatchers("/user-dashboard", "/profile", "update-info")
-                    .hasAuthority("USER")
-                .requestMatchers("/registration", "password-request","/profile","reset-password", "/**")
+                .requestMatchers("/createur-dashboard")
+                    .hasAuthority("CREATEUR")
+                .requestMatchers("/registration","/liste-des-participations","/liste-offres-pending","update-info","password-request",
+                		"/supprimer-tontine","/profile","reset-password","/liste-des-tontines","/ajouter-une-tontine","/**")
                     .permitAll()
                 .anyRequest().authenticated())
 

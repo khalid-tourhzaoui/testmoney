@@ -248,5 +248,9 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
     public DaretOperation getDaretOperationById(Long daretOperationId) {
         return daretOperationRepository.findById(daretOperationId).orElse(null);
     }
+	@Override
+	public void deleteParticipantById(Long id) {
+		daretParticipantRepository.deleteById(id);
+	}
 
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="layout/head :: head">
 
 
@@ -43,7 +44,8 @@
 							</div>
 
 						</div>
-						<form th:if="${user.role=='ADMIN' and user.id==daretOperation.AdminOffre.id}" th:action="@{/valider-paiement/{DaretOperationId}(DaretOperationId=${daretOperation.id})}"
+						<form th:if="${user.role !='USER' and user.id==daretOperation.AdminOffre.id}"
+							th:action="@{/valider-paiement/{DaretOperationId}(DaretOperationId=${daretOperation.id})}"
 							method="post">
 							<button type="submit" class="btn btn-info">
 								VALIDER
@@ -61,7 +63,8 @@
 										<th>TYPE DE MONTANT</th>
 										<th>DATE DE PAYEMENT</th>
 										<th>TOUR DE ROLE</th>
-										<th th:if="${user.role=='ADMIN' and user.id==daretOperation.AdminOffre.id}">ACTION</th>
+										<th th:if="${user.role!='USER' and user.id==daretOperation.AdminOffre.id}">
+											ACTION</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -80,19 +83,33 @@
 										</td>
 										<td>[[${participant.montantPaye}]] DH</td>
 										<td>[[${participant.typePayement}]]</td>
-										<td>[[${participant.datePaiement}]]</td>
-										<td 
+										<!-- Assurez-vous que iterStat.index - 1 est valide avant de l'utiliser -->
+										<td th:if="${iterStat.index > 0}">
+											[[${participants[iterStat.index - 1].datePaiement}]]
+										</td>
+										<td th:unless="${iterStat.index > 0}">
+											[[${participant.datePaiement}]]
+										</td>
+
+
+										<td
 											th:text="${participant.EtatTour == 'current' ? 'Actuel' : (participant.EtatTour == 'not_done' ? 'Pas Encore' : 'Déjà Fait')}">
 										</td>
-										<td th:if="${user.role=='ADMIN' and user.id==daretOperation.AdminOffre.id}">
-										
+										<td th:if="${user.role!='USER' and user.id==daretOperation.AdminOffre.id}">
+
 											<form
 												th:action="@{/passer-paiement/{participantId}(participantId=${participant.id})}"
 												method="post">
-												<button type="submit" class="btn btn-info"
+												<button th:if="${participant.datePaiement!=null}" type="submit"
+													class="btn btn-info"
 													th:disabled="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd') != #temporals.format(participant.datePaiement, 'yyyy-MM-dd') or participant.verifyPayement != 0}">
 													Payer
 												</button>
+												<button th:if="${participant.datePaiement==null}"  type="submit" class="btn btn-info"
+													th:disabled="${iterStat.index == 0 and #temporals.format(#temporals.createNow(), 'yyyy-MM-dd') != #temporals.format(participant.datePaiement, 'yyyy-MM-dd') or participant.verifyPayement != 0}">
+													Payer
+												</button>
+
 											</form>
 										</td>
 									</tr>

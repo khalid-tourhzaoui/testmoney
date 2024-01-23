@@ -62,28 +62,28 @@
 						<ul class="nav nav-tabs style-2">
 							<li class="nav-item">
 								<a href="#navpills-1" class="nav-link text-dark"
-									th:href="@{/liste-des-tontines?status=All}" aria-expanded="false">
+									th:href="@{${user.role != 'ADMIN'} ? '/liste-des-tontines?status=All' : '/liste-des-toutes-les-tontines?status=All'}" aria-expanded="false">
 									Toutes les offres <span
 										class="badge badge-pill shadow-primary badge-primary">[[${totalOffersCount}]]</span>
 								</a>
 							</li>
 							<li class="nav-item">
 								<a href="#navpills-2" class="nav-link text-dark"
-									th:href="@{/liste-des-tontines?status=Progress}" aria-expanded="false">
+									th:href="@{${user.role != 'ADMIN'} ? '/liste-des-tontines?status=Progress' : '/liste-des-toutes-les-tontines?status=Progress'}" aria-expanded="false">
 									En cours <span
 										class="badge badge-pill badge-info shadow-info">[[${inProgressCount}]]</span>
 								</a>
 							</li>
 							<li class="nav-item">
 								<a href="#navpills-3" class="nav-link text-dark"
-									th:href="@{/liste-des-tontines?status=Pending}" aria-expanded="true">
+									th:href="@{${user.role != 'ADMIN'} ? '/liste-des-tontines?status=Pending' : '/liste-des-toutes-les-tontines?status=Pending'}" aria-expanded="true">
 									En attente <span
 										class="badge badge-pill badge-warning shadow-warning">[[${pendingCount}]]</span>
 								</a>
 							</li>
 							<li class="nav-item">
 								<a href="#navpills-4" class="nav-link text-dark"
-									th:href="@{/liste-des-tontines?status=Closed}" aria-expanded="true">
+									th:href="@{${user.role != 'ADMIN'} ? '/liste-des-tontines?status=Closed' : '/liste-des-toutes-les-tontines?status=Closed'}" aria-expanded="true">
 									Fermé <span
 										class="badge badge-pill badge-danger shadow-danger">[[${closedCount}]]</span>
 								</a>
@@ -174,20 +174,7 @@
 		document.getElementById('yearButton').textContent = currentDate.getFullYear();
 			/*------------------------------------------------------------------------------------------------------------*/
 	</script>
-	<script th:if="${successMessage}" th:inline="javascript">
-    /*<![CDATA[*/
-    $(document).ready(function() {
-        toastr.options = {
-            positionClass: 'toast-top-full-width', // Set the position to top-right
-            timeOut: 5000, // Set the duration to 5 seconds
-            extendedTimeOut: 1000, 
-            close: true,
-            toastClass: 'mt-5',
-        };
-        toastr.success([[${successMessage}]]);
-    });
-    /*]]>*/
-</script>
+
 
 	<!-- Add this script to your HTML file, or include it in your existing script file -->
 	<script th:inline="javascript">

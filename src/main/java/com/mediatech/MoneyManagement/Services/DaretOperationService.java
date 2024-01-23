@@ -37,6 +37,9 @@ public interface DaretOperationService {
 
     boolean isUserParticipantInUnfinishedDarets(User user);
 /*--------------------------------------------------------------*/
+
+	List<DaretOperation> getAllDaretOperationsByStatus(String status);
+
   
 
 }

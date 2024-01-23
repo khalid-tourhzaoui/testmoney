@@ -2,9 +2,9 @@ package com.mediatech.MoneyManagement.Models;
 
 import jakarta.persistence.*;
 
+
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class DaretOperation {

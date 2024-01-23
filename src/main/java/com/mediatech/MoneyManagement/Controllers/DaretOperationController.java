@@ -10,7 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.mediatech.MoneyManagement.Models.*;
 import com.mediatech.MoneyManagement.Repositories.DaretOperationRepository;
+import com.mediatech.MoneyManagement.Repositories.DaretParticipantRepository;
 import com.mediatech.MoneyManagement.Services.DaretOperationService;
+import com.mediatech.MoneyManagement.Services.DaretParticipantService;
 import com.mediatech.MoneyManagement.Services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -18,6 +20,9 @@ import jakarta.servlet.http.HttpServletRequest;
 public class DaretOperationController {
 	@Autowired
     private DaretOperationService daretOperationService;
+	
+	@Autowired
+    private DaretParticipantService daretParticipantService;
 	
 	@Autowired
 	private UserService userService;
@@ -28,7 +33,8 @@ public class DaretOperationController {
 	@Autowired
     private DaretOperationRepository daretOperationRepository;
 	
-
+	@Autowired
+    private DaretParticipantRepository daretParticipantRepository;
 	
 
 	@GetMapping("/liste-des-tontines")
@@ -319,29 +325,58 @@ public class DaretOperationController {
 
 
 	//--------------------------------------------------------------------------------------------------------------------------------------------
-	    @PostMapping("/supprimer-tontine")
-	    public String deleteDaret(@RequestParam Long operationId) {
-	        try {
-	            // Récupérer la DaretOperation par ID
-	            DaretOperation daretOperation = daretOperationService.findById(operationId);
+	@PostMapping("/supprimer-tontine")
+	public String deleteDaret(@RequestParam Long operationId, @AuthenticationPrincipal UserDetails userDetails) {
+	    try {
+	        // Récupérer la DaretOperation par ID
+	        DaretOperation daretOperation = daretOperationService.findById(operationId);
 
-	            // Vérifier si la DaretOperation est en cours
-	            if ("En cours".equals(daretOperation.getStatus())) {
-	                // Afficher une alerte SweetAlert pour l'annulation
-	                return "redirect:/liste-des-tontines?deleteCanceled";
-	            }
+	        // Récupérer l'utilisateur actuel
+	        User currentUser = userService.findByEmail(userDetails.getUsername());
 
-	            // Implémenter votre méthode de service pour supprimer la DaretOperation par ID
-	            daretOperationService.deleteDaretById(operationId);
-
-	            // Rediriger vers la vue de la liste après la suppression
-	            return "redirect:/liste-des-tontines";
-	        } catch (Exception e) {
-	            // Gérer l'exception, vous pouvez la journaliser ou rediriger vers une page d'erreur
-	            System.out.println("Erreur lors de la suppression de la DaretOperation : " + e.getMessage());
-	            return "redirect:/liste-des-tontines?deleteError";
+	        // Vérifier si la DaretOperation est en cours
+	        if ("Progress".equals(daretOperation.getStatus())) {
+	            // Afficher une alerte SweetAlert pour l'annulation
+	            return "redirect:/liste-des-tontines?deleteCanceled";
 	        }
+
+	        // Vérifier si l'utilisateur actuel est le créateur
+	        if ("CREATEUR".equals(currentUser.getRole())) {
+	            // Si le créateur veut supprimer et la tontine est en attente, alors supprime
+	            if ("Pending".equals(daretOperation.getStatus())) {
+	                // Implémenter votre méthode de service pour supprimer la DaretOperation par ID
+	                daretOperationService.deleteDaretById(operationId);
+	            } else {
+	                // Afficher une alerte SweetAlert pour indiquer que seul le créateur peut supprimer une tontine en attente
+	                return "redirect:/liste-des-tontines?deleteNotAllowed";
+	            }
+	        } else {
+	            // Si l'utilisateur actuel est un participant
+	            List<DaretParticipant> participants = daretOperation.getDaretParticipants();
+
+	            for (DaretParticipant participant : participants) {
+	                if (participant.getUser().getId() == currentUser.getId()) {
+	                    // Si le participant veut quitter et la tontine est en attente, alors le participant peut quitter
+	                    if ("Pending".equals(daretOperation.getStatus())) {
+	                        daretParticipantRepository.deleteById(participant.getId());
+	                        return "redirect:/liste-des-tontines";
+	                    } else {
+	                        // Afficher une alerte SweetAlert pour indiquer que seul le créateur peut supprimer une tontine en attente
+	                        return "redirect:/liste-des-tontines?leaveNotAllowed";
+	                    }
+	                }
+	            }
+	        }
+
+	        return "redirect:/liste-des-tontines";
+	    } catch (Exception e) {
+	        // Gérer l'exception, vous pouvez la journaliser ou rediriger vers une page d'erreur
+	        System.out.println("Erreur lors de la suppression de la DaretOperation : " + e.getMessage());
+	        return "redirect:/liste-des-tontines?deleteError";
 	    }
+	}
+
+
 
 
 		//--------------------------------------------------------------------------------------------------------------------------------------------

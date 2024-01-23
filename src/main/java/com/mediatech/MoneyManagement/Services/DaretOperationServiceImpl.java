@@ -105,4 +105,9 @@ public class DaretOperationServiceImpl implements DaretOperationService {
 	        return !userParticipantDarets.isEmpty();
 	    }
 
+	@Override
+	public List<DaretOperation> getAllDaretOperationsByStatus(String status) {
+		return daretOperationRepository.findByStatus(status);
+	}
+
 }

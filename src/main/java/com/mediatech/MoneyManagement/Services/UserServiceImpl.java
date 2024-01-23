@@ -2,6 +2,9 @@ package com.mediatech.MoneyManagement.Services;
 
 
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -90,6 +93,10 @@ public class UserServiceImpl implements UserService {
 	    public User findById(Long userId) {
 	        return userRepository.findById(userId).orElse(null);
 	    }
+		@Override
+		public List<User> findAllUsers() {
+			return userRepository.findByRoleIn(Arrays.asList("USER","CREATEUR"));
+		}
 	 
 
 }
