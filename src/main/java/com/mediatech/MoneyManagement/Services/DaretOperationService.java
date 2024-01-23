@@ -24,7 +24,8 @@ public interface DaretOperationService {
     long countClosedByAdminOffre(User adminOffre);
     
     List<DaretOperation> findByAdminOffreAndStatus(User adminOffre, String status);
-    
+    List<DaretOperation> findByDaretParticipantsUser(User participant);
+    List<DaretOperation> findByDaretParticipantsUserAndStatus(User participant,String status);
     DaretOperation findById(Long id);
     
     void deleteDaretById(Long id);
@@ -32,8 +33,10 @@ public interface DaretOperationService {
     List<DaretOperation> findPendingOffers();
     
     long countParticipationsByUserAndStatus(User participant, String status);
+    boolean isUserCreatedUnfinishedDarets(User user);
 
-
-
+    boolean isUserParticipantInUnfinishedDarets(User user);
+/*--------------------------------------------------------------*/
+  
 
 }

@@ -1,99 +1,55 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-	<!-- Common title, favicon, and font-awesome link -->
-	<link rel="icon" type="image/png" sizes="256x256" th:href="@{/images/dollar.png}" />
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-		integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-		crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
-		integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous" />
-
-	<!-- Common stylesheets -->
-	<link rel="stylesheet" th:href="@{/vendor/chartist/css/chartist.min.css}" />
-	<link rel="stylesheet" th:href="@{/vendor/bootstrap-select/dist/css/bootstrap-select.min.css}" />
-	<link rel="stylesheet" th:href="@{/vendor/owl-carousel/owl.carousel.css}" />
-	<link rel="stylesheet" th:href="@{/css/style.css}" />
-
-	<!-- Additional stylesheets specific to certain pages -->
-	<link rel="stylesheet" th:href="@{/vendor/select2/css/select2.min.css}" />
-	<link rel="stylesheet" th:href="@{/vendor/jquery-smartwizard/dist/css/smart_wizard.min.css}" />
-</head>
+<head th:replace="layout/head :: head">
 
 <body>
 
-	<!--*******************
-        Preloader start
-    ********************-->
+	<!--*************************************Preloader-Start***********************************-->
 	<div id="preloader">
 		<div class="sk-three-bounce">
-			<!-- ... Preloader content ... -->
+			<div class="sk-child sk-bounce1"></div>
+			<div class="sk-child sk-bounce2"></div>
+			<div class="sk-child sk-bounce3"></div>
 		</div>
 	</div>
-	<!--*******************
-        Preloader end
-    ********************-->
+	<!--*************************************Preloader-End*************************************-->
 
-	<!--**********************************
-        Main wrapper start
-    ***********************************-->
+	<!--**********************************Main wrapper start***********************************-->
 	<div id="main-wrapper">
 
-		<!--**********************************
-            Nav header start
-        ***********************************-->
+		<!--**********************************Nav header start*************************************-->
 		<div th:replace="layout/NavHeader :: NavHeader"></div>
-		<!--**********************************
-            Nav header end
-        ***********************************-->
+		<!--**********************************Nav header end***************************************-->
 
-		<!--**********************************
-            Header start
-        ***********************************-->
+		<!--**********************************Header start*****************************************-->
 		<div th:replace="layout/header :: header"></div>
-		<!--**********************************
-            Header end
-        ***********************************-->
+		<!--**********************************Header end*******************************************-->
 
-		<!--**********************************
-            Sidebar start
-        ***********************************-->
+		<!--***********************************Sidebar start***************************************-->
 		<div th:replace="layout/sidebar :: sidebar"></div>
-		<!--**********************************
-            Sidebar end
-        ***********************************-->
+		<!--***********************************Sidebar end*****************************************-->
 
-		<!--**********************************
-            Content body start
-        ***********************************-->
+		<!--***********************************Content body start**********************************-->
 		<div class="content-body">
 			<div class="container-fluid">
-
 				<!-- row -->
 				<div class="row">
 					<div class="col-xl-12 col-xxl-12">
 						<div class="card">
 							<div class="card-header">
-								<!-- Error Message -->
-								<div th:if="${errorMessage}" class="alert alert-danger text-dark" role="alert">
-									<span th:text="${errorMessage}"></span>
-								</div>
+								
 							</div>
 							<div class="card-body">
 								<div id="smartwizard" class="form-wizard order-create">
 									<ul class="nav nav-wizard">
-										<li><a class="nav-link" href="#wizard_Service"><span>1</span></a></li>
-										<li><a class="nav-link" href="#wizard_Time"><span>2</span></a></li>
-										<li><a class="nav-link" href="#wizard_Payment"><span>3</span></a></li>
+										<li><a class="nav-link" href="#information-de-tontine"><span>1</span></a></li>
+										<li><a class="nav-link" href="#places-de-tontine"><span>2</span></a></li>
+										<li><a class="nav-link" href="#ajouter-une-tontine"><span>3</span></a></li>
 									</ul>
-									<form class="tab-content" th:action="@{'/modifier-offre/' + ${daretOperation.id}}"
-										method="post" th:object="${daretOperation}" onsubmit="return validateForm()">
-										<div id="wizard_Service" class="tab-pane" role="tabpanel">
+									<form class="tab-content" th:action="@{/ajouter-tontine}" method="post"
+										th:object="${daretOperation}" onsubmit="return validateForm()">
+										<div id="information-de-tontine" class="tab-pane" role="tabpanel">
 											<div class="row">
 												<div class="col-lg-12 mb-2">
 													<div class="form-group">
@@ -101,7 +57,6 @@
 														<input type="text" id="designation" th:field="*{designation}"
 															class="form-control"
 															placeholder="Entrez le nom d'opération">
-
 													</div>
 												</div>
 												<div class="col-lg-12 mb-2">
@@ -109,21 +64,15 @@
 														<label for="single-select">Type de Période</label>
 														<select id="single-select" class="form-control"
 															name="typePeriode" th:field="*{typePeriode}">
-															<option value="mensuelle"
-																th:selected="${daretOperation.typePeriode == 'mensuelle'}">
-																Mensuelle</option>
-															<option value="hebdomadaire"
-																th:selected="${daretOperation.typePeriode == 'hebdomadaire'}">
-																Hebdomadaire</option>
-															<option value="par semaine"
-																th:selected="${daretOperation.typePeriode == 'par semaine'}">
-																Par semaine</option>
+															<option value="mensuelle">Mensuelle</option>
+															<option value="hebdomadaire">Hebdomadaire</option>
+															<option value="semaine">Par semaine</option>
 														</select>
 													</div>
 												</div>
 											</div>
 										</div>
-										<div id="wizard_Time" class="tab-pane" role="tabpanel">
+										<div id="places-de-tontine" class="tab-pane" role="tabpanel">
 											<div class="row">
 
 												<div class="col-lg-12 mb-2">
@@ -138,8 +87,6 @@
 																placeholder="Enter Nombre de Personne">
 															<button type="button" class="btn btn-outline-primary"
 																onclick="increment()">+</button>
-
-
 														</div>
 													</div>
 												</div>
@@ -156,17 +103,18 @@
 															<button type="button" class="btn btn-outline-primary"
 																onclick="incrementMontant()">+</button>
 														</div>
+
 													</div>
 												</div>
 											</div>
 										</div>
 
-										<div id="wizard_Payment" class="tab-pane" role="tabpanel">
+										<div id="ajouter-une-tontine" class="tab-pane" role="tabpanel">
 											<div class="row">
 												<div class="col-lg-6 mx-auto mb-2">
 													<div class="form-group">
 														<button type="submit"
-															class="btn btn-success w-100">Modifier</button>
+															class="btn btn-success w-100">Ajouter</button>
 													</div>
 												</div>
 											</div>
@@ -186,9 +134,27 @@
         ***********************************-->
 
 
+
+
+		<!--**********************************
+           Support ticket button start
+        ***********************************-->
+
+		<!--**********************************
+           Support ticket button end
+        ***********************************-->
+
+
 	</div>
-	<!-- Required vendors -->
-	<script th:src="@{/vendor/global/global.min.js}"></script>
+	<!--**********************************
+        Main wrapper end
+    ***********************************-->
+
+	<!--**********************************
+        Scripts
+    ***********************************-->
+	<!--  vendors -->
+<script th:src="@{/vendor/global/global.min.js}"></script>
 	<script th:src="@{/vendor/bootstrap-select/dist/js/bootstrap-select.min.js}"></script>
 	<script th:src="@{/vendor/chart.js/Chart.bundle.min.js}"></script>
 	<script th:src="@{/vendor/peity/jquery.peity.min.js}"></script>
@@ -201,8 +167,28 @@
 	<script th:src="@{/vendor/jquery-smartwizard/dist/js/jquery.smartWizard.js}"></script>
 	<script th:src="@{/vendor/select2/js/select2.full.min.js}"></script>
 
+    <!-- Toastr -->
+    <script src="vendor/toastr/js/toastr.min.js"></script>
+    <script src="js/plugins-init/toastr-init.js"></script>
+	
+<script th:if="${errorMessage}" th:inline="javascript">
+    /*<![CDATA[*/
+    $(document).ready(function() {
+		  toastr.options = {
+            positionClass: 'toast-top-full-width', // Set the position to top-right
+            timeOut: 5000, // Set the duration to 5 seconds
+            extendedTimeOut: 1000, 
+            close: true,
+            toastClass: 'mt-5',
+
+        };
+        toastr.error([[${errorMessage}]]);
+    });
+    /*]]>*/
+</script>
 
 	<script>
+		// Fonction pour valider le formulaire côté client
 		function validateForm() {
 			// Récupérez les valeurs des champs
 			var designation = document.getElementById('designation').value;
@@ -252,7 +238,6 @@
 			var input = document.getElementById('montantParPeriode');
 			input.stepDown();
 		}
-		// Get the current date
 		var currentDate = new Date();
 
 		// Set the day, month, and year buttons

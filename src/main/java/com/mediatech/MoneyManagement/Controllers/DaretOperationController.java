@@ -31,9 +31,9 @@ public class DaretOperationController {
 
 	
 
-	@GetMapping("/liste-des-offres")
+	@GetMapping("/liste-des-tontines")
 	public String listeOffres(@RequestParam(name = "status", defaultValue = "All") String status,Model model,
-	    @AuthenticationPrincipal UserDetails userDetails,HttpServletRequest request) {
+	    @AuthenticationPrincipal UserDetails userDetails) {
 	    try {
 	        // Vérifier si l'utilisateur actuel est null, ce qui indiquerait une session terminée
 	        if (userDetails == null) {
@@ -59,8 +59,7 @@ public class DaretOperationController {
 	        long totalOffersCount = daretOperationRepository.countByAdminOffre(currentUser);
 
 	        // Ajouter les attributs au modèle pour affichage dans la vue
-	        model.addAttribute("currentUrl", request.getRequestURL().toString())
-	            .addAttribute("user", currentUser)
+	        model.addAttribute("user", currentUser)
 	            .addAttribute("userDaretOperations", userDaretOperations)
 	            .addAttribute("inProgressCount", inProgressCount)
 	            .addAttribute("pendingCount", pendingCount)
@@ -70,17 +69,17 @@ public class DaretOperationController {
 	            .addAttribute("pageTitle", "DARET-ADMIN LISTE DES OFFRES");
 
 	        // Renvoyer le nom de la vue pour afficher la liste des offres
-	        return "Admin/liste-offres";
+	        return "Admin/liste-tontine";
 	    } catch (Exception e) {
 	        // Gérer les exceptions, par exemple, rediriger vers une page d'erreur ou journaliser
 	        System.out.println("Erreur lors de la récupération des offres : " + e.getMessage());
-	        return "redirect:/liste-des-offres?error";
+	        return "redirect:/liste-des-tontines?error";
 	    }
 	}
 
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------
-	@GetMapping("/ajouter-offre")
+	@GetMapping("/ajouter-tontine")
 	public String AddOffre(Model model, @AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request) {
 	    try {
 	        // Vérifier si userDetails est null
@@ -105,7 +104,7 @@ public class DaretOperationController {
 	        model.addAttribute("daretOperation", daretOperation)
 	             .addAttribute("pageTitle", "DARET-ADMIN AJOUTER UNE OFFRE");
 	        // Renvoyer le nom de la vue pour le formulaire d'ajout d'offre
-	        return "Admin/ajouter-offre";
+	        return "Admin/ajouter-tontine";
 	    } catch (Exception e) {
 	        // Journaliser ou gérer l'exception selon les besoins
 	        System.out.println("Erreur au niveau ajouter offre ====> " + e.getMessage()); // Journaliser la trace de la pile de l'exception
@@ -115,7 +114,7 @@ public class DaretOperationController {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------------------------------
-	@PostMapping("/ajouter-offre")
+	@PostMapping("/ajouter-tontine")
 	public String saveOffer(@ModelAttribute("daretOperation") DaretOperation daretOperation,@AuthenticationPrincipal UserDetails userDetails,Model model) {
 	    try {
 	        // Récupérez l'utilisateur actuellement authentifié
@@ -131,25 +130,25 @@ public class DaretOperationController {
                 // Ajouter un message d'erreur pour la longueur de la désignation
                 model.addAttribute("errorMessage", "La désignation doit avoir entre 5 et 15 caractères.");
                 model.addAttribute("user", currentUser);
-                return "Admin/ajouter-offre";
+                return "Admin/ajouter-tontine";
             }
 	        if (daretOperation.getMontantParPeriode() <= 0) {
 	            // Ajoutez un message d'erreur pour le montant par période
 	            model.addAttribute("errorMessage", "Le montant par période doit être un nombre positif");
 	            model.addAttribute("user", currentUser);
-	            return "Admin/ajouter-offre"; // Directly return the template without redirect
+	            return "Admin/ajouter-tontine"; // Directly return the template without redirect
 	        }
 	        if (!Arrays.asList("semaine", "mensuelle", "hebdomadaire").contains(daretOperation.getTypePeriode())) {
 	            // Ajoutez un message d'erreur pour le type de période
 	            model.addAttribute("errorMessage", "Le type de période doit être semaine, mensuelle ou hebdomadaire");
 	            model.addAttribute("user", currentUser);
-	            return "Admin/ajouter-offre"; // Directly return the template without redirect
+	            return "Admin/ajouter-tontine"; // Directly return the template without redirect
 	        }
 	        if (daretOperation.getNombreParticipant() < 2) {
 	            // Ajoutez un message d'erreur pour le nombre de participants
 	            model.addAttribute("errorMessage", "Le nombre de participants doit être d'au moins 2");
 	            model.addAttribute("user", currentUser);
-	            return "Admin/ajouter-offre"; // Directly return the template without redirect
+	            return "Admin/ajouter-tontine"; // Directly return the template without redirect
 	        }
 	        // Configurez les propriétés de l'opération
 	        daretOperation.setAdminOffre(currentUser);
@@ -161,11 +160,11 @@ public class DaretOperationController {
 	        daretOperationService.save(daretOperation);
 	        // Redirigez l'utilisateur vers la page de liste des offres avec un message de succès
 	        model.addAttribute("successMessage", "L'opération a été ajoutée avec succès.");
-	        return "redirect:/liste-des-offres";
+	        return "redirect:/liste-des-tontines";
 	    } catch (Exception e) {
 	        // Gérez l'exception en journalisant ou en redirigeant vers une page d'erreur appropriée
 	        model.addAttribute("errorMessage", "Une erreur s'est produite lors de l'ajout de l'opération.");
-	        return "Admin/ajouter-offre"; // Directly return the template without redirect
+	        return "Admin/ajouter-tontine"; // Directly return the template without redirect
 	    }
 	}
 
@@ -173,9 +172,9 @@ public class DaretOperationController {
 
 
 	/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-	@GetMapping("/modifier-offre/{operationId}")
+	@GetMapping("/modifier-tontine/{operationId}")
 	public String showUpdateForm(@PathVariable Long operationId, Model model,
-	                             @AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request) {
+	                             @AuthenticationPrincipal UserDetails userDetails) {
 	    try {
 	        // Récupérer l'utilisateur actuel
 	        User currentUser = userService.findByEmail(userDetails.getUsername());
@@ -186,9 +185,7 @@ public class DaretOperationController {
 	            return "redirect:/logout";
 	        }
 
-	        // Obtenir l'URL actuelle et l'ajouter au modèle
-	        String currentUrl = request.getRequestURL().toString();
-	        model.addAttribute("currentUrl", currentUrl);
+	        
 
 	        // Ajouter les détails de l'utilisateur authentifié au modèle
 	        model.addAttribute("user", currentUser);
@@ -203,7 +200,7 @@ public class DaretOperationController {
 	             .addAttribute("pageTitle", "DARET-ADMIN MODIFIER UNE OFFRE");
 
 	        // Retourner le nom de la vue pour le formulaire de modification d'offre
-	        return "Admin/modifier-offre";
+	        return "Admin/modifier-tontine";
 	    } catch (Exception e) {
 	        // Gérer les exceptions, par exemple, rediriger vers une page de connexion ou afficher une page d'erreur
 	        System.out.println("Erreur au niveau de la modification de l'offre ====> " + e.getMessage()); // Journaliser la trace de la pile de l'exception
@@ -216,7 +213,7 @@ public class DaretOperationController {
 
 
 	    //-------------------------------------------------------------------------------------------------------------------------------------------
-	@PostMapping("/modifier-offre/{operationId}")
+	@PostMapping("/modifier-tontine/{operationId}")
 	public String updateOffer(@PathVariable Long operationId,
 	                          @ModelAttribute("daretOperation") DaretOperation updatedDaretOperation,
 	                          @AuthenticationPrincipal UserDetails userDetails, Model model) {
@@ -235,26 +232,26 @@ public class DaretOperationController {
 	                // Ajouter un message d'erreur pour le montant par période
 	                model.addAttribute("errorMessage", "Le montant par période doit être un nombre positif");
 	                model.addAttribute("user", currentUser);
-	                return "redirect:/modifier-offre/" + operationId + "?errorMessage";
+	                return "redirect:/modifier-tontine/" + operationId;
 	            }
 	            if (updatedDaretOperation.getDesignation() != null
 	                    && (updatedDaretOperation.getDesignation().length() < 5 || updatedDaretOperation.getDesignation().length() > 15)) {
 	                // Ajouter un message d'erreur pour la longueur de la désignation
 	                model.addAttribute("errorMessage", "La désignation doit avoir entre 5 et 15 caractères.");
 	                model.addAttribute("user", currentUser);
-	                return "redirect:/modifier-offre/" + operationId + "?errorMessage";
+	                return "redirect:/modifier-tontine/" + operationId;
 	            }
 	            if (!Arrays.asList("semaine", "mensuelle", "hebdomadaire").contains(updatedDaretOperation.getTypePeriode())) {
 	                // Ajouter un message d'erreur pour le type de période
 	                model.addAttribute("errorMessage", "Le type de période doit être semaine, mensuelle ou hebdomadaire");
 	                model.addAttribute("user", currentUser);
-	                return "redirect:/modifier-offre/" + operationId + "?errorMessage";
+	                return "redirect:/modifier-tontine/" + operationId;
 	            }
 	            if (updatedDaretOperation.getNombreParticipant() < 2) {
 	                // Ajouter un message d'erreur pour le nombre de participants
 	                model.addAttribute("errorMessage", "Le nombre de participants doit être d'au moins 2");
 	                model.addAttribute("user", currentUser);
-	                return "redirect:/modifier-offre/" + operationId + "?errorMessage";
+	                return "redirect:/modifier-tontine/" + operationId;
 	            }
 
 	            // Mettre à jour les propriétés de l'opération existante avec les nouvelles valeurs
@@ -271,11 +268,11 @@ public class DaretOperationController {
 	            daretOperationService.save(existingDaretOperation);
 	        }
 
-	        return "redirect:/liste-des-offres";
+	        return "redirect:/liste-des-tontines";
 	    } catch (Exception e) {
 	        // Gérer les exceptions, par exemple, rediriger vers une page d'erreur ou journaliser
 	        System.out.println("Erreur lors de la modification de l'offre ====> " + e.getMessage()); // Journaliser la trace de la pile de l'exception
-	        return "redirect:/liste-des-offres"; // Ou rediriger vers une autre page d'erreur
+	        return "redirect:/liste-des-tontines"; // Ou rediriger vers une autre page d'erreur
 	    }
 	}
 
@@ -284,9 +281,8 @@ public class DaretOperationController {
 
 
 	//--------------------------------------------------------------------------------------------------------------------------------------------
-	@GetMapping("/details-offre/{operationId}")
-	public String showOfferDetails(@PathVariable Long operationId,@AuthenticationPrincipal UserDetails userDetails,
-	    Model model,HttpServletRequest request){
+	@GetMapping("/details-tontine/{operationId}")
+	public String showOfferDetails(@PathVariable Long operationId,@AuthenticationPrincipal UserDetails userDetails,Model model){
 	    try {
 	        // Vérifier si l'utilisateur actuel est null, ce qui indiquerait une session terminée
 	        if (userDetails == null) {
@@ -296,7 +292,6 @@ public class DaretOperationController {
 
 	        // Récupérer l'utilisateur actuel et les détails de la demande
 	        User currentUser = userService.findByEmail(userDetails.getUsername());
-	        String currentUrl = request.getRequestURL().toString();
 
 	        // Récupérer l'opération par ID et les participants associés
 	        DaretOperation daretOperation = daretOperationService.findById(operationId);
@@ -305,14 +300,13 @@ public class DaretOperationController {
 	        // Effectuer une vérification d'autorisation ici si nécessaire
 
 	        // Ajouter les attributs au modèle pour l'affichage dans la vue
-	        model.addAttribute("currentUrl", currentUrl)
-	            .addAttribute("user", currentUser)
+	        model.addAttribute("user", currentUser)
 	            .addAttribute("daretOperation", daretOperation)
 	            .addAttribute("participants", participants)
 	            .addAttribute("pageTitle", "DARET-ADMIN DÉTAILS DE L'OFFRE");
 
 	        // Renvoyer le nom de la vue pour afficher les détails de l'offre
-	        return "Admin/detail-offre";
+	        return "Admin/hara";
 
 	    } catch (Exception e) {
 	        // Gérer les exceptions, par exemple, rediriger vers une page d'erreur ou journaliser
@@ -325,7 +319,7 @@ public class DaretOperationController {
 
 
 	//--------------------------------------------------------------------------------------------------------------------------------------------
-	    @PostMapping("/supprimer-offre")
+	    @PostMapping("/supprimer-tontine")
 	    public String deleteDaret(@RequestParam Long operationId) {
 	        try {
 	            // Récupérer la DaretOperation par ID
@@ -334,18 +328,18 @@ public class DaretOperationController {
 	            // Vérifier si la DaretOperation est en cours
 	            if ("En cours".equals(daretOperation.getStatus())) {
 	                // Afficher une alerte SweetAlert pour l'annulation
-	                return "redirect:/liste-des-offres?deleteCanceled";
+	                return "redirect:/liste-des-tontines?deleteCanceled";
 	            }
 
 	            // Implémenter votre méthode de service pour supprimer la DaretOperation par ID
 	            daretOperationService.deleteDaretById(operationId);
 
 	            // Rediriger vers la vue de la liste après la suppression
-	            return "redirect:/liste-des-offres";
+	            return "redirect:/liste-des-tontines";
 	        } catch (Exception e) {
 	            // Gérer l'exception, vous pouvez la journaliser ou rediriger vers une page d'erreur
 	            System.out.println("Erreur lors de la suppression de la DaretOperation : " + e.getMessage());
-	            return "redirect:/liste-des-offres?deleteError";
+	            return "redirect:/liste-des-tontines?deleteError";
 	        }
 	    }
 

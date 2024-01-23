@@ -87,8 +87,7 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
                     participantIndex++;
 
                 }
-
-              
+ 
             }
             
             daretParticipantRepository.save(daretParticipant);

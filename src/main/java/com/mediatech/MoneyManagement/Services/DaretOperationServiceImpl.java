@@ -3,6 +3,7 @@ package com.mediatech.MoneyManagement.Services;
 import java.util.List;
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -78,6 +79,30 @@ public class DaretOperationServiceImpl implements DaretOperationService {
     public long countParticipationsByUserAndStatus(User participant, String status) {
         return daretOperationRepository.countDistinctByDaretParticipantsUserAndStatus(participant, status);
     }
-   
+    /*-------------------------------------------------------------------*/
+
+	@Override
+	public List<DaretOperation> findByDaretParticipantsUser(User participant) {
+		return daretOperationRepository.findByDaretParticipantsUser(participant);
+	}
+
+	@Override
+	public List<DaretOperation> findByDaretParticipantsUserAndStatus(User participant, String status) {
+		return daretOperationRepository.findByDaretParticipantsUserAndStatus(participant, status);
+
+	}
+	
+	@Override
+    public boolean isUserCreatedUnfinishedDarets(User user) {
+        // Récupérer les Daret créés par l'utilisateur qui ne sont pas terminés
+        List<DaretOperation> userCreatedDarets = daretOperationRepository.findByAdminOffreAndStatus(user, "Progress");
+        return !userCreatedDarets.isEmpty();
+    }
+	 @Override
+	    public boolean isUserParticipantInUnfinishedDarets(User user) {
+	        // Récupérer les Daret auxquels l'utilisateur participe et qui ne sont pas terminés
+	        List<DaretOperation> userParticipantDarets = daretOperationRepository.findByDaretParticipantsUserAndStatus(user, "Progress");
+	        return !userParticipantDarets.isEmpty();
+	    }
 
 }

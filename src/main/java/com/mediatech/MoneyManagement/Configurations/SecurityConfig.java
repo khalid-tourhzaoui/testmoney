@@ -100,9 +100,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(request -> request
                 .requestMatchers("/admin-dashboard", "update-info", "/profile", "/liste-des-offres")
                     .hasAuthority("ADMIN")
-                .requestMatchers("/user-dashboard", "/profile", "update-info", "/profile")
+                .requestMatchers("/user-dashboard", "/profile", "update-info")
                     .hasAuthority("USER")
-                .requestMatchers("/registration", "password-request", "reset-password", "/**")
+                .requestMatchers("/registration", "password-request","/profile","reset-password", "/**")
                     .permitAll()
                 .anyRequest().authenticated())
 

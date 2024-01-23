@@ -14,7 +14,7 @@
 					<img src="images/money-flow.gif" alt="">
 				</div>
 				<div class="ml-2">
-					<span>Montant d'offre</span>
+					<span>Montant</span>
 					<h5 class="mb-0 pt-1 font-w50 text-black">[[${operation.montantParPeriode}]] DH</h5>
 				</div>
 			</div>
@@ -52,7 +52,7 @@
 					class="btn bgl-info text-info status-btn ms-5">[[${operation.status}]]</span>
 				<span th:if="${operation.status == 'Pending'}"
 					class="btn bgl-warning text-warning status-btn ms-5">[[${operation.status}]]</span>
-				<span th:if="${operation.status == 'closed'}"
+				<span th:if="${operation.status == 'Closed'}"
 					class="btn bgl-danger text-danger status-btn ms-5">[[${operation.status}]]</span>
 
 				<!-- Dropdown for additional actions -->
@@ -71,12 +71,12 @@
 						</svg>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
-						<a class="dropdown-item" th:href="@{'/details-offre/' + ${operation.id}}">Show</a>
-						<a class="dropdown-item" th:href="@{'/modifier-offre/' + ${operation.id}}">Edit</a>
-						<form id="deleteForm" th:action="@{/supprimer-offre}" method="post">
+						<a class="dropdown-item" th:href="@{'/details-tontine/' + ${operation.id}}">Show</a>
+						<a th:if="${operation.status == 'Pending' and user.role=='ADMIN' and user.id==operation.AdminOffre.id}" class="dropdown-item" th:href="@{'/modifier-tontine/' + ${operation.id}}">Edit</a>
+						<form id="deleteForm" th:action="@{/supprimer-tontine}" method="post">
 							<input type="hidden" id="operationIdInput" name="operationId" />
 						</form>
-						<a class="dropdown-item" th:data-id="${operation.id}" th:data-status="${operation.status}"
+						<a th:if="${operation.status != 'Progress' and user.role=='ADMIN' and user.id==operation.AdminOffre.id}" class="dropdown-item" th:data-id="${operation.id}" th:data-status="${operation.status}"
 							style="cursor: pointer;"
 							onclick="confirmEditOrDelete(this.getAttribute('data-id'), this.getAttribute('data-status'))">
 							Delete

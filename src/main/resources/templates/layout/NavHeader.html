@@ -1,8 +1,8 @@
 <!--**********************************
             Nav header start
         ***********************************-->
-<div class="nav-header" th:fragment="NavHeader">
-	<a th:href="@{${currentUrl}}" class="brand-logo">
+<div class="nav-header bg-light" th:fragment="NavHeader">
+	<a th:href="@{${user.role == 'ADMIN' ? '/admin-dashboard' : '/user-dashboard'}}" class="brand-logo">
 		<svg class="logo-abbr" width="50" height="50" viewbox="0 0 50 50" fill="none"
 			xmlns="http://www.w3.org/2000/svg">
 			<rect class="svg-logo-rect" width="50" height="50" rx="6" fill="#EB8153"></rect>
