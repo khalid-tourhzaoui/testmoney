@@ -266,7 +266,7 @@
 																				data-dismiss="modal">
 																				ANNULER
 																			</button>
-																			<button type="button"
+																			<button type="submit"
 																				class="btn btn-primary"
 																				onclick="submitDeleteAccountForm()">
 																				SUPPRIMER LE COMPTE
@@ -307,7 +307,7 @@
     <script src="vendor/toastr/js/toastr.min.js"></script>
     <script src="js/plugins-init/toastr-init.js"></script>
 	
-<script th:if="${ErrorMessage}" th:inline="javascript">
+<script th:if="${errorMessage}" th:inline="javascript">
     /*<![CDATA[*/
     $(document).ready(function() {
 		  toastr.options = {
@@ -318,11 +318,11 @@
             toastClass: 'mt-5',
 
         };
-        toastr.error([[${ErrorMessage}]]);
+        toastr.error([[${errorMessage}]]);
     });
     /*]]>*/
 </script>
-<script th:if="${SuccessMessage}" th:inline="javascript">
+<script th:if="${successMessage}" th:inline="javascript">
     /*<![CDATA[*/
     $(document).ready(function() {
 		  toastr.options = {
@@ -333,7 +333,7 @@
             toastClass: 'mt-5',
 
         };
-        toastr.success([[${SuccessMessage}]]);
+        toastr.success([[${successMessage}]]);
     });
     /*]]>*/
 </script>

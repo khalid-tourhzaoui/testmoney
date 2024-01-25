@@ -208,9 +208,9 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
         switch (typePeriode.toLowerCase()) {
             case "mensuelle":
                 return currentDate.plusMonths(1);
-            case "hebdomadaire":
+            case "quotidienne":
                 return currentDate.plusDays(1);
-            case "semaine":
+            case "hebdomadaire":
                 return currentDate.plusWeeks(1);
             default:
                 throw new IllegalArgumentException("Unsupported type de période: " + typePeriode);
@@ -219,15 +219,15 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
 
     // Set the end date based on typePeriode and numberOfParticipants
     private void setEndDateBasedOnTypeAndNumberOfParticipants(DaretOperation daretOperation) {
-        if ("mensuelle".equalsIgnoreCase(daretOperation.getTypePeriode())) {
+        if ("Mensuelle".equalsIgnoreCase(daretOperation.getTypePeriode())) {
             int numberOfMonths = daretOperation.getNombreParticipant();
             LocalDate newDateFin = daretOperation.getDateDebut().plusMonths(numberOfMonths);
             daretOperation.setDateFin(newDateFin);
-        } else if ("hebdomadaire".equalsIgnoreCase(daretOperation.getTypePeriode())) {
+        } else if ("Quotidienne".equalsIgnoreCase(daretOperation.getTypePeriode())) {
             int numberOfDays = daretOperation.getNombreParticipant();
             LocalDate newDateFin = daretOperation.getDateDebut().plusDays(numberOfDays);
             daretOperation.setDateFin(newDateFin);
-        } else if ("semaine".equalsIgnoreCase(daretOperation.getTypePeriode())) {
+        } else if ("Hebdomadaire".equalsIgnoreCase(daretOperation.getTypePeriode())) {
             int numberOfWeeks = daretOperation.getNombreParticipant();
             LocalDate newDateFin = daretOperation.getDateDebut().plusWeeks(numberOfWeeks);
             daretOperation.setDateFin(newDateFin);
@@ -248,9 +248,11 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
     public DaretOperation getDaretOperationById(Long daretOperationId) {
         return daretOperationRepository.findById(daretOperationId).orElse(null);
     }
-	@Override
-	public void deleteParticipantById(Long id) {
-		daretParticipantRepository.deleteById(id);
-	}
+    
+
+
+  
+
+	
 
 }

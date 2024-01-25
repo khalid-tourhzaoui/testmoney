@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{layout/head :: head}">
+<head th:replace="layout/head :: head">
 
 <body>
 
-	<!--*******************
-        Preloader start
-    ********************-->
+	<!--*************************************Preloader-Start***********************************-->
 	<div id="preloader">
 		<div class="sk-three-bounce">
 			<div class="sk-child sk-bounce1"></div>
@@ -15,44 +13,24 @@
 			<div class="sk-child sk-bounce3"></div>
 		</div>
 	</div>
-	<!--*******************
-        Preloader end
-    ********************-->
+	<!--*************************************Preloader-End*************************************-->
 
-	<!--**********************************
-        Main wrapper start
-    ***********************************-->
+	<!--**********************************Main wrapper start***********************************-->
 	<div id="main-wrapper">
 
-		<!--**********************************
-            Nav header start
-        ***********************************-->
-		<div th:replace="~{layout/NavHeader :: NavHeader}"></div>
+		<!--**********************************Nav header start*************************************-->
+		<div th:replace="layout/NavHeader :: NavHeader"></div>
+		<!--**********************************Nav header end***************************************-->
 
-		<!--**********************************
-            Nav header end
-        ***********************************-->
+		<!--**********************************Header start*****************************************-->
+		<div th:replace="layout/header :: header"></div>
+		<!--**********************************Header end*******************************************-->
 
+		<!--***********************************Sidebar start***************************************-->
+		<div th:replace="layout/sidebar :: sidebar"></div>
+		<!--***********************************Sidebar end*****************************************-->
 
-		<!--**********************************
-            Header start
-        ***********************************-->
-		<div th:replace="~{layout/header :: header}"></div>
-		<!--**********************************
-            Header end ti-comment-alt
-        ***********************************-->
-
-		<!--**********************************
-            Sidebar start
-        ***********************************-->
-		<div th:replace="~{layout/sidebar :: sidebar}"></div>
-
-		<!--**********************************
-            Sidebar end
-        ***********************************-->
-		<!--**********************************
-            Content body start
-        ***********************************-->
+		<!--***********************************Content body start**********************************-->
 		<!-- liste-offres.html -->
 		<div class="content-body">
 			<div class="container-fluid">
@@ -174,7 +152,36 @@
 		document.getElementById('yearButton').textContent = currentDate.getFullYear();
 			/*------------------------------------------------------------------------------------------------------------*/
 	</script>
+<script th:if="${successMessage}" th:inline="javascript">
+    /*<![CDATA[*/
+    $(document).ready(function() {
+		  toastr.options = {
+            positionClass: 'toast-top-full-width', // Set the position to top-right
+            timeOut: 5000, // Set the duration to 5 seconds
+            extendedTimeOut: 1000, 
+            close: true,
+            toastClass: 'mt-5',
 
+        };
+        toastr.success([[${successMessage}]]);
+    });
+    /*]]>*/
+</script>
+<script th:if="${errorMessage}" th:inline="javascript">
+    /*<![CDATA[*/
+    $(document).ready(function() {
+		  toastr.options = {
+            positionClass: 'toast-top-full-width', // Set the position to top-right
+            timeOut: 5000, // Set the duration to 5 seconds
+            extendedTimeOut: 1000, 
+            close: true,
+            toastClass: 'mt-5',
+
+        };
+        toastr.error([[${errorMessage}]]);
+    });
+    /*]]>*/
+</script>
 
 	<!-- Add this script to your HTML file, or include it in your existing script file -->
 	<script th:inline="javascript">

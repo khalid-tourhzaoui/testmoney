@@ -34,6 +34,12 @@
 		<!--***********************************Content body start**********************************-->
 		<div class="content-body">
 			<div class="container-fluid">
+				<div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+					<span th:text="${errorMessage}"></span>
+				</div>
+				<div th:if="${successMessage}" class="alert alert-success" role="alert">
+					<span th:text="${successMessage}"></span>
+				</div>
 				<div class="card">
 					<div class="card-header d-sm-flex d-block">
 						<div class="mr-auto mb-sm-0 mb-3">
@@ -83,12 +89,9 @@
 										</td>
 										<td>[[${participant.montantPaye}]] DH</td>
 										<td>[[${participant.typePayement}]]</td>
-										<!-- Assurez-vous que iterStat.index - 1 est valide avant de l'utiliser -->
-										<td th:if="${iterStat.index > 0}">
-											[[${participants[iterStat.index - 1].datePaiement}]]
-										</td>
-										<td th:unless="${iterStat.index > 0}">
-											[[${participant.datePaiement}]]
+										<td th:text="${iterStat.index > 0 && participants[iterStat.index - 1].datePaiement != null ? 
+											participants[iterStat.index - 1].datePaiement : (participant.datePaiement != null ?
+											 participant.datePaiement : 'Pas encore')}">
 										</td>
 
 
@@ -100,17 +103,18 @@
 											<form
 												th:action="@{/passer-paiement/{participantId}(participantId=${participant.id})}"
 												method="post">
-												<button th:if="${participant.datePaiement!=null}" type="submit"
+												<button th:if="${participant.datePaiement != null}" type="submit"
 													class="btn btn-info"
 													th:disabled="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd') != #temporals.format(participant.datePaiement, 'yyyy-MM-dd') or participant.verifyPayement != 0}">
 													Payer
 												</button>
-												<button th:if="${participant.datePaiement==null}"  type="submit" class="btn btn-info"
+												<button th:if="${participant.datePaiement == null}" type="submit"
+													class="btn btn-info" th:text="${iterStat.index}"
 													th:disabled="${iterStat.index == 0 and #temporals.format(#temporals.createNow(), 'yyyy-MM-dd') != #temporals.format(participant.datePaiement, 'yyyy-MM-dd') or participant.verifyPayement != 0}">
 													Payer
 												</button>
-
 											</form>
+
 										</td>
 									</tr>
 
@@ -140,7 +144,36 @@
 	<!-- Datatable -->
 	<script th:src="@{/vendor/datatables/js/jquery.dataTables.min.js}"></script>
 	<script th:src="@{/js/plugins-init/datatables.init.js}"></script>
+	<script th:if="${successMessage}" th:inline="javascript">
+		/*<![CDATA[*/
+		$(document).ready(function () {
+			toastr.options = {
+				positionClass: 'toast-top-full-width', // Set the position to top-right
+				timeOut: 5000, // Set the duration to 5 seconds
+				extendedTimeOut: 1000,
+				close: true,
+				toastClass: 'mt-5',
 
+			};
+			toastr.success([[${successMessage}]]);
+		});
+    /*]]>*/
+	</script>
+	<script th:if="${errorMessage}" th:inline="javascript">
+		/*<![CDATA[*/
+		$(document).ready(function () {
+			toastr.options = {
+				positionClass: 'toast-top-full-width', // Set the position to top-right
+				timeOut: 5000, // Set the duration to 5 seconds
+				extendedTimeOut: 1000,
+				close: true,
+				toastClass: 'mt-5',
+
+			};
+			toastr.error([[${errorMessage}]]);
+		});
+    /*]]>*/
+	</script>
 	<script>
 		// Get the current date
 		var currentDate = new Date();

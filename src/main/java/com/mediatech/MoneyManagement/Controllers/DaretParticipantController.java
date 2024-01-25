@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.mediatech.MoneyManagement.Models.*;
 import com.mediatech.MoneyManagement.Repositories.DaretOperationRepository;
 import com.mediatech.MoneyManagement.Repositories.DaretParticipantRepository;
@@ -76,9 +78,7 @@ public class DaretParticipantController {
 	        }
 	        return "User/liste-tontine";
 	    } catch (Exception e) {
-	        // Gérer les exceptions, par exemple, rediriger vers une page d'erreur ou journaliser
-	        System.out.println("Erreur lors de la récupération des offres : " + e.getMessage());
-	        return "redirect:/liste-des-tontines?error";
+	        return "redirect:/logout";
 	    }
 	}
 
@@ -89,17 +89,14 @@ public class DaretParticipantController {
 			@RequestParam("userId") Long userId,
 			@RequestParam("paymentType") String paymentType,
 			@RequestParam("montantPaye") float montantPaye,
-			Model model) {
+			Model model,RedirectAttributes redirectAttributes) {
 		try {
 			// Récupérer l'opération Daret correspondante
 			DaretOperation daretOperation = daretOperationService.findById(daretOperationId);
 
 			// Vérifier si le nombre de places disponibles est suffisant
 			if (daretOperation.getPlacesReservees() >= daretOperation.getNombreParticipant()) {
-				// Le nombre de places disponibles est insuffisant, gérer cela en affichant un
-				// message d'erreur ou en redirigeant
-				System.out.println("Le nombre de places disponibles est insuffisant.");
-				model.addAttribute("errorMessage", "Le nombre de places disponibles est insuffisant.");
+				redirectAttributes.addFlashAttribute("errorMessage", "Le nombre de places disponibles est insuffisant.");
 				return "redirect:/liste-offres-pending";
 			}
 
@@ -108,26 +105,24 @@ public class DaretParticipantController {
 			if (!paymentType.equals("Moitier") && !paymentType.equals("Normale") && !paymentType.equals("Double")) {
 				// Gérer le type de paiement invalide, par exemple, rediriger vers une page
 				// d'erreur
-				model.addAttribute("errorMessage", "Le type de paiement doit être normale, double ou moitier");
+				redirectAttributes.addFlashAttribute("errorMessage", "Le type de paiement doit être normale, double ou moitier");
 				return "redirect:/liste-offres-pending";
 			}
 
 			// Appeler la méthode de service pour ajouter le participant et mettre à jour
 			// les placesReservees
 			daretParticipantService.addParticipantToDaretOperation(daretOperationId, userId, paymentType, montantPaye);
-
+        	redirectAttributes.addFlashAttribute("successMessage", "L'offre a été ajoutée avec succès");
 			return "redirect:/liste-offres-pending";
 		} catch (Exception e) {
-			// Gérer l'exception, par exemple, rediriger vers une page d'erreur ou
-			// journaliser
-			model.addAttribute("errorMessage", "Une erreur s'est produite lors de l'ajout du participant.");
-			return "redirect:/liste-offres-pending?errorMessage";
+			
+			return "redirect:/logout";
 		}
 	}
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
 	@PostMapping("/passer-paiement/{participantId}")
-	public String makePayment(@PathVariable Long participantId, Model model) {
+	public String makePayment(@PathVariable Long participantId, Model model,RedirectAttributes redirectAttributes) {
 	    try {
 	        DaretParticipant participant = daretParticipantService.getDaretParticipantById(participantId);
 
@@ -138,7 +133,7 @@ public class DaretParticipantController {
 	            if (previousParticipant != null) {
 	                participant.setDatePaiement(previousParticipant.getDatePaiement());
 	            } else {
-	                model.addAttribute("ErrorMessage", "La date de paiement n'est pas définie et il n'y a pas de participant précédent.");
+	            	redirectAttributes.addFlashAttribute("errorMessage", "La date de paiement n'est pas définie et il n'y a pas de participant précédent.");
 	                return "redirect:/details-tontine/" + participant.getDaretOperation().getId();
 	            }
 	        }
@@ -153,15 +148,14 @@ public class DaretParticipantController {
 	            // Save the updated participant
 	            daretParticipantRepository.save(participant);
 	        } else {
-	            model.addAttribute("ErrorMessage", "La date de paiement n'est pas valide.");
+	        	redirectAttributes.addFlashAttribute("errorMessage", "La date de paiement n'est pas valide.");
 	            return "redirect:/details-tontine/" + participant.getDaretOperation().getId();
 	        }
 
 	        // Redirect to the appropriate page
+        	redirectAttributes.addFlashAttribute("successMessage", "Le paiement a été effectuée avec succès");
 	        return "redirect:/details-tontine/" + participant.getDaretOperation().getId();
 	    } catch (Exception e) {
-	        System.out.println("error : " + e.getMessage());
-	        // Handle exceptions if needed
 	        return "redirect:/logout";
 	    }
 	}
@@ -183,7 +177,7 @@ public class DaretParticipantController {
 
 	/*------------------------------------------------------------------------------------------*/
 	@PostMapping("/valider-paiement/{daretOperationId}")
-	public String validerPayment(@PathVariable Long daretOperationId) {
+	public String validerPayment(@PathVariable Long daretOperationId,RedirectAttributes redirectAttributes) {
 		try {
 			// Récupérer le DaretOperation depuis la base de données
 			DaretOperation daretOperation = daretOperationService.getDaretOperationById(daretOperationId);
@@ -227,18 +221,19 @@ public class DaretParticipantController {
 					daretOperation.setStatus("closed");
 					// Enregistrez la mise à jour du statut dans la base de données
 					daretOperationService.save(daretOperation);
-					return "redirect:/createur-dashboard";
+	            	redirectAttributes.addFlashAttribute("successMessage", "La tontine a été terminée avec succès");
+					return "redirect:/liste-des-tontines";
 				}
 				// Rediriger vers une page de succès
 				return "redirect:/details-tontine/" + daretOperation.getId();
 			} else {
 				// Certains paiements sont manquants, rediriger vers une page d'erreur ou une
 				// autre page
-				return "redirect:/payment-error";
+            	redirectAttributes.addFlashAttribute("errorMessage", "Certains paiements sont manquants");
+				return "redirect:/details-tontine/" + daretOperation.getId();
 			}
 		} catch (Exception e) {
-			// Gérer les exceptions, pour l'instant, rediriger vers la page de connexion
-			return "redirect:/login";
+			return "redirect:/logout";
 		}
 	}
 
@@ -288,11 +283,11 @@ public class DaretParticipantController {
 
 	// Calculez la prochaine date de paiement en fonction de la période
 	public void calculateNextPaymentDate(DaretParticipant participant, DaretOperation daretOperation) {
-		if ("mensuelle".equalsIgnoreCase(daretOperation.getTypePeriode())) {
+		if ("Mensuelle".equalsIgnoreCase(daretOperation.getTypePeriode())) {
 			participant.setDatePaiement(participant.getDatePaiement().plusMonths(1));
-		} else if ("hebdomadaire".equalsIgnoreCase(daretOperation.getTypePeriode())) {
+		} else if ("Quotidienne".equalsIgnoreCase(daretOperation.getTypePeriode())) {
 			participant.setDatePaiement(participant.getDatePaiement().plusDays(1));
-		} else if ("semaine".equalsIgnoreCase(daretOperation.getTypePeriode())) {
+		} else if ("Hebdomadaire".equalsIgnoreCase(daretOperation.getTypePeriode())) {
 			participant.setDatePaiement(participant.getDatePaiement().plusWeeks(1));
 		}
 	}

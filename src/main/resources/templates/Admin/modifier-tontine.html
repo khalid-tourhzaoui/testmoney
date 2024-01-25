@@ -64,9 +64,9 @@
 														<label for="single-select">Type de Période</label>
 														<select id="single-select" class="form-control"
 															name="typePeriode" th:field="*{typePeriode}">
-															<option value="mensuelle">Mensuelle</option>
-															<option value="hebdomadaire">Hebdomadaire</option>
-															<option value="semaine">Par semaine</option>
+															<option value="Mensuelle">Mensuelle</option>
+															<option value="Quotidienne">Quotidienne</option>
+															<option value="Hebdomadaire">Hebdomadaire</option>
 														</select>
 													</div>
 												</div>
@@ -168,8 +168,8 @@
 	<script th:src="@{/vendor/select2/js/select2.full.min.js}"></script>
 
     <!-- Toastr -->
-    <script src="vendor/toastr/js/toastr.min.js"></script>
-    <script src="js/plugins-init/toastr-init.js"></script>
+    <script src="@{/vendor/toastr/js/toastr.min.js}"></script>
+    <script src="@{/js/plugins-init/toastr-init.js}"></script>
 	
 <script th:if="${errorMessage}" th:inline="javascript">
     /*<![CDATA[*/

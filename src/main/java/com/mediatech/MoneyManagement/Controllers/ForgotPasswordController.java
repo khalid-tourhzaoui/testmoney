@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mediatech.MoneyManagement.Models.ForgotPasswordToken;
 import com.mediatech.MoneyManagement.Models.User;
@@ -44,39 +45,34 @@ public class ForgotPasswordController {
 	}
 	
 	@PostMapping("/password-request")
-	public String savePasswordRequest(@RequestParam("email") String email, Model model) {
-		User user = userService.findByEmail(email);
-		if (user == null) {
-			model.addAttribute("error", "This Email is not registered");
-			return "Auth/password-request";
-		}
-		
-		ForgotPasswordToken forgotPasswordToken = new ForgotPasswordToken();
-		forgotPasswordToken.setExpireTime(forgotPasswordService.expireTimeRange());
-		forgotPasswordToken.setToken(forgotPasswordService.generateToken());
-		forgotPasswordToken.setUser(user);
-		forgotPasswordToken.setUsed(false);
-		
-		forgotPasswordRepository.save(forgotPasswordToken);
-		
-		String emailLink = "http://localhost:2525/reset-password?token=" + forgotPasswordToken.getToken();
-		
-		try {
-			forgotPasswordService.sendEmail(user.getEmail(), "Password Reset Link", emailLink);
-		} catch (UnsupportedEncodingException | MessagingException e) {
-			model.addAttribute("error", "Error While Sending email");
-			return "Auth/password-request";
-		}
-		return "redirect:/password-request?success";
-	}
-	
-	@GetMapping("/reset-password")
-	public String resetPassword(@Param(value="token") String token, Model model, HttpSession session) {
-		
-		session.setAttribute("token", token);
-		ForgotPasswordToken forgotPasswordToken = forgotPasswordRepository.findByToken(token);
-		return forgotPasswordService.checkValidity(forgotPasswordToken, model);
-		
+	public String savePasswordRequest(@RequestParam("email") String email, Model model, RedirectAttributes redirectAttributes) {
+	    User user = userService.findByEmail(email);
+	    if (user == null) {
+	        // Utilisez RedirectAttributes pour passer des messages entre les redirections
+	        redirectAttributes.addFlashAttribute("errorMessage", "Cet e-mail n'est pas enregistré.");
+	        return "redirect:/password-request";
+	    }
+	    
+	    ForgotPasswordToken forgotPasswordToken = new ForgotPasswordToken();
+	    forgotPasswordToken.setExpireTime(forgotPasswordService.expireTimeRange());
+	    forgotPasswordToken.setToken(forgotPasswordService.generateToken());
+	    forgotPasswordToken.setUser(user);
+	    forgotPasswordToken.setUsed(false);
+	    
+	    forgotPasswordRepository.save(forgotPasswordToken);
+	    
+	    String emailLink = "http://localhost:2525/reset-password?token=" + forgotPasswordToken.getToken();
+	    
+	    try {
+	        forgotPasswordService.sendEmail(user.getEmail(), "Lien de réinitialisation du mot de passe", emailLink);
+	    } catch (UnsupportedEncodingException | MessagingException e) {
+	        redirectAttributes.addFlashAttribute("errorMessage", "Erreur lors de l'envoi de l'e-mail.");
+	        return "redirect:/password-request";
+	    }
+	    
+	    // Utilisez RedirectAttributes pour passer des messages entre les redirections
+	    redirectAttributes.addFlashAttribute("successMessage", "Le lien de réinitialisation du mot de passe a été envoyé avec succès.");
+	    return "redirect:/password-request";
 	}
 	
 	@PostMapping("/reset-password")

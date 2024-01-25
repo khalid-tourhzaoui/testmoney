@@ -52,7 +52,7 @@
 					class="btn bgl-info text-info status-btn ms-5">[[${operation.status}]]</span>
 				<span th:if="${operation.status == 'Pending'}"
 					class="btn bgl-warning text-warning status-btn ms-5">[[${operation.status}]]</span>
-				<span th:if="${operation.status == 'Closed'}"
+				<span th:if="${operation.status == 'closed'}"
 					class="btn bgl-danger text-danger status-btn ms-5">[[${operation.status}]]</span>
 
 				<!-- Dropdown for additional actions -->
@@ -76,7 +76,7 @@
 						<form id="deleteForm" th:action="@{/supprimer-tontine}" method="post">
 							<input type="hidden" id="operationIdInput" name="operationId" />
 						</form>
-						<a th:if="${(operation.status != 'Progress' and user.id==operation.AdminOffre.id) or operation.status!='Progress'}" class="dropdown-item" th:data-id="${operation.id}" th:data-status="${operation.status}"
+						<a th:if="${(operation.status != 'Progress' and user.id==operation.AdminOffre.id)}" class="dropdown-item" th:data-id="${operation.id}" th:data-status="${operation.status}"
 							style="cursor: pointer;"
 							onclick="confirmEditOrDelete(this.getAttribute('data-id'), this.getAttribute('data-status'))">
 							Delete

@@ -27,7 +27,7 @@ public class DaretOperation {
 
   
     @Column(nullable = false)
-    private String typePeriode; // Mensuelle, hebdomadaire, etc.
+    private String typePeriode; // Mensuelle, Hebdomadaire, Mensuelle.
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")

@@ -218,9 +218,40 @@
 	<script src="js/deznav-init.js"></script>
 	<script src="js/demo.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+	 <!-- Toastr -->
+    <script src="vendor/toastr/js/toastr.min.js"></script>
+    <script src="js/plugins-init/toastr-init.js"></script>
+<script th:if="${successMessage}" th:inline="javascript">
+    /*<![CDATA[*/
+    $(document).ready(function() {
+		  toastr.options = {
+            positionClass: 'toast-top-full-width', // Set the position to top-right
+            timeOut: 5000, // Set the duration to 5 seconds
+            extendedTimeOut: 1000, 
+            close: true,
+            toastClass: 'mt-5'
 
+        };
+        toastr.success([[${successMessage}]]);
+    });
+    /*]]>*/
+</script>
+<script th:if="${errorMessage}" th:inline="javascript">
+    /*<![CDATA[*/
+    $(document).ready(function() {
+		  toastr.options = {
+            positionClass: 'toast-top-full-width', // Set the position to top-right
+            timeOut: 5000, // Set the duration to 5 seconds
+            extendedTimeOut: 1000, 
+            close: true,
+            toastClass: 'mt-5'
+
+        };
+        toastr.error([[${errorMessage}]]);
+    });
+    /*]]>*/
+</script>
 	<script>
-	
 		function selectPaymentType(paymentType, offerId, montantPaye) {
 			console.log('Function triggered!');
 			// Use SweetAlert for confirmation
