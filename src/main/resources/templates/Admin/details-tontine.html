@@ -41,9 +41,9 @@
 					<span th:text="${successMessage}"></span>
 				</div>
 				<div class="card">
-					<div class="card-header d-sm-flex d-block">
+					<div class="card-header d-sm-flex d-block  bg-primary">
 						<div class="mr-auto mb-sm-0 mb-3">
-							<h4 class="card-title mb-2">La liste des participants concernat la tontine :
+							<h4 class="card-title text-white">La liste des participants concernat la tontine :
 								[[${daretOperation.designation}]]</h4>
 							<div th:if="${ErrorMessage}" class="alert alert-danger text-dark" role="alert">
 								<span th:text="${ErrorMessage}"></span>
@@ -53,32 +53,33 @@
 						<form th:if="${user.role !='USER' and user.id==daretOperation.AdminOffre.id}"
 							th:action="@{/valider-paiement/{DaretOperationId}(DaretOperationId=${daretOperation.id})}"
 							method="post">
-							<button type="submit" class="btn btn-info">
+							<button type="submit" class="btn w-100" style="background-color: #FBF2C4;">
 								VALIDER
 							</button>
 						</form>
 					</div>
 					<div class="card-body">
-						<div class="table-responsive">
-							<table class="table style-1 text-center" id="ListDatatableView">
+						<div class="table-responsive" >
+							<table class="style-1 table table-striped display" id="example">
 								<thead>
 									<tr class="text-center">
 										<th>#</th>
-										<th>PARTICIPANT</th>
-										<th>MONTANT</th>
-										<th>TYPE DE MONTANT</th>
-										<th>DATE DE PAYEMENT</th>
-										<th>TOUR DE ROLE</th>
-										<th th:if="${user.role!='USER' and user.id==daretOperation.AdminOffre.id}">
-											ACTION</th>
+										<th>Participant</th>
+										<th>Montant</th>
+										<th>Type de paiement</th>
+										<th>Date de paiement</th>
+										<th>Tour de role</th>
+										<th th:if="${user.role!='USER' and user.id==daretOperation.AdminOffre.id}">ACTION</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr th:each="participant,iterStat : ${participants}">
+									<tr th:each="participant,iterStat : ${participants}" class="text-center">
 										<td th:text="${iterStat.count}"></td>
 										<td>
 											<div class="media style-1">
-												<span class="icon-name mr-2 bgl-info text-info">k</span>
+												<span class="icon-name mr-2 bgl-info text-info">
+													[[${participant.user.nom != null && participant.user.nom.length() > 0 ? participant.user.prenom.substring(0, 1) : ''}]]
+												</span>
 												<div class="media-body">
 													<h6 th:text="${participant.user.prenom+' '+participant.user.nom}">
 													</h6>
@@ -106,11 +107,11 @@
 												<button th:if="${participant.datePaiement != null}" type="submit"
 													class="btn btn-info"
 													th:disabled="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd') != #temporals.format(participant.datePaiement, 'yyyy-MM-dd') or participant.verifyPayement != 0}">
-													Payer
+													Payerxxx
 												</button>
 												<button th:if="${participant.datePaiement == null}" type="submit"
-													class="btn btn-info" th:text="${iterStat.index}"
-													th:disabled="${iterStat.index == 0 and #temporals.format(#temporals.createNow(), 'yyyy-MM-dd') != #temporals.format(participant.datePaiement, 'yyyy-MM-dd') or participant.verifyPayement != 0}">
+													class="btn btn-info"
+													th:disabled="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd') == #temporals.format(participant.datePaiement, 'yyyy-MM-dd') or participant.verifyPayement == 0}">
 													Payer
 												</button>
 											</form>

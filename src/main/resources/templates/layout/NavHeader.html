@@ -1,7 +1,7 @@
 <!--**********************************
             Nav header start
         ***********************************-->
-<div class="nav-header bg-light" th:fragment="NavHeader">
+<div class="nav-header" th:fragment="NavHeader" style="background-color: #FBF2C4">
 	<a th:href="@{${user.role == 'CREATEUR' ? '/createur-dashboard' : (user.role == 'ADMIN' ? '/admin-dashboard' : '/user-dashboard')}}" class="brand-logo">
 		<svg class="logo-abbr" width="50" height="50" viewbox="0 0 50 50" fill="none"
 			xmlns="http://www.w3.org/2000/svg">
@@ -24,6 +24,4 @@
 		</div>
 	</div>
 </div>
-<!--**********************************
-					Nav header end
-				***********************************-->
+<!--**********************************Nav header end***********************************-->

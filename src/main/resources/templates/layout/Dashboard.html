@@ -36,14 +36,15 @@
 				<!-- ADMIN-->
 				<div th:if="${user.role=='ADMIN'}">
 					<!--**********************************************************************************************-->
-					<div class="card ">
+					<div class="card" style="background-color: #FBF2C4">
 						<div class="card-body">
 							<div id="accordion-seven" class="accordion accordion-header-bg accordion-bordered">
 								<div class="accordion__item">
 									<div class="accordion__header accordion__header--primary" data-toggle="collapse"
 										data-target="#header-bg_collapseOne">
 										<span class="accordion__header--icon"></span>
-										<strong class="accordion__header--text">Ces cartes représentent le nombre des tontines présentes dans votre application.</strong>
+										<strong class="accordion__header--text">Ces cartes représentent le nombre des
+											tontines présentes dans votre application.</strong>
 										<span class="accordion__header--indicator"></span>
 									</div>
 									<div id="header-bg_collapseOne" class="collapse accordion__body show bg-light"
@@ -61,7 +62,8 @@
 																</span>
 																<div class="media-body text-white text-right">
 																	<p class="mb-1">Nombre des tontines en cours</p>
-																	<h3 class="text-white">[[${AllTontineProgress}]]</h3>
+																	<h3 class="text-white">[[${AllTontineProgress}]]
+																	</h3>
 																</div>
 															</div>
 														</div>
@@ -129,14 +131,15 @@
 					</div>
 					<!--**********************************************************************************************-->
 					<!--**********************************************************************************************-->
-					<div class="card ">
+					<div class="card" style="background-color: #FBF2C4">
 						<div class="card-body">
 							<div id="accordion-seven" class="accordion accordion-header-bg accordion-bordered">
 								<div class="accordion__item">
 									<div class="accordion__header accordion__header--primary" data-toggle="collapse"
 										data-target="#header-bg_collapseTwo">
 										<span class="accordion__header--icon"></span>
-										<strong class="accordion__header--text">Ces cartes représentent le nombre des utilisateurs présentes dans votre application.</strong>
+										<strong class="accordion__header--text">Ces cartes représentent le nombre des
+											utilisateurs présentes dans votre application.</strong>
 										<span class="accordion__header--indicator"></span>
 									</div>
 									<div id="header-bg_collapseTwo" class="collapse accordion__body show bg-light"
@@ -190,7 +193,7 @@
 													</div>
 												</div>
 												<!-------------->
-											
+
 											</div>
 										</div>
 									</div>
@@ -202,15 +205,16 @@
 				</div>
 				<!--CREATEUR/ADMIN-->
 				<div th:if="${user.role=='CREATEUR' or user.role == 'ADMIN'}">
-				<!--**********************************************************************************************-->
-					<div class="card ">
+					<!--**********************************************************************************************-->
+					<div class="card" style="background-color: #FBF2C4">
 						<div class="card-body">
 							<div id="accordion-seven" class="accordion accordion-header-bg accordion-bordered">
 								<div class="accordion__item">
 									<div class="accordion__header accordion__header--primary" data-toggle="collapse"
 										data-target="#header-bg_collapseThree">
 										<span class="accordion__header--icon"></span>
-										<strong class="accordion__header--text">Ces cartes représentent le nombre des tontines que
+										<strong class="accordion__header--text">Ces cartes représentent le nombre des
+											tontines que
 											vous avez créées.</strong>
 										<span class="accordion__header--indicator"></span>
 									</div>
@@ -296,14 +300,15 @@
 						</div>
 					</div>
 					<!--**********************************************************************************************-->
-					<div class="card">
+					<div class="card" style="background-color: #FBF2C4">
 						<div class="card-body">
 							<div id="accordion-two" class="accordion accordion-header-bg accordion-bordered">
 								<div class="accordion__item">
 									<div class="accordion__header accordion__header--primary" data-toggle="collapse"
 										data-target="#header-bg_collapseFour">
 										<span class="accordion__header--icon"></span>
-										<strong class="accordion__header--text">Ces cartes représentent le nombre des tontines auxquelles vous avez participé.</strong>
+										<strong class="accordion__header--text">Ces cartes représentent le nombre des
+											tontines auxquelles vous avez participé.</strong>
 										<span class="accordion__header--indicator"></span>
 									</div>
 									<div id="header-bg_collapseFour" class="collapse accordion__body show bg-light"
@@ -321,7 +326,8 @@
 																</span>
 																<div class="media-body text-white text-right">
 																	<p class="mb-1">Nombre des tontines en cours</p>
-																	<h3 class="text-white">[[${inProgressCountSelf}]]</h3>
+																	<h3 class="text-white">[[${inProgressCountSelf}]]
+																	</h3>
 																</div>
 															</div>
 														</div>
@@ -390,14 +396,15 @@
 				</div>
 				<!--USER-->
 				<div th:if="${user.role=='USER'}">
-					<div class="card">
+					<div class="card" style="background-color: #FBF2C4">
 						<div class="card-body">
 							<div id="accordion-seven" class="accordion accordion-header-bg accordion-bordered">
 								<div class="accordion__item">
 									<div class="accordion__header accordion__header--primary" data-toggle="collapse"
 										data-target="#header-bg_collapseFive">
 										<span class="accordion__header--icon"></span>
-										<strong class="accordion__header--text">Ces cartes représentent le nombre des tontines auxquelles vous avez participé.</strong>
+										<strong class="accordion__header--text">Ces cartes représentent le nombre des
+											tontines auxquelles vous avez participé.</strong>
 										<span class="accordion__header--indicator"></span>
 									</div>
 									<div id="header-bg_collapseFive" class="collapse accordion__body show"
@@ -487,12 +494,10 @@
 	</div>
 
 
-
-
 	<!--**********************************
             Footer start
         ***********************************-->
-	<div class="footer">
+	<div class="footer text-dark" style="background-color: #FBF2C4">
 		<div class="copyright">
 			<p>Copyright © Designed &amp; Developed by <a href="https://github.com/khalid-tourhzaoui"
 					target="_blank">KHALID TOURHZAOUI</a> 2024</p>

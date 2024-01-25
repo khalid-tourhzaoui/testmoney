@@ -37,32 +37,34 @@
 				<div class="row">
 					<div class="col-xl-12 col-xxl-12">
 						<div class="card">
-							<div class="card-header">
-								
+							<div class="card-header bg-primary">
+								<h2 class="card-title text-white">Ajouter une Nouvelle Tontine 
+									<span class="__cf_email__"> (Les champs marqués d'une * sont obligatoires ) .</span>
+								</h2>
 							</div>
-							<div class="card-body">
-								<div id="smartwizard" class="form-wizard order-create">
-									<ul class="nav nav-wizard">
+							<div class="card-body" style="background-color: #74A892;">
+								<div id="smartwizard" class="form-wizard order-create" style="background-color: #FBF2C4;">
+									<ul class="nav nav-wizard" >
 										<li><a class="nav-link" href="#information-de-tontine"><span>1</span></a></li>
 										<li><a class="nav-link" href="#places-de-tontine"><span>2</span></a></li>
 										<li><a class="nav-link" href="#ajouter-une-tontine"><span>3</span></a></li>
 									</ul>
 									<form class="tab-content" th:action="@{/ajouter-tontine}" method="post"
 										th:object="${daretOperation}" onsubmit="return validateForm()">
-										<div id="information-de-tontine" class="tab-pane" role="tabpanel">
+										<div id="information-de-tontine" class="tab-pane mt-3" role="tabpanel">
 											<div class="row">
 												<div class="col-lg-12 mb-2">
 													<div class="form-group">
-														<label for="designation">Nom d'opération :</label>
+														<label for="designation" style="font-weight: bold;">Nom du Tontine * :</label>
 														<input type="text" id="designation" th:field="*{designation}"
-															class="form-control"
-															placeholder="Entrez le nom d'opération">
+															class="form-control border border-primary rounded-5"
+															placeholder="Entrez le nom du Tontine">
 													</div>
 												</div>
 												<div class="col-lg-12 mb-2">
 													<div class="form-group">
-														<label for="single-select">Type de Période</label>
-														<select id="single-select" class="form-control"
+														<label for="single-select" style="font-weight: bold;">Type de Période * :</label>
+														<select id="single-select" class="form-control border border-primary rounded-5"
 															name="typePeriode" th:field="*{typePeriode}">
 															<option value="Mensuelle">Mensuelle</option>
 															<option value="Quotidienne">Quotidienne</option>
@@ -72,49 +74,39 @@
 												</div>
 											</div>
 										</div>
-										<div id="places-de-tontine" class="tab-pane" role="tabpanel">
+										<div id="places-de-tontine" class="tab-pane mt-3" role="tabpanel">
 											<div class="row">
-
 												<div class="col-lg-12 mb-2">
 													<div class="form-group">
-														<label for="nombreParticipant">Nombre de Personne : </label>
+														<label for="nombreParticipant" style="font-weight: bold;">Nombre de Participant * : </label>
 														<div class="input-group">
-															<button type="button" class="btn btn-outline-primary"
-																onclick="decrement()">-</button>
-															<input type="number" class="form-control mx-1"
+															<input type="number" class="form-control border border-primary rounded-5"
 																id="nombreParticipant" name="nombreParticipant"
 																th:field="*{nombreParticipant}"
-																placeholder="Enter Nombre de Personne">
-															<button type="button" class="btn btn-outline-primary"
-																onclick="increment()">+</button>
+																placeholder="Entrez le nombre de Participant">
 														</div>
 													</div>
 												</div>
-												<div class="col-lg-12 mb-2">
+												<div class="col-lg-12">
 													<div class="form-group">
-														<label for="montantParPeriode">Montant par Période :</label>
+														<label for="montantParPeriode" style="font-weight: bold;">Montant par Période * :</label>
 														<div class="input-group">
-															<button type="button" class="btn btn-outline-primary"
-																onclick="decrementMontant()">-</button>
-															<input type="number" class="form-control"
+															<input type="number" class="form-control border border-primary rounded-5"
 																id="montantParPeriode" name="montantParPeriode"
 																th:field="*{montantParPeriode}"
-																placeholder="Enter Montant par Période">
-															<button type="button" class="btn btn-outline-primary"
-																onclick="incrementMontant()">+</button>
+																placeholder="Entrez le montant par Période">
 														</div>
-
 													</div>
 												</div>
 											</div>
 										</div>
 
-										<div id="ajouter-une-tontine" class="tab-pane" role="tabpanel">
+										<div id="ajouter-une-tontine" class="tab-pane mt-3" role="tabpanel">
 											<div class="row">
 												<div class="col-lg-6 mx-auto mb-2">
 													<div class="form-group">
 														<button type="submit"
-															class="btn btn-success w-100">Ajouter</button>
+															class="btn btn-primary w-100">Ajouter</button>
 													</div>
 												</div>
 											</div>
@@ -154,7 +146,7 @@
         Scripts
     ***********************************-->
 	<!--  vendors -->
-<script th:src="@{/vendor/global/global.min.js}"></script>
+	<script th:src="@{/vendor/global/global.min.js}"></script>
 	<script th:src="@{/vendor/bootstrap-select/dist/js/bootstrap-select.min.js}"></script>
 	<script th:src="@{/vendor/chart.js/Chart.bundle.min.js}"></script>
 	<script th:src="@{/vendor/peity/jquery.peity.min.js}"></script>
@@ -166,26 +158,27 @@
 	<script th:src="@{/js/demo.js}"></script>
 	<script th:src="@{/vendor/jquery-smartwizard/dist/js/jquery.smartWizard.js}"></script>
 	<script th:src="@{/vendor/select2/js/select2.full.min.js}"></script>
+	<script src="vendor/jquery-steps/build/jquery.steps.min.js"></script>
+	<script src="vendor/jquery-validation/jquery.validate.min.js"></script>
+	<!-- Toastr -->
+	<script src="vendor/toastr/js/toastr.min.js"></script>
+	<script src="js/plugins-init/toastr-init.js"></script>
 
-    <!-- Toastr -->
-    <script src="vendor/toastr/js/toastr.min.js"></script>
-    <script src="js/plugins-init/toastr-init.js"></script>
-	
-<script th:if="${errorMessage}" th:inline="javascript">
-    /*<![CDATA[*/
-    $(document).ready(function() {
-		  toastr.options = {
-            positionClass: 'toast-top-full-width', // Set the position to top-right
-            timeOut: 5000, // Set the duration to 5 seconds
-            extendedTimeOut: 1000, 
-            close: true,
-            toastClass: 'mt-5',
+	<script th:if="${errorMessage}" th:inline="javascript">
+		/*<![CDATA[*/
+		$(document).ready(function () {
+			toastr.options = {
+				positionClass: 'toast-top-full-width', // Set the position to top-right
+				timeOut: 5000, // Set the duration to 5 seconds
+				extendedTimeOut: 1000,
+				close: true,
+				toastClass: 'mt-5',
 
-        };
-        toastr.error([[${errorMessage}]]);
-    });
+			};
+			toastr.error([[${errorMessage}]]);
+		});
     /*]]>*/
-</script>
+	</script>
 
 	<script>
 		// Fonction pour valider le formulaire côté client
@@ -207,8 +200,8 @@
 				return false;
 			}
 
-			if (isNaN(nombreParticipant) || nombreParticipant < 2) {
-				alert("Le nombre de participants doit être d'au moins 2");
+			if (isNaN(nombreParticipant) || nombreParticipant < 3) {
+				alert("Le nombre de participants doit être d'au moins 3");
 				return false;
 			}
 

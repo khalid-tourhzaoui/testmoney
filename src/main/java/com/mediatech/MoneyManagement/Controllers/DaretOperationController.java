@@ -144,9 +144,9 @@ public class DaretOperationController {
 	            model.addAttribute("user", currentUser);
 	            return "Admin/ajouter-tontine"; // Directly return the template without redirect
 	        }
-	        if (daretOperation.getNombreParticipant() < 2) {
+	        if (daretOperation.getNombreParticipant() < 3) {
 	            // Ajoutez un message d'erreur pour le nombre de participants
-	            model.addAttribute("errorMessage", "Le nombre de participants doit être d'au moins 2");
+	            model.addAttribute("errorMessage", "Le nombre de participants doit être d'au moins 3");
 	            model.addAttribute("user", currentUser);
 	            return "Admin/ajouter-tontine"; // Directly return the template without redirect
 	        }
@@ -241,9 +241,9 @@ public class DaretOperationController {
 	                //model.addAttribute("user", currentUser);
 	                return "redirect:/modifier-tontine/" + operationId;
 	            }
-	            if (updatedDaretOperation.getNombreParticipant() < 2) {
+	            if (updatedDaretOperation.getNombreParticipant() < 3) {
 	                // Ajouter un message d'erreur pour le nombre de participants
-	            	redirectAttributes.addFlashAttribute("errorMessage", "Le nombre de participants doit être d'au moins 2");
+	            	redirectAttributes.addFlashAttribute("errorMessage", "Le nombre de participants doit être d'au moins 3");
 	                //model.addAttribute("user", currentUser);
 	                return "redirect:/modifier-tontine/" + operationId;
 	            }
@@ -318,17 +318,10 @@ public class DaretOperationController {
 	        // Récupérer l'utilisateur actuel
 	        User currentUser = userService.findByEmail(userDetails.getUsername());
 
-	        // Vérifier si la DaretOperation est en cours
-	        if ("Progress".equals(daretOperation.getStatus())) {
-	        	model.addAttribute("errorMessage", "Vous n'êtes pas autorisé à supprimer une tontine en cours.")
-	        		 .addAttribute("user",currentUser);
-	            return "liste-tontine";
-	        }
-
 	        // Vérifier si l'utilisateur actuel est le créateur
-	        if ("CREATEUR".equals(currentUser.getRole())) {
+	        if (("CREATEUR".equals(currentUser.getRole())) || ("ADMIN".equalsIgnoreCase(currentUser.getRole()))){
 	            // Si le créateur veut supprimer et la tontine est en attente, alors supprime
-	            if ("Pending".equals(daretOperation.getStatus())) {
+	            if (!"Progress".equals(daretOperation.getStatus())) {
 	                // Implémenter votre méthode de service pour supprimer la DaretOperation par ID
 	                daretOperationService.deleteDaretById(operationId);
 	            } else {

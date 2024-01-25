@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="layout/head :: head">
+
 <body>
 
-	<!--*******************
-        Preloader start
-    ********************-->
+	<!--*************************************Preloader-Start***********************************-->
 	<div id="preloader">
 		<div class="sk-three-bounce">
 			<div class="sk-child sk-bounce1"></div>
@@ -13,46 +13,24 @@
 			<div class="sk-child sk-bounce3"></div>
 		</div>
 	</div>
-	<!--*******************
-        Preloader end
-    ********************-->
+	<!--*************************************Preloader-End*************************************-->
 
-
-	<!--**********************************
-        Main wrapper start
-    ***********************************-->
+	<!--**********************************Main wrapper start***********************************-->
 	<div id="main-wrapper">
-		<!--**********************************
-            Nav header start
-        ***********************************-->
+
+		<!--**********************************Nav header start*************************************-->
 		<div th:replace="layout/NavHeader :: NavHeader"></div>
+		<!--**********************************Nav header end***************************************-->
 
-		<!--**********************************
-            Nav header end
-        ***********************************-->
-
-
-		<!--**********************************
-            Header start
-        ***********************************-->
+		<!--**********************************Header start*****************************************-->
 		<div th:replace="layout/header :: header"></div>
+		<!--**********************************Header end*******************************************-->
 
-		<!--**********************************
-            Header end ti-comment-alt
-        ***********************************-->
-
-		<!--**********************************
-            Sidebar start
-        ***********************************-->
+		<!--***********************************Sidebar start***************************************-->
 		<div th:replace="layout/sidebar :: sidebar"></div>
+		<!--***********************************Sidebar end*****************************************-->
 
-		<!--**********************************
-            Sidebar end
-        ***********************************-->
-		<!--**********************************
-            Content body start
-        ***********************************-->
-
+		<!--***********************************Content body start**********************************-->
 
 		<div class="content-body">
 			<div class="container-fluid">
@@ -68,13 +46,13 @@
 										<p class="text-primary mb-1" th:text="${'#N-' + offer.id}"></p>
 										<h5 class="title font-w600 mb-2"><a href="post-details.html" class="text-black"
 												th:text="${offer.designation}"></a></h5>
-										<span
+										<span style="font-weight: bold;"
 											th:text="${'Créer par : ' + offer.adminOffre.getNom()+' '+offer.adminOffre.getPrenom()}"></span>
 									</div>
 									<span class="badge badge-warning d-sm-inline-block d-none"
 										th:text="${offer.status}"></span>
 								</div>
-								<p class="mb-4">L'offre #N- [[${offer.id}]] est actuellement ouverte à la participation.
+								<p class="mb-4" style="font-weight: bold;">L'offre #N- [[${offer.id}]] est actuellement ouverte à la participation.
 									Nous recherchons [[${offer.nombreParticipant}]] personnes pour rejoindre cette
 									opportunité.</p>
 								<div class="row mb-4">
@@ -91,8 +69,8 @@
 											</svg>
 										</div>
 										<div>
-											<span>Date Début</span>
-											<p class="mb-0 pt-1 font-w500 text-black">[[${offer.dateDebut}]]</p>
+											<span>Date de creation</span>
+											<p class="mb-0 pt-1 font-w500 text-black" th:text="${#dates.format(offer.createdAt, 'dd/MM/yyyy')}"></p>
 										</div>
 									</div>
 									<div class="col-sm-6 d-flex">
@@ -105,8 +83,8 @@
 											</svg>
 										</div>
 										<div>
-											<span>Date Fin</span>
-											<p class="mb-0 pt-1 font-w500 text-black">[[${offer.dateFin}]]</p>
+											<span>Date Dernier Modification</span>
+											<p class="mb-0 pt-1 font-w500 text-black" th:text="${offer.updatedAt==null ? 'Date non disponible': #dates.format(offer.updatedAt, 'dd/MM/yyyy')}"></p>
 										</div>
 									</div>
 								</div>
@@ -137,7 +115,7 @@
 														class="btn btn-sm btn-info disabled">Normale</a>
 												</li>
 												<li>
-													<a th:unless="${offer.placesReservees > offer.nombreParticipant - 1.5}"
+													<a th:unless="${offer.placesReservees >= offer.nombreParticipant - 1.5}"
 														class="btn btn-sm btn-info" href="javascript:void(0);"
 														th:onclick="'selectPaymentType(\'Double\', ' + ${offer.id} + ', \'' + ${offer.montantParPeriode} + '\')'">Double</a>
 													<a th:unless="${offer.placesReservees < offer.nombreParticipant - 1.5}"
@@ -161,16 +139,16 @@
 								</div>
 								<div class="row">
 									<div class="col-6">
-										<div>Nombre de place : <span
+										<div>Nombre total de participants : <span
 												class="text-black ml-3 font-w600">[[${offer.nombreParticipant}]]</span>
 										</div>
-										<div>Le reste : <span class="text-black ml-3 font-w600"
+										<div>Nombre des places restantes : <span class="text-black ml-3 font-w600"
 												th:text="${offer.nombreParticipant - offer.placesReservees}"></span>
 										</div>
 
 									</div>
 									<div class="col-6">
-										<h6>Progress
+										<h6>En cours
 											<span class="pull-right"
 												th:text="${(offer.placesReservees * 100) div offer.nombreParticipant} + '%'"></span>
 										</h6>

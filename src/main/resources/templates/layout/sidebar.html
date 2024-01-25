@@ -1,39 +1,30 @@
 <!--**********************************Sidebar start***********************************-->
 <div class="deznav" th:fragment="sidebar">
-	<div class="deznav-scroll bg-light shadow rounded">
+	<div class="deznav-scroll shadow rounded" style="background-color: #FBF2C4">
 		<div class="main-profile">
 			<div class="image-bx">
-				<img th:src="${user.getGender() == 'MALE' ? 'images/men_avatar.png' : 'images/woman_avatar.png'}"
+				<img th:src="${user.getGender() == 'MALE' ? '/images/corruption.gif' : '/images/corruption.gif'}"
 					alt="avatar">
 				<a
 					th:href="@{${user.role == 'CREATEUR' ? '/createur-dashboard' : (user.role == 'ADMIN' ? '/admin-dashboard' : '/user-dashboard')}}">
 					<i class="fa fa-cog" aria-hidden="true"></i>
 				</a>
 			</div>
-			<h5 th:if="${user.getGender() == 'MALE'}" class="name"><span class="font-w400">Bonjour,Monsieur</span></h5>
-			<h5 th:if="${user.getGender() == 'FEMALE'}" class="name"><span class="font-w400">Bonjour,Madame</span></h5>
-			<p class="email"><span class="__cf_email__">[[${user.getEmail()}]]</a></p>
+			<h5 th:text="${user.getGender() == 'MALE' ? 'Bonjour,Monsieur' : 'Bonjour,Madaùe'}" class="name"></h5>
+			<p class="email text-dark"><span class="__cf_email__">[[${user.getEmail()}]]</a></p>
 		</div>
 		<ul class="metismenu" id="menu">
 			<li class="nav-label first">Menu principal</li>
-			<li th:if="${user.getRole() == 'CREATEUR'}">
-				<a th:href="@{/createur-dashboard}" aria-expanded="false">
+
+			<li th:if="${user.getRole() == 'CREATEUR' or user.getRole() == 'ADMIN' or user.getRole() == 'USER'}">
+				<a th:href="${user.getRole() == 'CREATEUR' ? '/createur-dashboard' :
+                user.getRole() == 'ADMIN' ? '/admin-dashboard' :
+                user.getRole() == 'USER' ? '/user-dashboard' : '#'}" aria-expanded="false">
 					<i class="flaticon-144-layout"></i>
 					<span class="nav-text font-weight-bold">Tableau de bord</span>
 				</a>
 			</li>
-			<li th:if="${user.getRole() == 'ADMIN'}">
-				<a th:href="@{/admin-dashboard}" aria-expanded="false">
-					<i class="flaticon-144-layout"></i>
-					<span class="nav-text font-weight-bold">Tableau de bord</span>
-				</a>
-			</li>
-			<li th:if="${user.getRole() == 'USER'}">
-				<a th:href="@{/user-dashboard}" aria-expanded="false">
-					<i class="flaticon-144-layout"></i>
-					<span class="nav-text font-weight-bold">Tableau de bord</span>
-				</a>
-			</li>
+
 			<!--***************************************************************************************************-->
 			<li th:if="${user.getRole() == 'CREATEUR' or user.getRole() == 'ADMIN'}">
 				<a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -50,11 +41,8 @@
 
 			</li>
 			<!--***************************************************************************************************-->
-
-			
 			<li th:if="${user.getRole() == 'CREATEUR' or user.getRole() == 'ADMIN' or user.getRole() == 'USER'}">
-				<a class="has-arrow ai-icon" href="javascript:void()"
-					aria-expanded="false">
+				<a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
 					<i class="flaticon-381-network"></i>
 					<span class="nav-text font-weight-bold">Gestion des participations</span>
 				</a>
@@ -64,15 +52,16 @@
 					<li><a th:href="@{/liste-des-participations}" class="font-weight-bold"><i
 								class="fa-solid fa-list"></i>Liste des participations</a></li>
 				</ul>
-
 			</li>
+			<!--***************************************************************************************************-->
 			<li th:if="${user.getRole() == 'ADMIN'}"><a class="has-arrow ai-icon" href="javascript:void()"
 					aria-expanded="false">
 					<i class="flaticon-381-network"></i>
 					<span class="nav-text font-weight-bold">Gestion des utilisateurs</span>
 				</a>
 				<ul aria-expanded="false">
-					<li><a th:href="@{/liste-utilisateurs}"><i class="fa-solid fa-list"></i>Liste des utilisateurs</a></li>
+					<li><a th:href="@{/liste-utilisateurs}"><i class="fa-solid fa-list"></i>Liste des utilisateurs</a>
+					</li>
 				</ul>
 
 			</li>

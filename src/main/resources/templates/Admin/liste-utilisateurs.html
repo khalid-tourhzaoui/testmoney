@@ -37,12 +37,13 @@
 				<div class="row">
 					<div class="col-12">
 						<div class="card">
-							<div class="card-header">
-								<h4 class="card-title">Basic Datatable</h4>
+							<div class="card-header bg-primary">
+								<h4 class="card-title text-white mx-auto">La liste des utilisateurs présentes dans votre
+									application .</h4>
 							</div>
 							<div class="card-body">
 								<div class="table-responsive">
-									<table id="example" class="table table-hover table-stripped display" style="min-width: 845px">
+									<table class="style-1 table table-striped display" id="example">
 										<thead>
 											<tr class="text-center">
 												<th>#</th>
@@ -56,14 +57,23 @@
 										<tbody>
 											<tr th:each="item,iterStat : ${allUsers}" class="text-center">
 												<td th:text="${iterStat.count}"></td>
-												<td>[[${item.nom}]] [[${item.prenom}]]</td>
+												<td>
+													<div class="media style-1">
+														<span class="icon-name mr-2 bgl-info text-info">
+															[[${item.nom != null && item.nom.length() > 0 ? item.prenom.substring(0, 1) : ''}]]
+														</span>
+														<div class="media-body">
+															<h6 th:text="${item.prenom+' '+item.nom}"></h6>
+															<span><a class="__cf_email__">[[${item.email}]]</a></span>
+														</div>
+													</div>
+												</td>
 												<td>[[${item.cin}]]</td>
 												<td>[[${item.email}]]</td>
 												<td>[[${item.gender}]]</td>
 												<td>[[${item.role}]]</td>
 											</tr>
 										</tbody>
-										
 									</table>
 								</div>
 							</div>

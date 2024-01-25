@@ -56,7 +56,7 @@
 		<!-- liste-offres.html -->
 		<div class="content-body">
 			<div class="container-fluid">
-				<div class="project-nav">
+				<div class="project-nav mx-auto">
 					<!-- Navigation tabs -->
 					<div class="card card-action card-tabs  mx-auto">
 						<ul class="nav nav-tabs style-2">
@@ -64,7 +64,8 @@
 								<a href="#navpills-1" class="nav-link text-dark"
 									th:href="@{/liste-des-participations?status=All}" aria-expanded="false">
 									Toutes les offres <span
-										class="badge badge-pill shadow-primary badge-primary">[[${totalOffersCount}]]</span>
+										class="badge badge-pill shadow-primary badge-primary">
+										[[${inProgressCount + pendingCount + closedCount}]]</span>
 								</a>
 							</li>
 							<li class="nav-item">

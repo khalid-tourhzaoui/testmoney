@@ -76,7 +76,7 @@
 						<form id="deleteForm" th:action="@{/supprimer-tontine}" method="post">
 							<input type="hidden" id="operationIdInput" name="operationId" />
 						</form>
-						<a th:if="${(operation.status != 'Progress' and user.id==operation.AdminOffre.id)}" class="dropdown-item" th:data-id="${operation.id}" th:data-status="${operation.status}"
+						<a th:if="${(operation.status != 'Progress' and (user.id==operation.AdminOffre.id or  user.role=='ADMIN'))}" class="dropdown-item" th:data-id="${operation.id}" th:data-status="${operation.status}"
 							style="cursor: pointer;"
 							onclick="confirmEditOrDelete(this.getAttribute('data-id'), this.getAttribute('data-status'))">
 							Delete
