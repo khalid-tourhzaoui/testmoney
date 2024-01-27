@@ -27161,7 +27161,8 @@ table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.
   padding: 5px 15px;
   flex-flow: wrap;
   display: flex;
-  align-items: center; }
+  align-items: center; 
+  justify-content: space-between;}
   @media only screen and (max-width: 1600px) {
     .project-info {
       font-size: 13px; }

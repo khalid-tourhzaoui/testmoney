@@ -74,19 +74,38 @@ public class ForgotPasswordController {
 	    redirectAttributes.addFlashAttribute("successMessage", "Le lien de réinitialisation du mot de passe a été envoyé avec succès.");
 	    return "redirect:/password-request";
 	}
-	
+	@GetMapping("/reset-password")
+	public String resetPassword(@Param(value="token") String token, Model model, HttpSession session) {
+		
+		session.setAttribute("token", token);
+		ForgotPasswordToken forgotPasswordToken = forgotPasswordRepository.findByToken(token);
+		return forgotPasswordService.checkValidity(forgotPasswordToken, model);
+		
+	}
 	@PostMapping("/reset-password")
 	public String saveResetPassword(HttpServletRequest request, HttpSession session, Model model) {
-		String password = request.getParameter("password");
-		String token = (String)session.getAttribute("token");
-		
-		ForgotPasswordToken forgotPasswordToken = forgotPasswordRepository.findByToken(token);
-		User user = forgotPasswordToken.getUser();
-		user.setPassword(passwordEncoder.encode(password));
-		forgotPasswordToken.setUsed(true);
-		userService.save(user);
-		forgotPasswordRepository.save(forgotPasswordToken);
-	    return "redirect:/login?success";
+	    try {
+	        String password = request.getParameter("password");
+	        String token = (String) session.getAttribute("token");
+
+	        ForgotPasswordToken forgotPasswordToken = forgotPasswordRepository.findByToken(token);
+
+	        User user = forgotPasswordToken.getUser();
+	        user.setPassword(passwordEncoder.encode(password));
+	        forgotPasswordToken.setUsed(true);
+	        userService.save(user);
+	        forgotPasswordRepository.save(forgotPasswordToken);
+
+	        // Ajouter un attribut de message de succès dans le modèle
+	        model.addAttribute("successMessage", "Votre mot de passe a été réinitialisé avec succès.");
+
+	        return "redirect:/login";
+	    } catch (Exception e) {
+	        // Gérer les autres exceptions
+	        model.addAttribute("errorMessage", "Une erreur s'est produite lors de la réinitialisation du mot de passe.");
+	        return "redirect:/login?error";
+	    }
 	}
+
 
 }

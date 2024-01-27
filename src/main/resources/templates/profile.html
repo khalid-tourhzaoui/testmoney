@@ -265,40 +265,32 @@
 	<script th:src="@{/js/demo.js}"></script>
 	<script th:src="@{/vendor/jquery-smartwizard/dist/js/jquery.smartWizard.js}"></script>
 	<script th:src="@{/vendor/select2/js/select2.full.min.js}"></script>
-<!-- Toastr -->
-    <script src="vendor/toastr/js/toastr.min.js"></script>
-    <script src="js/plugins-init/toastr-init.js"></script>
-	
-<script th:if="${errorMessage}" th:inline="javascript">
-    /*<![CDATA[*/
-    $(document).ready(function() {
-		  toastr.options = {
-            positionClass: 'toast-top-full-width', // Set the position to top-right
-            timeOut: 5000, // Set the duration to 5 seconds
-            extendedTimeOut: 1000, 
-            close: true,
-            toastClass: 'mt-5',
 
-        };
-        toastr.error([[${errorMessage}]]);
-    });
-    /*]]>*/
-</script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script th:if="${successMessage}" th:inline="javascript">
-    /*<![CDATA[*/
-    $(document).ready(function() {
-		  toastr.options = {
-            positionClass: 'toast-top-full-width', // Set the position to top-right
-            timeOut: 5000, // Set the duration to 5 seconds
-            extendedTimeOut: 1000, 
-            close: true,
-            toastClass: 'mt-5',
-
-        };
-        toastr.success([[${successMessage}]]);
-    });
-    /*]]>*/
-</script>
+	    /*<![CDATA[*/
+	    $(document).ready(function() {
+		Swal.fire({
+		  icon: "success",
+		  title: [[${successMessage}]],
+		  showConfirmButton: false,
+		  timer: 2000,
+		  
+		});
+	   });
+	    /*]]>*/
+	</script>
+	<script th:if="${errorMessage}" th:inline="javascript">
+	    /*<![CDATA[*/
+	    $(document).ready(function() {
+		Swal.fire({
+		  icon: "error",
+		  title: "Oups...",
+		  text:[[${errorMessage}]],
+		});
+	   });
+	    /*]]>*/
+	</script>
 	<script>
 		// Get the current date
 		var currentDate = new Date();

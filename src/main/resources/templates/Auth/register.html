@@ -15,26 +15,22 @@
 </head>
 
 <body>
-	<div class="container font-sans text-gray-900 antialiased">
-		<form th:action="@{/registration}" method="post" role="form" th:object="${user}">
-			<div class="container-fluid login-1">
-				<div class="container">
-					<div class="login-form">
-						<div class="row align-items-center">
-							<!-- Image Section -->
-							<div class="col-md-4">
-								<div class="img-box">
-									<img th:src="@{images/school-software-removebg.png}" class="img img-fluid me-5 pe-5"
-										title="login" alt="welcome image">
-								</div>
-							</div>
+	<div class="container text-gray-900 antialiased">
+        <form th:action="@{/registration}" method="post" role="form" th:object="${user}">
+            <div class="login-1">
+                <div class="container">
+                    <div class="login-form my-auto">
+                        <div class="row align-items-center">
+                            <div class="col-md-5">
+                                <div class="img-box">
+                                    <img th:src="@{/images/login.png}" class="img img-fluid" title="login"
+                                        alt="welcome image">
+                                </div>
+                            </div>
 
 							<!-- Registration Form Section -->
-							<div class="col-md-8">
-								<div class="row">
-								
-								</div>
-
+							<div class="col-md-7">
+		
 								<!-- Personal Information -->
 								<div class="row">
 									<div class="col-md-6 form-group">
@@ -74,8 +70,8 @@
 									<div class="col-md-6 form-group">
 										<select style="border-radius: 1rem;" class="form-control w-100" name="gender"
 											th:field="*{gender}">
-											<option value="MALE">MALE</option>
-											<option value="FEMALE">FEMALE</option>
+											<option value="homme">Homme</option>
+											<option value="femme">Femme</option>
 										</select>
 									</div>
 								</div>
@@ -85,20 +81,20 @@
 									<div class="col-md-6 form-group">
 										<input style="border-radius: 1rem;" class="form-control block w-100 w-full"
 											type="password" name="password" th:field="*{password}" required autofocus
-											placeholder="Enter your password" />
+											placeholder="Entez votre mot de passe" />
 									</div>
 									<div class="col-md-6 form-group">
 										<input style="border-radius: 1rem;" class="form-control block w-100 w-full"
 											type="password" name="confirmPassword" th:field="*{confirmPassword}"
-											required placeholder="Confirm your password" />
+											required placeholder="Confirmez votre mot de passe" />
 									</div>
 								</div>
 
 								<!-- Submission Section -->
 								<div class="row">
 									<div class="col-md-12 form-group">
-										<button class="btn btn-primary " style="border-radius: 1rem;"
-											type="submit">Register</button>
+										<button class="btn btn-primary w-100 " style="border-radius: 1rem;"
+											type="submit">Enregistrer</button>
 									</div>
 								</div>
 							</div>
@@ -109,39 +105,32 @@
 		</form>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-	 <!-- Toastr -->
-    <script src="vendor/toastr/js/toastr.min.js"></script>
-    <script src="js/plugins-init/toastr-init.js"></script>
-   <script th:if="${successMessage}" th:inline="javascript">
-    /*<![CDATA[*/
-    $(document).ready(function() {
-		  toastr.options = {
-            positionClass: 'toast-top-full-width', // Set the position to top-right
-            timeOut: 5000, // Set the duration to 5 seconds
-            extendedTimeOut: 1000, 
-            close: true,
-            toastClass: 'mt-5',
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-        };
-        toastr.success([[${successMessage}]]);
-    });
-    /*]]>*/
-</script>
- <script th:if="${errorMessage}" th:inline="javascript">
-    /*<![CDATA[*/
-    $(document).ready(function() {
-		  toastr.options = {
-            positionClass: 'toast-top-full-width', // Set the position to top-right
-            timeOut: 5000, // Set the duration to 5 seconds
-            extendedTimeOut: 1000, 
-            close: true,
-            toastClass: 'mt-5',
-
-        };
-        toastr.error([[${errorMessage}]]);
-    });
-    /*]]>*/
-</script>
+ <script th:if="${successMessage}" th:inline="javascript">
+	    /*<![CDATA[*/
+	    $(document).ready(function() {
+		Swal.fire({
+		  icon: "success",
+		  title: [[${successMessage}]],
+		  showConfirmButton: false,
+		  timer: 2000,
+		  
+		});
+	   });
+	    /*]]>*/
+	</script>
+	<script th:if="${errorMessage}" th:inline="javascript">
+	    /*<![CDATA[*/
+	    $(document).ready(function() {
+		Swal.fire({
+		  icon: "error",
+		  title: "Oups...",
+		  text:[[${errorMessage}]],
+		});
+	   });
+	    /*]]>*/
+	</script>
 </body>
 </body>
 

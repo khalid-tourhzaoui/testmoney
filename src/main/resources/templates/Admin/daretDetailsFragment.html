@@ -3,9 +3,14 @@
 	<div class="project-info ">
 		<div class="col-xl-3 my-2 col-lg-4 col-sm-6">
 			<p class="text-primary mb-1">#N-[[${operation.id}]]</p>
-			<h5 class="title font-w600 mb-2"><a href="" class="text-black">[[${operation.designation}]]</a></h5>
-			<div class="text-dark"><i class="fa fa-calendar-o mr-3" aria-hidden="true"></i>créé le
-				[[${operation.dateDebut}]]</div>
+			<h5 class="title font-w600 mb-2"><a class="text-black">[[${operation.designation}]]</a></h5>
+			<div class="text-dark">
+				<i class="fa fa-calendar-o mr-3" aria-hidden="true"></i>créé le
+				<span th:if="${operation.dateDebut == null}"
+					th:text="${#dates.format(operation.createdAt, 'dd-MM-yyyy')}"></span>
+				<span th:if="${operation.dateDebut != null}"
+					th:text="${operation.dateDebut}"></span>
+			</div>
 		</div>
 
 		<div class="col-xl-2 my-2 col-lg-4 col-sm-6">
@@ -26,7 +31,7 @@
 					<img src="images/customer.gif" alt="">
 				</div>
 				<div>
-					<span>Nombre de personne</span>
+					<span>Participants</span>
 					<h5 class="mb-0 pt-1 font-w50 text-black">[[${operation.nombreParticipant}]]</h5>
 				</div>
 			</div>
@@ -38,9 +43,10 @@
 					<img src="images/12-hours.gif" alt="">
 				</div>
 				<div class="ml-2">
-					<span>Date fin</span>
-					<h5 class="mb-0 font-w50 text-black"><i class="fa fa-calendar-o mr-2"
-							aria-hidden="true"></i>[[${operation.dateFin}]]</h5>
+					<span>[[${operation.dateFin == null ? 'Date modification' : 'Date Fin'}]]</span>
+					<h5 class="mb-0 font-w50 text-black"><i class="fa fa-calendar-o mr-2" aria-hidden="true"></i>
+						[[${operation.dateFin == null ? #dates.format(operation.updatedAt,'dd-MM-yyyy'): operation.dateFin}]]
+					</h5>
 				</div>
 			</div>
 		</div>
@@ -71,15 +77,17 @@
 						</svg>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
-						<a class="dropdown-item" th:href="@{'/details-tontine/' + ${operation.id}}">Show</a>
-						<a th:if="${operation.status == 'Pending' and user.role!='USER' and user.id==operation.AdminOffre.id}" class="dropdown-item" th:href="@{'/modifier-tontine/' + ${operation.id}}">Edit</a>
+						<a class="dropdown-item" th:href="@{'/details-tontine/' + ${operation.id}}">Details</a>
+						<a th:if="${operation.status == 'Pending' and user.role!='USER' and user.id==operation.AdminOffre.id}"
+							class="dropdown-item" th:href="@{'/modifier-tontine/' + ${operation.id}}">Modifier</a>
 						<form id="deleteForm" th:action="@{/supprimer-tontine}" method="post">
 							<input type="hidden" id="operationIdInput" name="operationId" />
 						</form>
-						<a th:if="${(operation.status != 'Progress' and (user.id==operation.AdminOffre.id or  user.role=='ADMIN'))}" class="dropdown-item" th:data-id="${operation.id}" th:data-status="${operation.status}"
+						<a th:if="${(operation.status != 'Progress' and (user.id==operation.AdminOffre.id or  user.role=='ADMIN'))}"
+							class="dropdown-item" th:data-id="${operation.id}" th:data-status="${operation.status}"
 							style="cursor: pointer;"
 							onclick="confirmEditOrDelete(this.getAttribute('data-id'), this.getAttribute('data-status'))">
-							Delete
+							Supprimer
 						</a>
 					</div>
 				</div>

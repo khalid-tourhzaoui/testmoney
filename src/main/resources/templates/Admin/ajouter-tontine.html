@@ -160,25 +160,19 @@
 	<script th:src="@{/vendor/select2/js/select2.full.min.js}"></script>
 	<script src="vendor/jquery-steps/build/jquery.steps.min.js"></script>
 	<script src="vendor/jquery-validation/jquery.validate.min.js"></script>
-	<!-- Toastr -->
-	<script src="vendor/toastr/js/toastr.min.js"></script>
-	<script src="js/plugins-init/toastr-init.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-	<script th:if="${errorMessage}" th:inline="javascript">
-		/*<![CDATA[*/
-		$(document).ready(function () {
-			toastr.options = {
-				positionClass: 'toast-top-full-width', // Set the position to top-right
-				timeOut: 5000, // Set the duration to 5 seconds
-				extendedTimeOut: 1000,
-				close: true,
-				toastClass: 'mt-5',
-
-			};
-			toastr.error([[${errorMessage}]]);
-		});
+<script th:if="${errorMessage}" th:inline="javascript">
+    /*<![CDATA[*/
+    $(document).ready(function() {
+	Swal.fire({
+	  icon: "error",
+	  title: "Oops...",
+	  text:[[${errorMessage}]],
+	});
+   });
     /*]]>*/
-	</script>
+</script>
 
 	<script>
 		// Fonction pour valider le formulaire côté client

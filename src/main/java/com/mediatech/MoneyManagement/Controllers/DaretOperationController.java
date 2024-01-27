@@ -289,6 +289,22 @@ public class DaretOperationController {
 	        DaretOperation daretOperation = daretOperationService.findById(operationId);
 	        List<DaretParticipant> participants = daretOperation.getDaretParticipants();
 
+	        if (!participants.isEmpty() && daretOperation.getStatus().equalsIgnoreCase("Progress")) {
+	            // Obtenez le dernier participant dans la liste
+	            DaretParticipant avantParticipant = participants.get(participants.size() - 2);
+	            DaretParticipant dernierParticipant = participants.get(participants.size() - 1);
+	            if(dernierParticipant.getDatePaiement()==null) {
+	            	  System.out.println("avant dernier : "+avantParticipant.getDatePaiement());
+	  	            System.out.println("le dernier : "+dernierParticipant.getDatePaiement());
+	  	            dernierParticipant.setDatePaiement(avantParticipant.getDatePaiement());
+	  	            daretOperation.setDaretParticipants(participants);
+	  	            for (DaretParticipant daretParticipant : participants) {
+						System.out.println("date paiement : "+daretParticipant.getDatePaiement());
+					}
+	            }
+	          
+	        }
+
 	        // Effectuer une vérification d'autorisation ici si nécessaire
 
 	        // Ajouter les attributs au modèle pour l'affichage dans la vue

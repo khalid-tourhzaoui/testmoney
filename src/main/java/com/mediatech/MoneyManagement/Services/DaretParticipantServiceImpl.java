@@ -59,7 +59,7 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
 
             handleCoupleParticipants(daretParticipant, participants);
 
-            if (daretOperation.getPlacesReservees() >= daretOperation.getNombreParticipant()) {
+            if (daretOperation.getPlacesReservees() == daretOperation.getNombreParticipant()) {
                 daretOperation.setStatus("Progress");
 
                 if (daretOperation.getDateDebut() == null) {
@@ -88,7 +88,14 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
 
                 }
  
+            
+                    System.out.println("la taille de liste :"+participants.size());
+                    for (DaretParticipant participant : participants) {
+                    	System.out.println("index = "+participant.getParticipantIndex());
+                    }
+                
             }
+            
             
             daretParticipantRepository.save(daretParticipant);
             daretOperationRepository.save(daretOperation);

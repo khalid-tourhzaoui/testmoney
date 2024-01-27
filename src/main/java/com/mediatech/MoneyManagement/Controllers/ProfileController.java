@@ -70,7 +70,7 @@ public class ProfileController {
 					userService.existsByCin(updatedUser.getCin())) {
 				redirectAttributes.addFlashAttribute("errorMessage","Le CIN existe déjà. Veuillez choisir un CIN différent.");
 				return "redirect:/profile";
-			} else if (!Arrays.asList("male", "female").contains(updatedUser.getGender())) {
+			} else if (!Arrays.asList("femme", "homme").contains(updatedUser.getGender())) {
 				redirectAttributes.addFlashAttribute("ErrorMessage", "Genre invalide. Veuillez choisir 'homme' ou 'femme'.");
 				return "redirect:/profile";
 			}

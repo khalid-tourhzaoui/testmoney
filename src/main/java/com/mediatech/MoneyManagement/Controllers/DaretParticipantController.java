@@ -76,7 +76,7 @@ public class DaretParticipantController {
 	        for (DaretOperation daretOperation : userDaretOperations) {
 	        	System.out.println(daretOperation.getDesignation());
 	        }
-	        return "User/liste-tontine";
+	        return "Admin/liste-tontine";
 	    } catch (Exception e) {
 	        return "redirect:/logout";
 	    }
