@@ -101,7 +101,7 @@ public class DaretOperationController {
 	        // Créer une nouvelle instance de DaretOperation et l'ajouter au modèle
 	        DaretOperation daretOperation = new DaretOperation();
 	        model.addAttribute("daretOperation", daretOperation)
-	             .addAttribute("pageTitle", "DARET-ADMIN AJOUTER UNE OFFRE");
+	             .addAttribute("pageTitle", "DARET-ADMIN AJOUTER UNE TONTINE");
 	        // Renvoyer le nom de la vue pour le formulaire d'ajout d'offre
 	        return "Admin/ajouter-tontine";
 	    } catch (Exception e) {
@@ -195,7 +195,7 @@ public class DaretOperationController {
 
 	        // Si la DaretOperation n'est pas en cours, afficher le formulaire de modification
 	        model.addAttribute("daretOperation", daretOperation)
-	             .addAttribute("pageTitle", "DARET-ADMIN MODIFIER UNE OFFRE");
+	             .addAttribute("pageTitle", "DARET-ADMIN MODIFIER UNE TONTINE");
 
 	        // Retourner le nom de la vue pour le formulaire de modification d'offre
 	        return "Admin/modifier-tontine";
@@ -311,7 +311,7 @@ public class DaretOperationController {
 	        model.addAttribute("user", currentUser)
 	            .addAttribute("daretOperation", daretOperation)
 	            .addAttribute("participants", participants)
-	            .addAttribute("pageTitle", "DARET-ADMIN DÉTAILS DE L'OFFRE");
+	            .addAttribute("pageTitle", "DARET-ADMIN DÉTAILS DE TONTINE");
 
 	        // Renvoyer le nom de la vue pour afficher les détails de l'offre
 	        return "Admin/details-tontine";

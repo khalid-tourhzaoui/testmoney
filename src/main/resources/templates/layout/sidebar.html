@@ -3,14 +3,14 @@
 	<div class="deznav-scroll shadow rounded" style="background-color: #FBF2C4">
 		<div class="main-profile">
 			<div class="image-bx">
-				<img th:src="${user.getGender() == 'MALE' ? '/images/corruption.gif' : '/images/corruption.gif'}"
+				<img th:src="${user.getGender() == 'homme' ? '/images/corruption.gif' : '/images/corruption.gif'}"
 					alt="avatar">
 				<a
 					th:href="@{${user.role == 'CREATEUR' ? '/createur-dashboard' : (user.role == 'ADMIN' ? '/admin-dashboard' : '/user-dashboard')}}">
 					<i class="fa fa-cog" aria-hidden="true"></i>
 				</a>
 			</div>
-			<h5 th:text="${user.getGender() == 'MALE' ? 'Bonjour,Monsieur' : 'Bonjour,Madaùe'}" class="name"></h5>
+			<h5 th:text="${user.getGender() == 'homme' ? 'Bonjour,Monsieur' : 'Bonjour,Madaùe'}" class="name"></h5>
 			<p class="email text-dark"><span class="__cf_email__">[[${user.getEmail()}]]</a></p>
 		</div>
 		<ul class="metismenu" id="menu">

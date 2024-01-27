@@ -2,76 +2,75 @@ package com.mediatech.MoneyManagement.Models;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+
+import jakarta.persistence.*;
 
 @Entity
 public class ForgotPasswordToken {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-	
-	@Column(nullable = false)
-	private String token;
-	
-	@ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-	@JoinColumn(nullable = false, name = "user_id")
-	private User user;
-	
-	@Column(nullable = false)
-	private LocalDateTime expireTime;
-	
-	@Column(nullable = false)
-	private boolean isUsed;
+	// Identifiant unique généré automatiquement
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	public Long getId() {
-		return id;
-	}
+    // Token associé à la réinitialisation du mot de passe, non nul
+    @Column(nullable = false)
+    private String token;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    // Relation Many-to-One avec l'entité User, indiquant l'utilisateur associé au token
+    //@ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "user_id")
+    private User user;
 
-	public String getToken() {
-		return token;
-	}
+    // Date et heure d'expiration du token
+    @Column(nullable = false)
+    private LocalDateTime expireTime;
 
-	public void setToken(String token) {
-		this.token = token;
-	}
+    // Indique si le token a été utilisé ou non
+    @Column(nullable = false)
+    private boolean isUsed;
 
-	public User getUser() {
-		return user;
-	}
+    // Getters et setters pour tous les champs
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public LocalDateTime getExpireTime() {
-		return expireTime;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setExpireTime(LocalDateTime expireTime) {
-		this.expireTime = expireTime;
-	}
+    public String getToken() {
+        return token;
+    }
 
-	public boolean isUsed() {
-		return isUsed;
-	}
+    public void setToken(String token) {
+        this.token = token;
+    }
 
-	public void setUsed(boolean isUsed) {
-		this.isUsed = isUsed;
-	}
-	
-	
-	
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public LocalDateTime getExpireTime() {
+        return expireTime;
+    }
+
+    public void setExpireTime(LocalDateTime expireTime) {
+        this.expireTime = expireTime;
+    }
+
+    public boolean isUsed() {
+        return isUsed;
+    }
+
+    public void setUsed(boolean isUsed) {
+        this.isUsed = isUsed;
+    }
 
 }

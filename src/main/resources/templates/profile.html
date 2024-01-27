@@ -84,7 +84,7 @@
 														<form th:action="@{/update-info}" method="post"
 															th:object="${user}">
 															<div class="form-row" th:if="${user}">
-																<input type="hidden" th:field="*{id}" />
+																<input type="hidden" th:field="*{id}"/>
 																<div class="form-group col-md-6">
 																	<label for="nom"style="font-weight: bold;">Nom de famille :</label>
 																	<input id="nom" type="text" th:field="*{nom}"

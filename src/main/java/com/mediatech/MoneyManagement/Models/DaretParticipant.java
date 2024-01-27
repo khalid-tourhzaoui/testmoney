@@ -2,7 +2,6 @@ package com.mediatech.MoneyManagement.Models;
 
 import jakarta.persistence.*;
 
-
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -45,14 +44,15 @@ public class DaretParticipant {
    
    @Column(nullable=true)
    private int ParticipantIndex;
+   
    @Column(name = "couple_index")
    private int coupleIndex;
+   
    @Column(nullable = true)
    private String EtatTour;
 
 	public DaretParticipant(User user, DaretOperation daretOperation, float montantPaye, LocalDate datePaiement,
 			String typePayement, int verifyPayement,boolean isCouple,int coupleIndex,int ParticipantIndex,String EtatTour) {
-		super();
 		this.user = user;
 		this.daretOperation = daretOperation;
 		this.montantPaye = montantPaye;
@@ -67,7 +67,7 @@ public class DaretParticipant {
 
 	public DaretParticipant() {
 		super();
-		//TODO Auto-generated constructor stub
+		
 	}
 
 

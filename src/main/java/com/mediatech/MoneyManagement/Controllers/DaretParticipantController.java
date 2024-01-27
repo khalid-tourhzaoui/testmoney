@@ -2,6 +2,7 @@ package com.mediatech.MoneyManagement.Controllers;
 
 import java.time.LocalDate;
 
+
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -38,8 +39,7 @@ public class DaretParticipantController {
 	        Model model,
 	        @AuthenticationPrincipal UserDetails userDetails) {
 	    try {
-	        // Vérifier si l'utilisateur actuel est null, ce qui indiquerait une session
-	        // terminée
+	        // Vérifier si l'utilisateur actuel est null, ce qui indiquerait une session terminée
 	        if (userDetails == null) {
 	            // Rediriger vers la page de déconnexion
 	            return "redirect:/logout";

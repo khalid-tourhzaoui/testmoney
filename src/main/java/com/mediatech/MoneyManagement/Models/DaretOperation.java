@@ -13,48 +13,60 @@ public class DaretOperation {
     private Long id;
 
 
-    @Column(nullable = false, length = 50)
+ // Désignation de l'opération, non nulle
+    @Column(nullable = false)
     private String designation;
 
+    // Nombre de participants à l'opération
     @Column(nullable = false)
     private int nombreParticipant;
-   
+
+    // Date de début de l'opération
     @Column(nullable = true)
     private LocalDate dateDebut;
 
+    // Date de fin de l'opération
     @Column(nullable = true)
     private LocalDate dateFin;
 
-  
+    // Type de période de l'opération (Mensuelle, Hebdomadaire, etc.)
     @Column(nullable = false)
-    private String typePeriode; // Mensuelle, Hebdomadaire, Mensuelle.
+    private String typePeriode;
 
+    // Admin offre lié à cette opération
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
     private User adminOffre;
 
-    @Column(nullable = false, length = 50)
+    // Statut de l'opération
+    @Column(nullable = false)
     private String status;
 
+    // Montant par période de l'opération
     @Column(nullable = false)
     private double montantParPeriode;
-    
+
+    // Nombre de tours de rôle dans l'opération
     @Column(nullable = true)
     private int tourDeRole;
-    
+
+    // Nombre de places réservées (par défaut à 0)
     @Column(nullable = true)
-    private float placesReservees=0;
-    
+    private float placesReservees = 0;
+
+    // Liste des participants liés à cette opération
     @OneToMany(mappedBy = "daretOperation", cascade = CascadeType.ALL)
     private List<DaretParticipant> daretParticipants;
+
+    // Date de création de l'opération
     @Column(name = "created_at")
     private Date createdAt;
 
+    // Date de mise à jour de l'opération
     @Column(name = "updated_at")
     private Date updatedAt;
-	public DaretOperation(String designation, int nombreParticipant, LocalDate dateDebut, LocalDate dateFin,String typePeriode, User adminOffre, String status,
-			double montantParPeriode,int tourDeRole) {
-		
+	public DaretOperation(String designation, int nombreParticipant, LocalDate dateDebut, LocalDate dateFin,String typePeriode, 
+			User adminOffre, String status, double montantParPeriode,int tourDeRole) {
 		this.designation = designation;
 		this.nombreParticipant = nombreParticipant;
 		this.dateDebut = dateDebut;
@@ -67,8 +79,7 @@ public class DaretOperation {
 	}
 
 	public DaretOperation() {
-		super();
-		//TODO Auto-generated constructor stub
+	
 	}
 
 	public Long getId() {

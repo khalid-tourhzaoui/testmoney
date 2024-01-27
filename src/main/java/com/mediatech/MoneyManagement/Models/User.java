@@ -3,57 +3,38 @@ package com.mediatech.MoneyManagement.Models;
 
 import java.util.Date;
 
+
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import jakarta.validation.constraints.*;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Table(name = "users")
 public class User {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotBlank(message = "L'adresse e-mail est requise")
+	@Column(nullable = false, unique = true)
     private String email;
 
-    @NotBlank(message = "Le mot de passe est requis")
-    @Size(min = 8, message = "Le mot de passe doit avoir au moins 8 caractères")
     @Column(nullable = false)
     private String password;
-
-    @Column(nullable = true)
+    
+    @Column(nullable =false)
     private String role;
 
-    @NotBlank(message = "Le prénom est requis")
-    @Size(max = 50, message = "Le prénom ne peut pas dépasser 50 caractères")
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
     private String nom;
 
-    @NotBlank(message = "Le nom de famille est requis")
-    @Size(max = 50, message = "Le nom de famille ne peut pas dépasser 50 caractères")
-    @Column(nullable = false, length = 50)
+  
+    @Column(nullable = false)
     private String prenom;
 
-    @NotBlank(message = "Le numéro d'identification est requis")
-    @Size(max = 10, message = "Le numéro d'identification ne peut pas dépasser 10 caractères")
-    @Column(nullable = false, unique = true, length = 10)
+
+    @Column(nullable = false, unique = true)
     private String cin;
 
-    @NotNull(message = "Le genre est requis")
     @Column(nullable = false)
     private String gender;
     
@@ -77,8 +58,7 @@ public class User {
 	}
 
 	public User() {
-		super();
-		//TODO Auto-generated constructor stub
+		
 	}
 
 	public Long getId() {

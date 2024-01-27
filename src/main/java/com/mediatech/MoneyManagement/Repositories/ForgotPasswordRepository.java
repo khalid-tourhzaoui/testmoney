@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 import com.mediatech.MoneyManagement.Models.ForgotPasswordToken;
 
 @Repository
-public interface ForgotPasswordRepository extends JpaRepository<ForgotPasswordToken, Long>{
+public interface ForgotPasswordRepository extends JpaRepository<ForgotPasswordToken, Long> {
 
-	ForgotPasswordToken findByToken(String token);
-	
+    // Méthode pour trouver un jeton de réinitialisation de mot de passe par son token
+    ForgotPasswordToken findByToken(String token);
 }
