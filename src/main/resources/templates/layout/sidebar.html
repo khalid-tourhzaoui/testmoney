@@ -3,8 +3,8 @@
 	<div class="deznav-scroll shadow rounded" style="background-color: #FBF2C4">
 		<div class="main-profile">
 			<div class="image-bx">
-				<img th:src="${user.getGender() == 'homme' ? '/images/corruption.gif' : '/images/corruption.gif'}"
-					alt="avatar">
+				<img th:src="${user.getGender() == 'homme' ? '/images/men_avatar.gif' : '/images/women_avatar.gif'}"
+					alt="avatar" class="img img-fluid" style="width: 20rem;">
 				<a
 					th:href="@{${user.role == 'CREATEUR' ? '/createur-dashboard' : (user.role == 'ADMIN' ? '/admin-dashboard' : '/user-dashboard')}}">
 					<i class="fa fa-cog" aria-hidden="true"></i>

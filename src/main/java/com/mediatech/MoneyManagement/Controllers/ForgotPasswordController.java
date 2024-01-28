@@ -75,15 +75,15 @@ public class ForgotPasswordController {
 	    return "redirect:/password-request";
 	}
 	@GetMapping("/reset-password")
-	public String resetPassword(@Param(value="token") String token, Model model, HttpSession session) {
+	public String resetPassword(@Param(value="token") String token, RedirectAttributes redirectAttributes, HttpSession session) {
 		
 		session.setAttribute("token", token);
 		ForgotPasswordToken forgotPasswordToken = forgotPasswordRepository.findByToken(token);
-		return forgotPasswordService.checkValidity(forgotPasswordToken, model);
+		return forgotPasswordService.checkValidity(forgotPasswordToken, redirectAttributes);
 		
 	}
 	@PostMapping("/reset-password")
-	public String saveResetPassword(HttpServletRequest request, HttpSession session, Model model) {
+	public String saveResetPassword(HttpServletRequest request, HttpSession session,RedirectAttributes redirectAttributes) {
 	    try {
 	        String password = request.getParameter("password");
 	        String token = (String) session.getAttribute("token");
@@ -91,18 +91,21 @@ public class ForgotPasswordController {
 	        ForgotPasswordToken forgotPasswordToken = forgotPasswordRepository.findByToken(token);
 
 	        User user = forgotPasswordToken.getUser();
+	        if (password.length() < 8) {
+	             redirectAttributes.addFlashAttribute("errorMessage", "Le mot de passe doit contenir au moins 8 caractères.");
+	             return "redirect:/reset-password?token="+token;
+	         }
 	        user.setPassword(passwordEncoder.encode(password));
 	        forgotPasswordToken.setUsed(true);
 	        userService.save(user);
 	        forgotPasswordRepository.save(forgotPasswordToken);
 
 	        // Ajouter un attribut de message de succès dans le modèle
-	        model.addAttribute("successMessage", "Votre mot de passe a été réinitialisé avec succès.");
-
+	        redirectAttributes.addFlashAttribute("successMessage", "Votre mot de passe a été réinitialisé avec succès.");
 	        return "redirect:/login";
 	    } catch (Exception e) {
 	        // Gérer les autres exceptions
-	        model.addAttribute("errorMessage", "Une erreur s'est produite lors de la réinitialisation du mot de passe.");
+	    	redirectAttributes.addFlashAttribute("errorMessage", "Une erreur s'est produite lors de la réinitialisation du mot de passe.");
 	        return "redirect:/login?error";
 	    }
 	}

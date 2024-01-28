@@ -38,13 +38,14 @@
 					<div class="col-xl-12 col-xxl-12">
 						<div class="card">
 							<div class="card-header bg-primary">
-								<h2 class="card-title text-white">Ajouter une Nouvelle Tontine 
+								<h2 class="card-title text-white">Ajouter une Nouvelle Tontine
 									<span class="__cf_email__"> (Les champs marqués d'une * sont obligatoires ) .</span>
 								</h2>
 							</div>
 							<div class="card-body" style="background-color: #74A892;">
-								<div id="smartwizard" class="form-wizard order-create" style="background-color: #FBF2C4;">
-									<ul class="nav nav-wizard" >
+								<div id="smartwizard" class="form-wizard order-create"
+									style="background-color: #FBF2C4;">
+									<ul class="nav nav-wizard">
 										<li><a class="nav-link" href="#information-de-tontine"><span>1</span></a></li>
 										<li><a class="nav-link" href="#places-de-tontine"><span>2</span></a></li>
 										<li><a class="nav-link" href="#ajouter-une-tontine"><span>3</span></a></li>
@@ -55,7 +56,8 @@
 											<div class="row">
 												<div class="col-lg-12 mb-2">
 													<div class="form-group">
-														<label for="designation" style="font-weight: bold;">Nom du Tontine * :</label>
+														<label for="designation" style="font-weight: bold;">Nom du
+															Tontine * :</label>
 														<input type="text" id="designation" th:field="*{designation}"
 															class="form-control border border-primary rounded-5"
 															placeholder="Entrez le nom du Tontine">
@@ -63,8 +65,10 @@
 												</div>
 												<div class="col-lg-12 mb-2">
 													<div class="form-group">
-														<label for="single-select" style="font-weight: bold;">Type de Période * :</label>
-														<select id="single-select" class="form-control border border-primary rounded-5"
+														<label for="single-select" style="font-weight: bold;">Type de
+															Période * :</label>
+														<select id="single-select"
+															class="form-control border border-primary rounded-5"
 															name="typePeriode" th:field="*{typePeriode}">
 															<option value="Mensuelle">Mensuelle</option>
 															<option value="Quotidienne">Quotidienne</option>
@@ -78,9 +82,11 @@
 											<div class="row">
 												<div class="col-lg-12 mb-2">
 													<div class="form-group">
-														<label for="nombreParticipant" style="font-weight: bold;">Nombre de Participant * : </label>
+														<label for="nombreParticipant" style="font-weight: bold;">Nombre
+															de Participant * : </label>
 														<div class="input-group">
-															<input type="number" class="form-control border border-primary rounded-5"
+															<input type="number"
+																class="form-control border border-primary rounded-5"
 																id="nombreParticipant" name="nombreParticipant"
 																th:field="*{nombreParticipant}"
 																placeholder="Entrez le nombre de Participant">
@@ -89,9 +95,11 @@
 												</div>
 												<div class="col-lg-12">
 													<div class="form-group">
-														<label for="montantParPeriode" style="font-weight: bold;">Montant par Période * :</label>
+														<label for="montantParPeriode"
+															style="font-weight: bold;">Montant par Période * :</label>
 														<div class="input-group">
-															<input type="number" class="form-control border border-primary rounded-5"
+															<input type="number"
+																class="form-control border border-primary rounded-5"
 																id="montantParPeriode" name="montantParPeriode"
 																th:field="*{montantParPeriode}"
 																placeholder="Entrez le montant par Période">
@@ -124,28 +132,23 @@
 		<!--**********************************
             Content body end
         ***********************************-->
-
-
-
-
 		<!--**********************************
-           Support ticket button start
+            Footer start
         ***********************************-->
-
+		<div class="footer text-dark" style="background-color: #FBF2C4">
+			<div class="copyright">
+				<p>Copyright © Designed &amp; Developed by <a href="https://github.com/khalid-tourhzaoui"
+						target="_blank">KHALID TOURHZAOUI</a> 2024</p>
+			</div>
+		</div>
 		<!--**********************************
-           Support ticket button end
+            Footer end
         ***********************************-->
-
-
 	</div>
 	<!--**********************************
         Main wrapper end
     ***********************************-->
 
-	<!--**********************************
-        Scripts
-    ***********************************-->
-	<!--  vendors -->
 	<script th:src="@{/vendor/global/global.min.js}"></script>
 	<script th:src="@{/vendor/bootstrap-select/dist/js/bootstrap-select.min.js}"></script>
 	<script th:src="@{/vendor/chart.js/Chart.bundle.min.js}"></script>
@@ -158,22 +161,21 @@
 	<script th:src="@{/js/demo.js}"></script>
 	<script th:src="@{/vendor/jquery-smartwizard/dist/js/jquery.smartWizard.js}"></script>
 	<script th:src="@{/vendor/select2/js/select2.full.min.js}"></script>
-	<script src="vendor/jquery-steps/build/jquery.steps.min.js"></script>
-	<script src="vendor/jquery-validation/jquery.validate.min.js"></script>
+	<script th:src="@{/vendor/jquery-steps/build/jquery.steps.min.js}"></script>
+	<script th:src="@{/vendor/jquery-validation/jquery.validate.min.js}"></script>
+	<script th:src="@{/vendor/datatables/js/jquery.dataTables.min.js}"></script>
+	<script th:src="@{/js/plugins-init/datatables.init.js}"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-<script th:if="${errorMessage}" th:inline="javascript">
-    /*<![CDATA[*/
-    $(document).ready(function() {
-	Swal.fire({
-	  icon: "error",
-	  title: "Oops...",
-	  text:[[${errorMessage}]],
-	});
-   });
-    /*]]>*/
-</script>
 
+
+	<script th:if="${errorMessage}" th:inline="javascript">
+		Swal.fire({
+			icon: "error",
+			title: "Oops...",
+			text: [[${errorMessage}]],
+		});
+	</script>
 	<script>
 		// Fonction pour valider le formulaire côté client
 		function validateForm() {
@@ -207,24 +209,7 @@
 			// Si toutes les validations réussissent, retournez true
 			return true;
 		}
-		function increment() {
-			var input = document.getElementById('nombreParticipant');
-			input.stepUp();
-		}
 
-		function decrement() {
-			var input = document.getElementById('nombreParticipant');
-			input.stepDown();
-		}
-		function incrementMontant() {
-			var input = document.getElementById('montantParPeriode');
-			input.stepUp();
-		}
-
-		function decrementMontant() {
-			var input = document.getElementById('montantParPeriode');
-			input.stepDown();
-		}
 		var currentDate = new Date();
 
 		// Set the day, month, and year buttons

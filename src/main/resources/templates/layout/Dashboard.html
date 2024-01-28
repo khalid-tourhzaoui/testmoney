@@ -36,7 +36,7 @@
 				<!-- ADMIN-->
 				<div th:if="${user.role=='ADMIN'}">
 					<!--**********************************************************************************************-->
-					<div class="card" style="background-color: #FBF2C4">
+					<div class="card" style="background-color: #74A892">
 						<div class="card-body">
 							<div id="accordion-seven" class="accordion accordion-header-bg accordion-bordered">
 								<div class="accordion__item">
@@ -131,7 +131,7 @@
 					</div>
 					<!--**********************************************************************************************-->
 					<!--**********************************************************************************************-->
-					<div class="card" style="background-color: #FBF2C4">
+					<div class="card" style="background-color: #74A892">
 						<div class="card-body">
 							<div id="accordion-seven" class="accordion accordion-header-bg accordion-bordered">
 								<div class="accordion__item">
@@ -206,7 +206,7 @@
 				<!--CREATEUR/ADMIN-->
 				<div th:if="${user.role=='CREATEUR' or user.role == 'ADMIN'}">
 					<!--**********************************************************************************************-->
-					<div class="card" style="background-color: #FBF2C4">
+					<div class="card" style="background-color:#74A892">
 						<div class="card-body">
 							<div id="accordion-seven" class="accordion accordion-header-bg accordion-bordered">
 								<div class="accordion__item">
@@ -300,7 +300,7 @@
 						</div>
 					</div>
 					<!--**********************************************************************************************-->
-					<div class="card" style="background-color: #FBF2C4">
+					<div class="card" style="background-color: #74A892">
 						<div class="card-body">
 							<div id="accordion-two" class="accordion accordion-header-bg accordion-bordered">
 								<div class="accordion__item">
@@ -396,7 +396,7 @@
 				</div>
 				<!--USER-->
 				<div th:if="${user.role=='USER'}">
-					<div class="card" style="background-color: #FBF2C4">
+					<div class="card" style="background-color: #74A892">
 						<div class="card-body">
 							<div id="accordion-seven" class="accordion accordion-header-bg accordion-bordered">
 								<div class="accordion__item">
@@ -407,7 +407,7 @@
 											tontines auxquelles vous avez participé.</strong>
 										<span class="accordion__header--indicator"></span>
 									</div>
-									<div id="header-bg_collapseFive" class="collapse accordion__body show"
+									<div id="header-bg_collapseFive" class="collapse accordion__body show bg-light"
 										data-parent="#accordion-seven">
 										<div class="accordion__body--text">
 											<div class="row">
@@ -507,20 +507,23 @@
             Footer end
         ***********************************-->
 
-	<!-- Required vendors -->
-	<script src="vendor/global/global.min.js"></script>
-	<script src="vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
-	<script src="vendor/chart.js/Chart.bundle.min.js"></script>
-	<!-- Chart piety plugin files -->
-	<script src="vendor/peity/jquery.peity.min.js"></script>
-	<!-- Apex Chart -->
-	<!--<script src="vendor/apexchart/apexchart.js"></script>-->
-	<!-- Dashboard 1 -->
-	<!--<script src="js/dashboard/dashboard-1.js"></script>-->
-	<script src="vendor/owl-carousel/owl.carousel.js"></script>
-	<script src="js/custom.min.js"></script>
-	<script src="js/deznav-init.js"></script>
-	<!--<script src="js/demo.js"></script>-->
+	<script th:src="@{/vendor/global/global.min.js}"></script>
+	<script th:src="@{/vendor/bootstrap-select/dist/js/bootstrap-select.min.js}"></script>
+	<script th:src="@{/vendor/chart.js/Chart.bundle.min.js}"></script>
+	<script th:src="@{/vendor/peity/jquery.peity.min.js}"></script>
+	<script th:src="@{/vendor/apexchart/apexchart.js}"></script>
+	<script th:src="@{/js/dashboard/dashboard-1.js}"></script>
+	<script th:src="@{/vendor/owl-carousel/owl.carousel.js}"></script>
+	<script th:src="@{/js/custom.min.js}"></script>
+	<script th:src="@{/js/deznav-init.js}"></script>
+	<script th:src="@{/js/demo.js}"></script>
+	<script th:src="@{/vendor/jquery-smartwizard/dist/js/jquery.smartWizard.js}"></script>
+	<script th:src="@{/vendor/select2/js/select2.full.min.js}"></script>
+	<script th:src="@{/vendor/jquery-steps/build/jquery.steps.min.js}"></script>
+	<script th:src="@{/vendor/jquery-validation/jquery.validate.min.js}"></script>
+	<script th:src="@{/vendor/datatables/js/jquery.dataTables.min.js}"></script>
+	<script th:src="@{/js/plugins-init/datatables.init.js}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 	<script>
 		// Get the current date
 		var currentDate = new Date();

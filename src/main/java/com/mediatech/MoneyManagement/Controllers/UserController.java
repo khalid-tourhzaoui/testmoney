@@ -1,5 +1,6 @@
 package com.mediatech.MoneyManagement.Controllers;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,29 +53,37 @@ public class UserController {
 	    }
 	}
 
-
-	
-	
 	@PostMapping("/registration")
 	public String saveUser(@ModelAttribute("user") UserDto userDto, RedirectAttributes redirectAttributes) {
 	    try {
+	    	 if (userDto.getPassword().length() < 8) {
+	             redirectAttributes.addFlashAttribute("errorMessage", "Le mot de passe doit contenir au moins 8 caractères.");
+	             return "redirect:/registration";
+	         }
 	        // Vérifier si les mots de passe correspondent
 	        if (!userDto.getPassword().equals(userDto.getConfirmPassword())) {
 	            redirectAttributes.addFlashAttribute("errorMessage", "Les mots de passe ne correspondent pas.");
-	            return "Auth/register";
+	            return "redirect:/registration";
 	        }
-
 	        // Vérifier si l'e-mail existe déjà
 	        if (userService.existsByEmail(userDto.getEmail())) {
 	            redirectAttributes.addFlashAttribute("errorMessage", "L'e-mail existe déjà. Veuillez choisir un e-mail différent.");
-	            return "Auth/register";
+	            return "redirect:/registration";
 	        }
 
 	        // Vérifier si le CIN existe déjà
 	        if (userService.existsByCin(userDto.getCin())) {
 	            redirectAttributes.addFlashAttribute("errorMessage", "CIN existe déjà. Veuillez choisir un CIN différent.");
-	            return "Auth/register";
+	            return "redirect:/registration";
 	        }
+	        if (!Arrays.asList("femme", "homme").contains(userDto.getGender())) {
+				redirectAttributes.addFlashAttribute("errorMessage", "Genre invalide. Veuillez choisir 'homme' ou 'femme'.");
+				return "redirect:/registration";
+			}
+	        if (!Arrays.asList("CREATEUR", "USER").contains(userDto.getRole())) {
+				redirectAttributes.addFlashAttribute("errorMessage", "Role invalide. Veuillez choisir 'CREATEUR' ou 'UTILISATEUR'.");
+				return "redirect:/registration";
+			}
 
 	        // Enregistrer l'utilisateur
 	        userService.save(userDto);
@@ -219,21 +228,28 @@ public class UserController {
 	}
 	/*------------------------------------------------------------------------------------------------*/
 	@GetMapping("/liste-utilisateurs")
-	public String listeUsers (Model model,@AuthenticationPrincipal UserDetails userDetails,RedirectAttributes redirectAttributes) {
-		try {
-			User currentUser = userService.findByEmail(userDetails.getUsername());
-			if (currentUser == null) {
+	public String listeUsers(Model model, @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes) {
+	    try {
+	        User currentUser = userService.findByEmail(userDetails.getUsername());
+	        if (currentUser == null) {
+	            // Ajouter un message d'erreur et rediriger vers la page de déconnexion
+	            redirectAttributes.addFlashAttribute("errorMessage", "Vous n'êtes pas connecté. Veuillez vous connecter.");
 	            return "redirect:/logout";
 	        }
+
 	        List<User> allUsers = userService.findAllUsers();
-			model.addAttribute("user", currentUser)
-				 .addAttribute("allUsers", allUsers)
-			     .addAttribute("pageTitle", "DARET-ADMIN LISTE-USERS");
-			return "Admin/liste-utilisateurs";
-		}catch(Exception e) {
-			return "redirect:/logout";
-		}
+	        model.addAttribute("user", currentUser)
+	             .addAttribute("allUsers", allUsers)
+	             .addAttribute("pageTitle", "DARET-ADMIN LISTE-USERS");
+
+	        return "Admin/liste-utilisateurs";
+	    } catch (Exception e) {
+	        // Ajouter un message d'erreur et rediriger vers la page de déconnexion
+	        redirectAttributes.addFlashAttribute("errorMessage", "Une erreur s'est produite. Veuillez réessayer.");
+	        return "redirect:/logout";
+	    }
 	}
+
 	/*------------------------------------------------------------------------------------------------------*/
 	@GetMapping("/liste-des-toutes-les-tontines")
 	public String listeOffres(@RequestParam(name = "status", defaultValue = "All") String status,
@@ -244,7 +260,7 @@ public class UserController {
 	        // Vérifier si l'utilisateur actuel est null, ce qui indiquerait une session terminée
 	        if (userDetails == null) {
 	            // Rediriger vers la page de déconnexion avec un message d'erreur
-	            redirectAttributes.addFlashAttribute("errorMessage", "Votre session a expiré. Veuillez vous reconnecter.");
+	            redirectAttributes.addFlashAttribute("errorMessage", "Vous n'êtes pas connecté. Veuillez vous connecter.");
 	            return "redirect:/logout";
 	        }
 

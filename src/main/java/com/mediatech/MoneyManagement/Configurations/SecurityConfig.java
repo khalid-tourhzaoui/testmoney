@@ -55,7 +55,6 @@ public class SecurityConfig {
             	    
             	    // URL du point de traitement de la connexion (par défaut : "/login")
             	    .loginProcessingUrl("/login")
-            	    
             	    // Gestionnaire personnalisé pour le succès de la connexion
             	    .successHandler(customSuccessHandler)
             	    

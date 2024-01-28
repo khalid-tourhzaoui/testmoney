@@ -40,29 +40,32 @@
 						<ul class="nav nav-tabs style-2">
 							<li class="nav-item">
 								<a href="#navpills-1" class="nav-link text-dark"
-									th:href="@{${user.role != 'ADMIN'} ? '/liste-des-tontines?status=All' : '/liste-des-toutes-les-tontines?status=All'}" aria-expanded="false">
-									Toutes les offres <span
-										class="badge badge-pill shadow-primary badge-primary">
+									th:href="@{${user.role != 'ADMIN'} ? '/liste-des-tontines?status=All' : '/liste-des-toutes-les-tontines?status=All'}"
+									aria-expanded="false">
+									Toutes les offres <span class="badge badge-pill shadow-primary badge-primary">
 										[[${inProgressCount+pendingCount+closedCount}]]</span>
 								</a>
 							</li>
 							<li class="nav-item">
 								<a href="#navpills-2" class="nav-link text-dark"
-									th:href="@{${user.role != 'ADMIN'} ? '/liste-des-tontines?status=Progress' : '/liste-des-toutes-les-tontines?status=Progress'}" aria-expanded="false">
+									th:href="@{${user.role != 'ADMIN'} ? '/liste-des-tontines?status=Progress' : '/liste-des-toutes-les-tontines?status=Progress'}"
+									aria-expanded="false">
 									En cours <span
 										class="badge badge-pill badge-info shadow-info">[[${inProgressCount}]]</span>
 								</a>
 							</li>
 							<li class="nav-item">
 								<a href="#navpills-3" class="nav-link text-dark"
-									th:href="@{${user.role != 'ADMIN'} ? '/liste-des-tontines?status=Pending' : '/liste-des-toutes-les-tontines?status=Pending'}" aria-expanded="true">
+									th:href="@{${user.role != 'ADMIN'} ? '/liste-des-tontines?status=Pending' : '/liste-des-toutes-les-tontines?status=Pending'}"
+									aria-expanded="true">
 									En attente <span
 										class="badge badge-pill badge-warning shadow-warning">[[${pendingCount}]]</span>
 								</a>
 							</li>
 							<li class="nav-item">
 								<a href="#navpills-4" class="nav-link text-dark"
-									th:href="@{${user.role != 'ADMIN'} ? '/liste-des-tontines?status=Closed' : '/liste-des-toutes-les-tontines?status=Closed'}" aria-expanded="true">
+									th:href="@{${user.role != 'ADMIN'} ? '/liste-des-tontines?status=Closed' : '/liste-des-toutes-les-tontines?status=Closed'}"
+									aria-expanded="true">
 									Fermé <span
 										class="badge badge-pill badge-danger shadow-danger">[[${closedCount}]]</span>
 								</a>
@@ -103,26 +106,40 @@
 									th:replace="~{Admin/daretDetailsFragment :: daretDetails(${operation})}"></div>
 							</div>
 						</div>
+						<!--<div class="tab-pane fade" id="navpills-4">
+							<div class="card" th:each="operation : ${userDaretOperations}">
+								<div th:if="${operation.status == 'Closed'}"
+									th:replace="~{Admin/daretDetailsFragment :: daretDetails(${operation})}"></div>
+							</div>
+						</div>-->
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
 
 	<!--**********************************
             Content body end
         ***********************************-->
 
+	<!--**********************************
+            Footer start
+        ***********************************-->
+	<div class="footer text-dark" style="background-color: #FBF2C4">
+		<div class="copyright">
+			<p>Copyright © Designed &amp; Developed by <a href="https://github.com/khalid-tourhzaoui"
+					target="_blank">KHALID TOURHZAOUI</a> 2024</p>
+		</div>
+	</div>
+	<!--**********************************
+            Footer end
+        ***********************************-->
 
-	
 
-	
 
-	
-	<script src="vendor/datatables/js/jquery.dataTables.min.js"></script>
-	<script src="js/plugins-init/datatables.init.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
 	<script th:src="@{/vendor/global/global.min.js}"></script>
 	<script th:src="@{/vendor/bootstrap-select/dist/js/bootstrap-select.min.js}"></script>
 	<script th:src="@{/vendor/chart.js/Chart.bundle.min.js}"></script>
@@ -135,29 +152,30 @@
 	<script th:src="@{/js/demo.js}"></script>
 	<script th:src="@{/vendor/jquery-smartwizard/dist/js/jquery.smartWizard.js}"></script>
 	<script th:src="@{/vendor/select2/js/select2.full.min.js}"></script>
+	<script th:src="@{/vendor/jquery-steps/build/jquery.steps.min.js}"></script>
+	<script th:src="@{/vendor/jquery-validation/jquery.validate.min.js}"></script>
+	<script th:src="@{/vendor/datatables/js/jquery.dataTables.min.js}"></script>
+	<script th:src="@{/js/plugins-init/datatables.init.js}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 	<script th:if="${successMessage}" th:inline="javascript">
-	    /*<![CDATA[*/
-	    $(document).ready(function() {
+
 		Swal.fire({
-		  icon: "success",
-		  title: [[${successMessage}]],
-		  showConfirmButton: false,
-		  timer: 2000,
-		  
+			icon: "success",
+			title: [[${successMessage}]],
+			showConfirmButton: false,
+			timer: 2000,
+
 		});
-	   });
-	    /*]]>*/
+
 	</script>
 	<script th:if="${errorMessage}" th:inline="javascript">
-	    /*<![CDATA[*/
-	    $(document).ready(function() {
+
 		Swal.fire({
-		  icon: "error",
-		  title: "Oups...",
-		  text:[[${errorMessage}]],
+			icon: "error",
+			title: "Oups...",
+			text: [[${errorMessage}]],
 		});
-	   });
-	    /*]]>*/
+
 	</script>
 
 	<script th:inline="javascript">
@@ -190,7 +208,7 @@
 					confirmButtonColor: '#d33',
 					cancelButtonColor: '#3085d6',
 					confirmButtonText: 'Supprimer',
-					cancelButtonText :'Annuler'
+					cancelButtonText: 'Annuler'
 				}).then((result) => {
 					if (result.isConfirmed) {
 						// Submit the form to delete-daret action

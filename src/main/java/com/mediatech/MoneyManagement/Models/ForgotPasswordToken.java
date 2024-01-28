@@ -10,7 +10,7 @@ public class ForgotPasswordToken {
 	
 	// Identifiant unique généré automatiquement
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // Token associé à la réinitialisation du mot de passe, non nul

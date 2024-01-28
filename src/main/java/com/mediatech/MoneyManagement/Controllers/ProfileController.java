@@ -27,13 +27,14 @@ public class ProfileController {
 
 	/*---------------------------------------------------------------------------------------------------------------*/
 	@GetMapping("/profile")
-	public String userProfile(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+	public String userProfile(@AuthenticationPrincipal UserDetails userDetails, Model model,RedirectAttributes redirectAttributes) {
 		try {
 			// userDetails contient des informations sur l'utilisateur authentifié
 			User currentUser = userService.findByEmail(userDetails.getUsername());
 
 			// Vérifiez si currentUser est null
 			if (currentUser == null) {
+				redirectAttributes.addFlashAttribute("errorMessage", "Une erreur s'est produite. Veuillez réessayer.");
 				// Redirige vers la page de déconnexion si l'utilisateur n'est pas authentifié
 				return "redirect:/logout";
 			}
@@ -44,6 +45,7 @@ public class ProfileController {
 
 			return "profile";
 		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("errorMessage", "Une erreur s'est produite. Veuillez réessayer.");
 			return "redirect:/logout";
 		}
 	}
@@ -101,6 +103,7 @@ public class ProfileController {
 			User currentUser = userService.findByEmail(userDetails.getUsername());
 			// Vérifiez si currentUser est null
 			if (currentUser == null) {
+				redirectAttributes.addFlashAttribute("errorMessage", "Une erreur s'est produite. Veuillez réessayer.");
 				// Redirige vers la page de déconnexion si l'utilisateur n'est pas authentifié
 				return "redirect:/logout";
 			}

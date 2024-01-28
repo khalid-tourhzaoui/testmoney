@@ -74,6 +74,7 @@ public class DaretOperationController {
 	        // Renvoyer le nom de la vue pour afficher la liste des offres
 	        return "Admin/liste-tontine";
 	    } catch (Exception e) {
+	        redirectAttributes.addFlashAttribute("errorMessage", "Une erreur s'est produite. Veuillez réessayer.");
 	        return "redirect:/logout";
 	    }
 	}
@@ -81,7 +82,7 @@ public class DaretOperationController {
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------
 	@GetMapping("/ajouter-tontine")
-	public String AddOffre(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+	public String AddOffre(Model model, @AuthenticationPrincipal UserDetails userDetails,RedirectAttributes redirectAttributes) {
 	    try {
 	        // Vérifier si userDetails est null
 	        if (userDetails == null) {
@@ -107,7 +108,7 @@ public class DaretOperationController {
 	    } catch (Exception e) {
 	        // Journaliser ou gérer l'exception selon les besoins
 	        System.out.println("Erreur au niveau ajouter offre ====> " + e.getMessage());
-	        // Rediriger vers la page de déconnexion ou toute autre page appropriée
+	        redirectAttributes.addFlashAttribute("errorMessage", "Une erreur s'est produite. Veuillez réessayer.");
 	        return "redirect:/logout";
 	    }
 	}
@@ -164,6 +165,7 @@ public class DaretOperationController {
 	        redirectAttributes.addFlashAttribute("successMessage", "La tontine a été ajoutée avec succès.");
 	        return "redirect:/liste-des-tontines";
 	    } catch (Exception e) {
+	        redirectAttributes.addFlashAttribute("errorMessage", "Une erreur s'est produite. Veuillez réessayer.");
 	        return "redirect:/logout";
 	    }
 	}
@@ -174,7 +176,7 @@ public class DaretOperationController {
 	/*-------------------------------------------------------------------------------------------------------------------------------------------*/
 	@GetMapping("/modifier-tontine/{operationId}")
 	public String showUpdateForm(@PathVariable Long operationId, Model model,
-	                             @AuthenticationPrincipal UserDetails userDetails) {
+			RedirectAttributes redirectAttributes,@AuthenticationPrincipal UserDetails userDetails) {
 	    try {
 	        // Récupérer l'utilisateur actuel
 	        User currentUser = userService.findByEmail(userDetails.getUsername());
@@ -200,6 +202,7 @@ public class DaretOperationController {
 	        // Retourner le nom de la vue pour le formulaire de modification d'offre
 	        return "Admin/modifier-tontine";
 	    } catch (Exception e) {
+	        redirectAttributes.addFlashAttribute("errorMessage", "Une erreur s'est produite. Veuillez réessayer.");
 	        return "redirect:/logout";
 	    }
 	}
@@ -264,6 +267,7 @@ public class DaretOperationController {
         	redirectAttributes.addFlashAttribute("successMessage", "La tontine a été modifiée avec succès");
 	        return "redirect:/liste-des-tontines";
 	    } catch (Exception e) {
+	        redirectAttributes.addFlashAttribute("errorMessage", "Une erreur s'est produite. Veuillez réessayer.");
 	        return "redirect:/logout";
 	    }
 	}
@@ -274,7 +278,8 @@ public class DaretOperationController {
 
 	//--------------------------------------------------------------------------------------------------------------------------------------------
 	@GetMapping("/details-tontine/{operationId}")
-	public String showOfferDetails(@PathVariable Long operationId,@AuthenticationPrincipal UserDetails userDetails,Model model){
+	public String showOfferDetails(@PathVariable Long operationId,@AuthenticationPrincipal UserDetails userDetails,
+			RedirectAttributes redirectAttributes,Model model){
 	    try {
 	        // Vérifier si l'utilisateur actuel est null, ce qui indiquerait une session terminée
 	        if (userDetails == null) {
@@ -304,9 +309,6 @@ public class DaretOperationController {
 	            }
 	          
 	        }
-
-	        // Effectuer une vérification d'autorisation ici si nécessaire
-
 	        // Ajouter les attributs au modèle pour l'affichage dans la vue
 	        model.addAttribute("user", currentUser)
 	            .addAttribute("daretOperation", daretOperation)
@@ -315,9 +317,9 @@ public class DaretOperationController {
 
 	        // Renvoyer le nom de la vue pour afficher les détails de l'offre
 	        return "Admin/details-tontine";
-
 	    } catch (Exception e) {
-	        return "redirect:/login"; 
+	        redirectAttributes.addFlashAttribute("errorMessage", "Une erreur s'est produite. Veuillez réessayer.");
+	        return "redirect:/logout"; 
 	    }
 	}
 
@@ -326,7 +328,8 @@ public class DaretOperationController {
 
 	//--------------------------------------------------------------------------------------------------------------------------------------------
 	@PostMapping("/supprimer-tontine")
-	public String deleteDaret(@RequestParam Long operationId, @AuthenticationPrincipal UserDetails userDetails,Model model,RedirectAttributes redirectAttributes) {
+	public String deleteDaret(@RequestParam Long operationId, @AuthenticationPrincipal UserDetails userDetails,Model model,
+			RedirectAttributes redirectAttributes) {
 	    try {
 	        // Récupérer la DaretOperation par ID
 	        DaretOperation daretOperation = daretOperationService.findById(operationId);
@@ -349,6 +352,7 @@ public class DaretOperationController {
         	redirectAttributes.addFlashAttribute("successMessage", "La tontine a été supprimée avec succès");
 	        return "redirect:/liste-des-tontines";
 	    } catch (Exception e) {
+	    	redirectAttributes.addFlashAttribute("errorMessage", "Une erreur s'est produite. Veuillez réessayer.");
 	        return "redirect:/logout";
 	    }
 	}
@@ -357,7 +361,7 @@ public class DaretOperationController {
 
 		//--------------------------------------------------------------------------------------------------------------------------------------------
 	    @GetMapping("/liste-offres-pending")
-	    public String listPendingOffers(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+	    public String listPendingOffers(Model model, @AuthenticationPrincipal UserDetails userDetails,RedirectAttributes redirectAttributes) {
 	        try {
 	            // Vérifier si l'utilisateur actuel est null, ce qui pourrait indiquer une session expirée
 	            if (userDetails == null) {
@@ -379,6 +383,7 @@ public class DaretOperationController {
 	            // Renvoyer le nom de la vue pour afficher la liste des offres en attente
 	            return "Admin/liste-offres-pending";
 	        } catch (Exception ex) {
+	        	redirectAttributes.addFlashAttribute("errorMessage", "Une erreur s'est produite. Veuillez réessayer.");
 	            return "redirect:/logout"; 
 	        }
 	    }

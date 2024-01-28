@@ -1,6 +1,7 @@
 package com.mediatech.MoneyManagement.Services;
 
 import java.io.UnsupportedEncodingException;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -8,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.mediatech.MoneyManagement.Models.ForgotPasswordToken;
 
 import jakarta.mail.MessagingException;
@@ -59,18 +61,19 @@ public class ForgotPasswordService {
     }
 
     // Vérifie la validité du jeton et renvoie le nom de la vue approprié
-    public String checkValidity(ForgotPasswordToken forgotPasswordToken, Model model) {
+    public String checkValidity(ForgotPasswordToken forgotPasswordToken, RedirectAttributes redirectAttributes) {
         if (forgotPasswordToken == null) {
-            model.addAttribute("error", "Invalid Token");
+            redirectAttributes.addFlashAttribute("errorMessage", "Jeton invalide");
             return "Auth/login";
         } else if (forgotPasswordToken.isUsed()) {
-            model.addAttribute("error", "The token is already used");
+            redirectAttributes.addFlashAttribute("errorMessage", "Le jeton est déjà utilisé");
             return "Auth/login";
         } else if (isExpired(forgotPasswordToken)) {
-            model.addAttribute("error", "The token is expired");
+            redirectAttributes.addFlashAttribute("errorMessage", "Le jeton a expiré");
             return "Auth/login";
         } else {
             return "Auth/reset-password";
         }
     }
+
 }

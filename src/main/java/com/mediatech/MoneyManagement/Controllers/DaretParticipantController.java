@@ -36,11 +36,12 @@ public class DaretParticipantController {
 //-------------------------------------------------------------------------------------------------------------------------------------------
 	@GetMapping("/liste-des-participations")
 	public String listeMesDarets(@RequestParam(name = "status", defaultValue = "All") String status,
-	        Model model,
+	        Model model,RedirectAttributes redirectAttributes,
 	        @AuthenticationPrincipal UserDetails userDetails) {
 	    try {
 	        // Vérifier si l'utilisateur actuel est null, ce qui indiquerait une session terminée
 	        if (userDetails == null) {
+	        	redirectAttributes.addFlashAttribute("errorMessage", "Une erreur s'est produite. Veuillez réessayer.");
 	            // Rediriger vers la page de déconnexion
 	            return "redirect:/logout";
 	        }
@@ -72,12 +73,9 @@ public class DaretParticipantController {
 	                .addAttribute("selectedStatus", status)
 	                .addAttribute("pageTitle", "DARET-ADMIN LISTE MES DARETS");
 
-	        // Renvoyer le nom de la vue pour afficher la liste des offres
-	        for (DaretOperation daretOperation : userDaretOperations) {
-	        	System.out.println(daretOperation.getDesignation());
-	        }
 	        return "Admin/liste-tontine";
 	    } catch (Exception e) {
+	    	redirectAttributes.addFlashAttribute("errorMessage", "Une erreur s'est produite. Veuillez réessayer.");
 	        return "redirect:/logout";
 	    }
 	}
@@ -115,7 +113,7 @@ public class DaretParticipantController {
         	redirectAttributes.addFlashAttribute("successMessage", "L'offre a été ajoutée avec succès");
 			return "redirect:/liste-offres-pending";
 		} catch (Exception e) {
-			
+			redirectAttributes.addFlashAttribute("errorMessage", "Une erreur s'est produite. Veuillez réessayer.");
 			return "redirect:/logout";
 		}
 	}
@@ -156,6 +154,7 @@ public class DaretParticipantController {
         	redirectAttributes.addFlashAttribute("successMessage", "Le paiement a été effectuée avec succès");
 	        return "redirect:/details-tontine/" + participant.getDaretOperation().getId();
 	    } catch (Exception e) {
+	    	redirectAttributes.addFlashAttribute("errorMessage", "Une erreur s'est produite. Veuillez réessayer.");
 	        return "redirect:/logout";
 	    }
 	}
@@ -233,6 +232,7 @@ public class DaretParticipantController {
 				return "redirect:/details-tontine/" + daretOperation.getId();
 			}
 		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("errorMessage", "Une erreur s'est produite. Veuillez réessayer.");
 			return "redirect:/logout";
 		}
 	}

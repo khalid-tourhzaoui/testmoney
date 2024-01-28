@@ -59,7 +59,7 @@
 						</form>
 					</div>
 					<div class="card-body">
-						<div class="table-responsive" >
+						<div class="table-responsive">
 							<table class="style-1 table table-striped display" id="example">
 								<thead>
 									<tr class="text-center">
@@ -69,7 +69,8 @@
 										<th>Type de paiement</th>
 										<th>Date de paiement</th>
 										<th>Tour de role</th>
-										<th th:if="${user.role!='USER' and user.id==daretOperation.AdminOffre.id}">ACTION</th>
+										<th th:if="${user.role!='USER' and user.id==daretOperation.AdminOffre.id}">
+											ACTION</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -78,7 +79,8 @@
 										<td>
 											<div class="media style-1">
 												<span class="icon-name mr-2 bgl-info text-info">
-													[[${participant.user.nom != null && participant.user.nom.length() > 0 ? participant.user.prenom.substring(0, 1) : ''}]]
+													[[${participant.user.nom != null && participant.user.nom.length() >
+													0 ? participant.user.prenom.substring(0, 1) : ''}]]
 												</span>
 												<div class="media-body">
 													<h6 th:text="${participant.user.prenom+' '+participant.user.nom}">
@@ -108,7 +110,7 @@
 													th:disabled="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd') != #temporals.format(participant.datePaiement, 'yyyy-MM-dd') or participant.verifyPayement != 0}">
 													Payer
 												</button>
-												
+
 											</form>
 
 										</td>
@@ -124,43 +126,55 @@
 		<!--**********************************
             Content body end
             ***********************************-->
+		<!--**********************************
+            Footer start
+        ***********************************-->
+		<div class="footer text-dark" style="background-color: #FBF2C4">
+			<div class="copyright">
+				<p>Copyright © Designed &amp; Developed by <a href="https://github.com/khalid-tourhzaoui"
+						target="_blank">KHALID TOURHZAOUI</a> 2024</p>
+			</div>
+		</div>
+		<!--**********************************
+            Footer end
+        ***********************************-->
 	</div>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 	<script th:src="@{/vendor/global/global.min.js}"></script>
 	<script th:src="@{/vendor/bootstrap-select/dist/js/bootstrap-select.min.js}"></script>
 	<script th:src="@{/vendor/chart.js/Chart.bundle.min.js}"></script>
 	<script th:src="@{/vendor/peity/jquery.peity.min.js}"></script>
+	<script th:src="@{/vendor/apexchart/apexchart.js}"></script>
+	<script th:src="@{/js/dashboard/dashboard-1.js}"></script>
 	<script th:src="@{/vendor/owl-carousel/owl.carousel.js}"></script>
 	<script th:src="@{/js/custom.min.js}"></script>
 	<script th:src="@{/js/deznav-init.js}"></script>
 	<script th:src="@{/js/demo.js}"></script>
 	<script th:src="@{/vendor/jquery-smartwizard/dist/js/jquery.smartWizard.js}"></script>
 	<script th:src="@{/vendor/select2/js/select2.full.min.js}"></script>
+	<script th:src="@{/vendor/jquery-steps/build/jquery.steps.min.js}"></script>
+	<script th:src="@{/vendor/jquery-validation/jquery.validate.min.js}"></script>
 	<script th:src="@{/vendor/datatables/js/jquery.dataTables.min.js}"></script>
 	<script th:src="@{/js/plugins-init/datatables.init.js}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 	<script th:if="${successMessage}" th:inline="javascript">
-		    /*<![CDATA[*/
-		    $(document).ready(function() {
-			Swal.fire({
-			  icon: "success",
-			  title: [[${successMessage}]],
-			  showConfirmButton: false,
-			  timer: 2000,
-			  
-			});
-		   });
-		    /*]]>*/
-		</script>
-		<script th:if="${errorMessage}" th:inline="javascript">
-		    /*<![CDATA[*/
-		    $(document).ready(function() {
-			Swal.fire({
-			  icon: "error",
-			  title: "Oups...",
-			  text:[[${errorMessage}]],
-			});
-		   });
-		    /*]]>*/
+
+		Swal.fire({
+			icon: "success",
+			title: [[${successMessage}]],
+			showConfirmButton: false,
+			timer: 2000,
+
+		});
+
+	</script>
+	<script th:if="${errorMessage}" th:inline="javascript">
+
+		Swal.fire({
+			icon: "error",
+			title: "Oups...",
+			text: [[${errorMessage}]],
+		});
+
 	</script>
 	<script>
 		// Get the current date
