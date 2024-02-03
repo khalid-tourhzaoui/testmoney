@@ -46,7 +46,7 @@ public class UserController {
 	public String getRegistrationPage(@ModelAttribute("user") UserDto userDto,RedirectAttributes redirectAttributes) {
 	    try {
 	        // Votre code existant pour gérer la requête GET et préparer le modèle
-	        return "Auth/register"; // Le nom de la vue/template
+	        return "Auth/register"; 
 	    } catch (Exception e) {
 	    	redirectAttributes.addFlashAttribute("errorMessage", "Une erreur s'est produite lors du traitement de votre demande.");
 	        return "redirect:/login";
@@ -274,7 +274,7 @@ public class UserController {
 	        } else {
 	            userDaretOperations = daretOperationService.getAllDaretOperationsByStatus(status);
 	        }
-
+	        System.out.println("liste-des-toutes-les-tontines");
 	        // Compter le nombre d'opérations dans différents états
 	        long allTontineProgress = daretOperationRepository.countByStatus("Progress");
 	        long allTontinePending = daretOperationRepository.countByStatus("Pending");
@@ -288,6 +288,7 @@ public class UserController {
 	             .addAttribute("pendingCount", allTontinePending)
 	             .addAttribute("closedCount", allTontineClosed)
 	             .addAttribute("totalOffersCount", totalOffersCount)
+	             .addAttribute("url","liste-des-toutes-les-tontines")
 	             .addAttribute("selectedStatus", status);
 
 	        // Renvoyer le nom de la vue pour afficher la liste des offres

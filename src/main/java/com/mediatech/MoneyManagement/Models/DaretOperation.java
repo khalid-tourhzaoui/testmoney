@@ -12,7 +12,6 @@ public class DaretOperation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
  // Désignation de l'opération, non nulle
     @Column(nullable = false)
     private String designation;
@@ -55,7 +54,7 @@ public class DaretOperation {
     private float placesReservees = 0;
 
     // Liste des participants liés à cette opération
-    @OneToMany(mappedBy = "daretOperation", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "daretOperation")
     private List<DaretParticipant> daretParticipants;
 
     // Date de création de l'opération

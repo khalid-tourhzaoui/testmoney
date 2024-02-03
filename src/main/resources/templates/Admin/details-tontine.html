@@ -50,7 +50,7 @@
 							</div>
 
 						</div>
-						<form th:if="${user.role !='USER' and user.id==daretOperation.AdminOffre.id}"
+						<form th:if="${user.role !='USER' and user.id==daretOperation.AdminOffre.id and daretOperation.status=='Progress'}"
 							th:action="@{/valider-paiement/{DaretOperationId}(DaretOperationId=${daretOperation.id})}"
 							method="post">
 							<button type="submit" class="btn w-100" style="background-color: #FBF2C4;">
@@ -69,7 +69,10 @@
 										<th>Type de paiement</th>
 										<th>Date de paiement</th>
 										<th>Tour de role</th>
-										<th th:if="${user.role!='USER' and user.id==daretOperation.AdminOffre.id}">
+										<th 
+										
+											<th 
+										th:if="${user.role!='USER' and user.id==daretOperation.AdminOffre.id and daretOperation.status=='Progress'}">
 											ACTION</th>
 									</tr>
 								</thead>
@@ -101,7 +104,7 @@
 										<td
 											th:text="${participant.EtatTour == 'current' ? 'Actuel' : (participant.EtatTour == 'not_done' ? 'Pas Encore' : 'Déjà Fait')}">
 										</td>
-										<td th:if="${user.role!='USER' and user.id==daretOperation.AdminOffre.id}">
+										<td th:if="${user.role!='USER' and user.id==daretOperation.AdminOffre.id and daretOperation.status=='Progress'}">
 
 											<form
 												th:action="@{/passer-paiement/{participantId}(participantId=${participant.id})}"
@@ -161,7 +164,7 @@
 		Swal.fire({
 			icon: "success",
 			title: [[${successMessage}]],
-			showConfirmButton: false,
+			showConfirmButton: true,
 			timer: 2000,
 
 		});
@@ -172,6 +175,7 @@
 		Swal.fire({
 			icon: "error",
 			title: "Oups...",
+			showConfirmButton: true,
 			text: [[${errorMessage}]],
 		});
 

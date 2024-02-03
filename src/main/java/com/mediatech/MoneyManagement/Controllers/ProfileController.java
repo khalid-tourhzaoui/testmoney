@@ -123,6 +123,10 @@ public class ProfileController {
 				redirectAttributes.addFlashAttribute("errorMessage","Le nouveau mot de passe et le mot de passe de confirmation ne correspondent pas.");
 				return "redirect:/profile";
 			}
+			if(newPassword.length()<8 || confirmPassword.length()<8 ) {
+				redirectAttributes.addFlashAttribute("errorMessage","Le mot de passe doit contenir au moins 8 caractères.");
+				return "redirect:/profile";
+			}
 
 			// Vérifier si le nouveau mot de passe est différent de l'ancien mot de passe
 			if (userService.isCorrectPassword(userEmail, newPassword)) {

@@ -2,11 +2,11 @@ package com.mediatech.MoneyManagement.Controllers;
 
 import java.io.UnsupportedEncodingException;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,7 +45,7 @@ public class ForgotPasswordController {
 	}
 	
 	@PostMapping("/password-request")
-	public String savePasswordRequest(@RequestParam("email") String email, Model model, RedirectAttributes redirectAttributes) {
+	public String savePasswordRequest(@RequestParam("email") String email,RedirectAttributes redirectAttributes) {
 	    User user = userService.findByEmail(email);
 	    if (user == null) {
 	        // Utilisez RedirectAttributes pour passer des messages entre les redirections
@@ -74,6 +74,7 @@ public class ForgotPasswordController {
 	    redirectAttributes.addFlashAttribute("successMessage", "Le lien de réinitialisation du mot de passe a été envoyé avec succès.");
 	    return "redirect:/password-request";
 	}
+	/*---------------------------------------------------------------------------------------------*/
 	@GetMapping("/reset-password")
 	public String resetPassword(@Param(value="token") String token, RedirectAttributes redirectAttributes, HttpSession session) {
 		
@@ -82,17 +83,23 @@ public class ForgotPasswordController {
 		return forgotPasswordService.checkValidity(forgotPasswordToken, redirectAttributes);
 		
 	}
+	/*---------------------------------------------------------------------------------------------*/
 	@PostMapping("/reset-password")
 	public String saveResetPassword(HttpServletRequest request, HttpSession session,RedirectAttributes redirectAttributes) {
 	    try {
 	        String password = request.getParameter("password");
+	        String confirmPassword = request.getParameter("confirmPassword");
 	        String token = (String) session.getAttribute("token");
 
 	        ForgotPasswordToken forgotPasswordToken = forgotPasswordRepository.findByToken(token);
 
 	        User user = forgotPasswordToken.getUser();
-	        if (password.length() < 8) {
+	        if (password.length() < 8 || confirmPassword.length() < 8) {
 	             redirectAttributes.addFlashAttribute("errorMessage", "Le mot de passe doit contenir au moins 8 caractères.");
+	             return "redirect:/reset-password?token="+token;
+	         }
+	        if (!password.equals(confirmPassword)){
+	             redirectAttributes.addFlashAttribute("errorMessage", "Les mots de passe ne sont pas identiques.");
 	             return "redirect:/reset-password?token="+token;
 	         }
 	        user.setPassword(passwordEncoder.encode(password));

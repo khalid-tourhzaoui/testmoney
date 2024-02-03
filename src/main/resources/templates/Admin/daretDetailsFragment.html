@@ -43,9 +43,11 @@
 					<img src="images/12-hours.gif" alt="">
 				</div>
 				<div class="ml-2">
-					<span>[[${operation.dateFin == null ? 'Date modification' : 'Date Fin'}]]</span>
+					<span>Date Fin</span>
 					<h5 class="mb-0 font-w50 text-black"><i class="fa fa-calendar-o mr-2" aria-hidden="true"></i>
-						[[${operation.dateFin == null ? #dates.format(operation.updatedAt,'dd-MM-yyyy'): operation.dateFin}]]
+						[[${operation.dateFin != null ? operation.dateFin : 'Pas encore'}]]
+
+
 					</h5>
 				</div>
 			</div>

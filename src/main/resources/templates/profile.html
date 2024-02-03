@@ -279,43 +279,33 @@
 
 		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script th:if="${successMessage}" th:inline="javascript">
-	    /*<![CDATA[*/
-	    $(document).ready(function() {
+
 		Swal.fire({
 		  icon: "success",
 		  title: [[${successMessage}]],
-		  showConfirmButton: false,
+		  showConfirmButton: true,
 		  timer: 2000,
 		  
 		});
-	   });
-	    /*]]>*/
+
 	</script>
 	<script th:if="${errorMessage}" th:inline="javascript">
-	    /*<![CDATA[*/
-	    $(document).ready(function() {
+
 		Swal.fire({
 		  icon: "error",
 		  title: "Oups...",
+		  showConfirmButton: true,
 		  text:[[${errorMessage}]],
+		  timer: 2000,
 		});
-	   });
-	    /*]]>*/
+
 	</script>
 	<script>
 		// Get the current date
 		var currentDate = new Date();
-
-		// Set the day, month, and year buttons
-		document.getElementById(
-			"dayButton"
-		).textContent = `${currentDate.toLocaleDateString("en-US", {
-			weekday: "long",
-		})} ${currentDate.getDate()}`;
-		document.getElementById("monthButton").textContent =
-			currentDate.toLocaleString("default", {month: "short"});
-		document.getElementById("yearButton").textContent =
-			currentDate.getFullYear();
+		document.getElementById("dayButton").textContent = `${currentDate.toLocaleDateString("en-US", {weekday: "long",})} ${currentDate.getDate()}`;
+		document.getElementById("monthButton").textContent =currentDate.toLocaleString("default", {month: "short"});
+		document.getElementById("yearButton").textContent =currentDate.getFullYear();
 	</script>
 </body>
 

@@ -2,6 +2,7 @@
 package com.mediatech.MoneyManagement.Configurations;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -36,9 +37,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
     	// Désactivation de la protection CSRF (Cross-Site Request Forgery)
-    	http.csrf(c -> c.disable())
+    	//http.csrf(c -> c.disable())
 
-            .authorizeHttpRequests(request -> request
+    	http.authorizeHttpRequests(request -> request
                 // Autorisations basées sur les rôles
                 .requestMatchers("/admin-dashboard","/liste-utilisateurs","/liste-des-toutes-les-tontines")
                     .hasAuthority("ADMIN")
@@ -80,15 +81,15 @@ public class SecurityConfig {
 
         http.sessionManagement(management -> management
         	    // Configuration de la gestion de session
-        	    .sessionFixation()
-        	        .migrateSession()
+        	    .sessionFixation().migrateSession()
         	    // URL à rediriger en cas de session expirée
         	    .invalidSessionUrl("/login?expired")
         	    // Limiter à une seule session par utilisateur
         	    .maximumSessions(1)
-        	    // URL à rediriger en cas de session expirée (pour les sessions additionnelles)
+        	    // Définit l'URL vers laquelle rediriger si une session expire en raison de l'ouverture d'une nouvelle session. 
         	    .expiredUrl("/login?expired")
-        	    // Empêcher la connexion si le nombre maximal de sessions est atteint
+        	    // Empêche la connexion si le nombre maximal de sessions est atteint. Cela signifie que si un utilisateur essaie 
+        	    //de se connecter à partir d'un deuxième appareil alors qu'il a déjà une session active, cela empêchera la connexion.
         	    .maxSessionsPreventsLogin(true));
 
         return http.build();

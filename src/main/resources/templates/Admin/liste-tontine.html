@@ -39,8 +39,7 @@
 					<div class="card card-action card-tabs mx-auto">
 						<ul class="nav nav-tabs style-2">
 							<li class="nav-item">
-								<a href="#navpills-1" class="nav-link text-dark"
-									th:href="@{${user.role != 'ADMIN'} ? '/liste-des-tontines?status=All' : '/liste-des-toutes-les-tontines?status=All'}"
+								<a href="#navpills-1" class="nav-link text-dark" th:href="@{${url + '?status=All'}}"
 									aria-expanded="false">
 									Toutes les offres <span class="badge badge-pill shadow-primary badge-primary">
 										[[${inProgressCount+pendingCount+closedCount}]]</span>
@@ -48,23 +47,21 @@
 							</li>
 							<li class="nav-item">
 								<a href="#navpills-2" class="nav-link text-dark"
-									th:href="@{${user.role != 'ADMIN'} ? '/liste-des-tontines?status=Progress' : '/liste-des-toutes-les-tontines?status=Progress'}"
+									th:href="@{${url + '?status=Progress'}}"
 									aria-expanded="false">
 									En cours <span
 										class="badge badge-pill badge-info shadow-info">[[${inProgressCount}]]</span>
 								</a>
 							</li>
 							<li class="nav-item">
-								<a href="#navpills-3" class="nav-link text-dark"
-									th:href="@{${user.role != 'ADMIN'} ? '/liste-des-tontines?status=Pending' : '/liste-des-toutes-les-tontines?status=Pending'}"
+								<a href="#navpills-3" class="nav-link text-dark" th:href="@{${url + '?status=Pending'}}"
 									aria-expanded="true">
 									En attente <span
 										class="badge badge-pill badge-warning shadow-warning">[[${pendingCount}]]</span>
 								</a>
 							</li>
 							<li class="nav-item">
-								<a href="#navpills-4" class="nav-link text-dark"
-									th:href="@{${user.role != 'ADMIN'} ? '/liste-des-tontines?status=Closed' : '/liste-des-toutes-les-tontines?status=Closed'}"
+								<a href="#navpills-4" class="nav-link text-dark" th:href="@{${url + '?status=Closed'}}"
 									aria-expanded="true">
 									Fermé <span
 										class="badge badge-pill badge-danger shadow-danger">[[${closedCount}]]</span>
@@ -162,7 +159,7 @@
 		Swal.fire({
 			icon: "success",
 			title: [[${successMessage}]],
-			showConfirmButton: false,
+			showConfirmButton: true,
 			timer: 2000,
 
 		});
@@ -173,6 +170,7 @@
 		Swal.fire({
 			icon: "error",
 			title: "Oups...",
+			showConfirmButton: true,
 			text: [[${errorMessage}]],
 		});
 

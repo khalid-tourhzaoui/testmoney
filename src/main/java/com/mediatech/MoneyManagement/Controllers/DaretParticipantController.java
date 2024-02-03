@@ -45,6 +45,7 @@ public class DaretParticipantController {
 	            // Rediriger vers la page de déconnexion
 	            return "redirect:/logout";
 	        }
+	        System.out.println("liste-des-participations");
 
 	        // Récupérer l'utilisateur actuel
 	        User currentUser = userService.findByEmail(userDetails.getUsername());
@@ -71,6 +72,7 @@ public class DaretParticipantController {
 	                .addAttribute("closedCount", closedCount)
 	                .addAttribute("totalDaretsCount", totalDaretsCount)
 	                .addAttribute("selectedStatus", status)
+		             .addAttribute("url","liste-des-participations")
 	                .addAttribute("pageTitle", "DARET-ADMIN LISTE MES DARETS");
 
 	        return "Admin/liste-tontine";
@@ -98,17 +100,14 @@ public class DaretParticipantController {
 				return "redirect:/liste-offres-pending";
 			}
 
-			// Valider le type de paiement (vous pouvez ajouter davantage de validations si
-			// nécessaire)
+			// Valider le type de paiement
 			if (!paymentType.equals("Moitier") && !paymentType.equals("Normale") && !paymentType.equals("Double")) {
-				// Gérer le type de paiement invalide, par exemple, rediriger vers une page
-				// d'erreur
+	
 				redirectAttributes.addFlashAttribute("errorMessage", "Le type de paiement doit être normale, double ou moitier");
 				return "redirect:/liste-offres-pending";
 			}
 
-			// Appeler la méthode de service pour ajouter le participant et mettre à jour
-			// les placesReservees
+			
 			daretParticipantService.addParticipantToDaretOperation(daretOperationId, userId, paymentType, montantPaye);
         	redirectAttributes.addFlashAttribute("successMessage", "L'offre a été ajoutée avec succès");
 			return "redirect:/liste-offres-pending";
@@ -171,7 +170,7 @@ public class DaretParticipantController {
 	        return participants.get(currentIndex - 1);
 	    }
 
-	    return null; // Return null if there is no previous participant
+	    return null; 
 	}
 
 	/*------------------------------------------------------------------------------------------*/
@@ -189,7 +188,7 @@ public class DaretParticipantController {
 			for (DaretParticipant participant : participants) {
 				if (participant.getVerifyPayement() == 0) {
 					allPaymentsReceived = false;
-					break; // Sortir de la boucle si un paiement est manquant
+					break;
 				}
 			}
 
@@ -247,6 +246,7 @@ public class DaretParticipantController {
 			// Vérifier si le participant de type "Double" a déjà effectué deux tours
 			if (participantTourIndex == currentTourDeRole) {
 				participant.setEtatTour("current");
+	            // Incrémentez le coupleIndex des autres participants non encore faits
 				for (DaretParticipant otherParticipant : participants) {
 					if (!participant.equals(otherParticipant)
 							&& "not_done".equalsIgnoreCase(otherParticipant.getEtatTour())) {
@@ -257,8 +257,10 @@ public class DaretParticipantController {
 				// Utilisez "secondtour" pour représenter le deuxième tour
 				participant.setEtatTour("current");
 			} else if (participantTourIndex < currentTourDeRole) {
+	            // Le participant a effectué tous ses tours
 				participant.setEtatTour("done");
 			} else {
+	            // Le participant n'a pas encore effectué tous ses tours
 				participant.setEtatTour("not_done");
 
 			}

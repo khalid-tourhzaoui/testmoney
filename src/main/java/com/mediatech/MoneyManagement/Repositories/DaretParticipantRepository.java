@@ -10,7 +10,7 @@ import com.mediatech.MoneyManagement.Models.DaretParticipant;
 public interface DaretParticipantRepository extends JpaRepository<DaretParticipant, Long> {
 
     // Méthode pour trouver une liste de participants à une opération ayant un certain type de paiement et faisant partie ou non d'un couple
-    List<DaretParticipant> findByDaretOperationIdAndTypePayementAndIsCouple(Long daretOperationId, String typePayement, boolean isCouple);
+    //List<DaretParticipant> findByDaretOperationIdAndTypePayementAndIsCouple(Long daretOperationId, String typePayement, boolean isCouple);
 
     
 }

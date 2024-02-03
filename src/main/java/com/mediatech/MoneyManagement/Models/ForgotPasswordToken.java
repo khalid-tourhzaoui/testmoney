@@ -18,7 +18,7 @@ public class ForgotPasswordToken {
     private String token;
 
     // Relation Many-to-One avec l'entité User, indiquant l'utilisateur associé au token
-    //@ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+  
     @ManyToOne
     @JoinColumn(nullable = false, name = "user_id")
     private User user;

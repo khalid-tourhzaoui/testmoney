@@ -212,7 +212,7 @@
 		Swal.fire({
 			icon: "success",
 			title: [[${successMessage}]],
-			showConfirmButton: false,
+			showConfirmButton: true,
 			timer: 2000,
 
 		});
@@ -223,6 +223,7 @@
 		Swal.fire({
 			icon: "error",
 			title: "Oups...",
+		  	showConfirmButton: true,
 			text: [[${errorMessage}]],
 		});
 

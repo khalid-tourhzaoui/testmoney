@@ -43,6 +43,7 @@ public class DaretOperationController {
 	            // Rediriger vers la page de déconnexion
 	            return "redirect:/logout";
 	        }
+	        System.out.println("liste-des-tontines");
 
 	        // Récupérer l'utilisateur actuel
 	        User currentUser = userService.findByEmail(userDetails.getUsername());
@@ -69,6 +70,8 @@ public class DaretOperationController {
 	            .addAttribute("closedCount", closedCount)
 	            .addAttribute("totalOffersCount", totalOffersCount)
 	            .addAttribute("selectedStatus", status)
+	             .addAttribute("url","liste-des-tontines")
+
 	            .addAttribute("pageTitle", "DARET-ADMIN LISTE DES OFFRES");
 
 	        // Renvoyer le nom de la vue pour afficher la liste des offres
@@ -281,15 +284,14 @@ public class DaretOperationController {
 	public String showOfferDetails(@PathVariable Long operationId,@AuthenticationPrincipal UserDetails userDetails,
 			RedirectAttributes redirectAttributes,Model model){
 	    try {
-	        // Vérifier si l'utilisateur actuel est null, ce qui indiquerait une session terminée
-	        if (userDetails == null) {
-	            // Rediriger vers la page de déconnexion
-	            return "redirect:/logout";
-	        }
 
 	        // Récupérer l'utilisateur actuel et les détails de la demande
 	        User currentUser = userService.findByEmail(userDetails.getUsername());
-
+	        // Vérifier si l'utilisateur actuel est null, ce qui indiquerait une session terminée
+	        if (currentUser == null) {
+	            // Rediriger vers la page de déconnexion
+	            return "redirect:/logout";
+	        }
 	        // Récupérer l'opération par ID et les participants associés
 	        DaretOperation daretOperation = daretOperationService.findById(operationId);
 	        List<DaretParticipant> participants = daretOperation.getDaretParticipants();
@@ -299,13 +301,13 @@ public class DaretOperationController {
 	            DaretParticipant avantParticipant = participants.get(participants.size() - 2);
 	            DaretParticipant dernierParticipant = participants.get(participants.size() - 1);
 	            if(dernierParticipant.getDatePaiement()==null) {
-	            	  System.out.println("avant dernier : "+avantParticipant.getDatePaiement());
-	  	            System.out.println("le dernier : "+dernierParticipant.getDatePaiement());
+	            	/*System.out.println("avant dernier : "+avantParticipant.getDatePaiement());
+	  	            System.out.println("le dernier : "+dernierParticipant.getDatePaiement());*/
 	  	            dernierParticipant.setDatePaiement(avantParticipant.getDatePaiement());
 	  	            daretOperation.setDaretParticipants(participants);
-	  	            for (DaretParticipant daretParticipant : participants) {
+	  	            /*for (DaretParticipant daretParticipant : participants) {
 						System.out.println("date paiement : "+daretParticipant.getDatePaiement());
-					}
+					}*/
 	            }
 	          
 	        }

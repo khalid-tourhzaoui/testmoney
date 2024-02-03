@@ -80,7 +80,7 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
                 setEndDateBasedOnTypeAndNumberOfParticipants(daretOperation);
 
                 // Utilise un compteur séparé pour l'index du participant.
-                int participantIndex = 1;
+                //int participantIndex = 1;
 
                 // Parcours tous les participants pour mettre à jour leurs propriétés.
                 for (DaretParticipant participant : participants) {
@@ -91,13 +91,13 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
                     }
 
                     // Met à jour l'index du participant.
-                    participant.setParticipantIndex(participantIndex);
+                    //participant.setParticipantIndex(participantIndex);
 
                     // Logique pour déterminer si le participant est en couple.
-                    participant.setIsCouple(isCouple(participant, participants));
+                    //participant.setIsCouple(isCouple(participant, participants));
 
                     // Incrémente le compteur de l'index du participant.
-                    participantIndex++;
+                    //participantIndex++;
                 }
 
                 // Affiche la taille de la liste des participants et leurs index.
@@ -117,10 +117,10 @@ public class DaretParticipantServiceImpl implements DaretParticipantService {
     }
 
     // Détermine si un participant est en couple en vérifiant le type de paiement.
-    private boolean isCouple(DaretParticipant participant, List<DaretParticipant> participants) {
+   /*private boolean isCouple(DaretParticipant participant, List<DaretParticipant> participants) {
         return participant.getTypePayement().equalsIgnoreCase("Moitier") && participant.getIsCouple();
     }
-
+*/
 
  // Gère l'ajout de participants en couple à une opération "Daret".
     private void handleCoupleParticipants(DaretParticipant newParticipant, List<DaretParticipant> participants) {

@@ -19,7 +19,7 @@ public interface UserService {
     // Méthode pour trouver un utilisateur par son adresse e-mail
     User findByEmail(String email);
 
-    // Méthode pour enregistrer un utilisateur
+    // Méthode pour faire l'operation d'oublier le mot de passed'un utilisateur
     User save(User user);
 
     // Méthode pour mettre à jour les informations d'un utilisateur

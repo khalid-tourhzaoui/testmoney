@@ -38,7 +38,7 @@ public class User {
     @Column(nullable = false)
     private String gender;
     
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private List<DaretParticipant> participatedDarets;
     
     @Column(name = "created_at")
